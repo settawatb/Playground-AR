@@ -60,7 +60,7 @@ struct CartPage: View {
                                     .font(.custom(customFont, size: 25))
                                     .fontWeight(.semibold)
                                 
-                                Text("Hit the button to save into basket.")
+                                Text("Hit the button to save into Cart.")
                                     .font(.custom(customFont, size: 18))
                                     .foregroundColor(.gray)
                                     .padding(.horizontal)
