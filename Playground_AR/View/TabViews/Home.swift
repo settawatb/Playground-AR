@@ -157,7 +157,7 @@ struct Home: View {
                     .foregroundStyle(.gray)
                     
                 
-                Text(product.price + " บาท")
+                Text((Int(product.price) ?? 0).formattedWithSeparator + " THB")
                     .font(.custom(customFont, size: 16))
                     .fontWeight(.bold)
                     .frame(width: getRect().width / 2 - 40, alignment: .leading)

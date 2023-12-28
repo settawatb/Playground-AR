@@ -30,11 +30,13 @@ struct MainPage: View {
                 Home(animation: animation)
                     .environmentObject(sharedData)
                     .tag(Tab.Home)
-                Text("Favorite")
+                FavoritePage()
+                    .environmentObject(sharedData)
                     .tag(Tab.Favorite)
                 ProfilePage()
                     .tag(Tab.Profile)
-                Text("Cart")
+                CartPage()
+                    .environmentObject(sharedData)
                     .tag(Tab.Cart)
             }
             
