@@ -33,6 +33,9 @@ struct ProductDetailView: View {
                     }
                     
                     Spacer()
+                        .onTapGesture {
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        }
                     
                     Button {
                         addToFav()
@@ -117,7 +120,7 @@ struct ProductDetailView: View {
                                 )
                         }
                         .sheet(isPresented: $isShowingARModeView) {
-                            ARModeView()
+                            ARModeView(productTitle: product.title)
                                 .navigationTitle("AR Mode Title")
                         }
                         

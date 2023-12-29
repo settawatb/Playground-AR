@@ -14,17 +14,23 @@ struct ARModeView : View {
     // State for place model
     @State private var modelPlacement: Bool?
     
+    // Product title for display AR Object
+    var productTitle: String
+    
     // Name of Product for display AR Object
     var model: String = "toy"
     
     var body: some View {
         ZStack{
-            ARViewContainer(modelPlacement: self.$modelPlacement).ignoresSafeArea()
+            ARViewContainer(modelPlacement: self.$modelPlacement, productTitle: productTitle).ignoresSafeArea()
             VStack {
-                ModelNameView(model: self.model)
+                ModelNameView(model: productTitle) // Use productTitle here
                 Spacer()
                 CameraUIView(modelPlacement: self.$modelPlacement)
             }
+        }
+        .onAppear {
+            self.modelPlacement = false // Initialize to false
         }
     }
 }
@@ -32,9 +38,8 @@ struct ARModeView : View {
 struct ARViewContainer: UIViewRepresentable {
     @Binding var modelPlacement: Bool?
     var arView: ARView?
+    var productTitle: String
     var model: String = "toy"
-    
-    var previousAnchor: AnchorEntity?
     
     func makeUIView(context: Context) -> ARView {
         let arView = FocusARView(frame: .zero)
@@ -61,8 +66,8 @@ struct ARViewContainer: UIViewRepresentable {
             // load model to Model Entity
             let modelEntity = try! ModelEntity.loadModel(named: filename)
             
-            //          Add Anchor Entity
-            let anchorEntity = AnchorEntity(plane: .any) // Preview Fail bcuz this (not available on the Simulator)
+            // Add Anchor Entity
+            let anchorEntity = AnchorEntity(plane: .any) // Preview Fail because this is not available on the Simulator
             anchorEntity.addChild(modelEntity)
             
             // Place Model to scene
@@ -79,41 +84,37 @@ struct ARViewContainer: UIViewRepresentable {
         DispatchQueue.main.async {
             self.modelPlacement = nil
         }
-        
     }
 }
-
-
-
 
 struct ModelNameView: View {
     var model: String
     var body: some View {
         VStack (alignment: .leading) {
-            
-            Text(self.model)
-                .font(.system(size: 46))
+            //            Text(self.model)
+            Text(self.model.prefix(14))
+                .font(.system(size: 26))
+                .lineLimit(1)
                 .foregroundStyle(Color.white)
-                .frame(maxWidth: .infinity, maxHeight: 60)
+                .frame(maxWidth: .infinity, maxHeight: 70)
                 .background(Color.black.opacity(0.8))
                 .cornerRadius(50)
                 .offset(y: 25)
             Spacer()
         }
         .frame(maxWidth: 300, maxHeight: .infinity)
-        .padding(30)
-        
+        .padding(20)
     }
 }
 
-struct ARVariables{
+struct ARVariables {
     static var arView: ARView!
 }
 
 struct CameraUIView: View {
     @Binding var modelPlacement: Bool?
+    static var arView: ARView!
     var body: some View {
-        
         HStack {
             // Camera Button
             Button(action: {
@@ -150,14 +151,15 @@ struct CameraUIView: View {
         }
         .frame(maxWidth: .infinity)
         .background(Color.black.opacity(0.3))
-        
     }
     
-    func placeModel(){
+    func placeModel() {
         modelPlacement = true
     }
 }
 
-#Preview {
-    ARModeView()
+struct ARModeView_Previews: PreviewProvider {
+    static var previews: some View {
+        ARModeView(productTitle: "Sample Product")
+    }
 }

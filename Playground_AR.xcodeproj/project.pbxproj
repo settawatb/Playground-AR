@@ -28,7 +28,6 @@
 		3F6356762B3E1313009DD829 /* FavoritePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6356752B3E1313009DD829 /* FavoritePage.swift */; };
 		3F834F8C2B3F13000035C2A9 /* FocusEntity in Frameworks */ = {isa = PBXBuildFile; productRef = 3F834F8B2B3F13000035C2A9 /* FocusEntity */; };
 		3F834F8E2B3F13590035C2A9 /* FocusARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F834F8D2B3F13590035C2A9 /* FocusARView.swift */; };
-		3F834F902B3F13830035C2A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F834F8F2B3F13830035C2A9 /* AppDelegate.swift */; };
 		3F9422462B385E01007056AF /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9422452B385E01007056AF /* SearchView.swift */; };
 		3F9422482B3868A0007056AF /* StaggeredGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9422472B3868A0007056AF /* StaggeredGrid.swift */; };
 		3FF462F22B1DE2250053797B /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF462F12B1DE2250053797B /* MainPage.swift */; };
@@ -82,7 +81,6 @@
 		3F6356712B3E12E7009DD829 /* CartPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartPage.swift; sourceTree = "<group>"; };
 		3F6356752B3E1313009DD829 /* FavoritePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePage.swift; sourceTree = "<group>"; };
 		3F834F8D2B3F13590035C2A9 /* FocusARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusARView.swift; sourceTree = "<group>"; };
-		3F834F8F2B3F13830035C2A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3F9422452B385E01007056AF /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		3F9422472B3868A0007056AF /* StaggeredGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaggeredGrid.swift; sourceTree = "<group>"; };
 		3FF462F12B1DE2250053797B /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
@@ -125,7 +123,6 @@
 			children = (
 				3F345A042B3EFB6900DE10E2 /* ARModeView.swift */,
 				3F834F8D2B3F13590035C2A9 /* FocusARView.swift */,
-				3F834F8F2B3F13830035C2A9 /* AppDelegate.swift */,
 				3F3459FD2B3EFA8200DE10E2 /* ARObject */,
 			);
 			path = ARMode;
@@ -405,7 +402,6 @@
 				3FF462F82B1DF1BC0053797B /* Product.swift in Sources */,
 				3FF9C9EC2B39A0AF00C990B1 /* SharedDataModel.swift in Sources */,
 				3FF462FA2B1DF4850053797B /* HomeViewModel.swift in Sources */,
-				3F834F902B3F13830035C2A9 /* AppDelegate.swift in Sources */,
 				3F3D4A202B08DDC500A46B5E /* LoginPageModel.swift in Sources */,
 				3F3D49E72B08C95F00A46B5E /* ContentView.swift in Sources */,
 				3F3D4A182B08CE8600A46B5E /* OnBoardingPage.swift in Sources */,
