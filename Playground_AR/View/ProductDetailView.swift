@@ -14,7 +14,7 @@ struct ProductDetailView: View {
     @EnvironmentObject var homeData: HomeViewModel
     @State private var isARModeActive: Bool = false
     @State private var isShowingARModeView: Bool = false
-
+    
     var body: some View {
         VStack {
             // Title Bar and Product Image
@@ -31,9 +31,9 @@ struct ProductDetailView: View {
                             .font(.title2)
                             .foregroundColor(Color.black.opacity(0.7))
                     }
-
+                    
                     Spacer()
-
+                    
                     Button {
                         addToFav()
                     } label: {
@@ -46,7 +46,7 @@ struct ProductDetailView: View {
                     }
                 }
                 .padding()
-
+                
                 // Product Image
                 Image(product.productImage)
                     .resizable()
@@ -59,22 +59,22 @@ struct ProductDetailView: View {
             }
             .frame(height: getRect().height / 2.7)
             .zIndex(1)
-
+            
             // Product Details
             ScrollView(.vertical, showsIndicators: false) {
                 // Product Data
                 VStack(alignment: .leading, spacing: 15) {
                     Text(product.title)
                         .font(.custom(customFont, size: 20).bold())
-
+                    
                     Text(product.subtitle)
                         .font(.custom(customFont, size: 18))
                         .foregroundStyle(Color.gray)
-
+                    
                     Text("Description of product example")
                         .font(.custom(customFont, size: 16))
                         .foregroundStyle(Color.gray)
-
+                    
                     Button {
                         // Since image at right
                     } label: {
@@ -86,18 +86,18 @@ struct ProductDetailView: View {
                         .font(.custom(customFont, size: 15).bold())
                         .foregroundColor(PurPle)
                     }
-
+                    
                     Spacer()
                     VStack(alignment: .leading){
                         Text("Price")
                             .font(.custom(customFont, size: 17))
-
+                        
                         Text((Int(product.price) ?? 0).formattedWithSeparator + " THB")
                             .font(.custom(customFont, size: 20).bold())
                             .foregroundColor(.black)
                     }
                     .padding(.vertical, 20)
-
+                    
                     HStack {
                         // AR button
                         Button {
@@ -120,7 +120,7 @@ struct ProductDetailView: View {
                             ARModeView()
                                 .navigationTitle("AR Mode Title")
                         }
-
+                        
                         // Add to cart button
                         Button {
                             addToCart()
@@ -155,19 +155,19 @@ struct ProductDetailView: View {
         .animation(.easeInOut, value: sharedData.cartProducts)
         .background(LightGray.ignoresSafeArea())
     }
-
+    
     func isFavorited() -> Bool {
         sharedData.favoritedProducts.contains { product in
             self.product.id == product.id
         }
     }
-
+    
     func isAddedToCart() -> Bool {
         sharedData.cartProducts.contains { product in
             self.product.id == product.id
         }
     }
-
+    
     func addToFav() {
         if let index = sharedData.favoritedProducts.firstIndex(where: { product in
             self.product.id == product.id
@@ -177,7 +177,7 @@ struct ProductDetailView: View {
             sharedData.favoritedProducts.append(product)
         }
     }
-
+    
     func addToCart() {
         if let index = sharedData.cartProducts.firstIndex(where: { product in
             self.product.id == product.id

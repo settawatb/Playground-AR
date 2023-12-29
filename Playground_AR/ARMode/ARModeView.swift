@@ -17,8 +17,6 @@ struct ARModeView : View {
     // Name of Product for display AR Object
     var model: String = "toy"
     
-    private var previousAnchor: AnchorEntity?
-    
     var body: some View {
         ZStack{
             ARViewContainer(modelPlacement: self.$modelPlacement).ignoresSafeArea()
@@ -42,9 +40,6 @@ struct ARViewContainer: UIViewRepresentable {
         let arView = FocusARView(frame: .zero)
         ARVariables.arView = arView
         
-//        // Add rotation gesture
-//        arView.addGestureRecognizer(rotationGesture())
-        
         return arView
     }
     
@@ -60,13 +55,13 @@ struct ARViewContainer: UIViewRepresentable {
             modelAnchors.forEach { anchor in
                 uiView.scene.removeAnchor(anchor)
             }
-
+            
             // model name + type of files
             let filename: String = model + ".usdz"
             // load model to Model Entity
             let modelEntity = try! ModelEntity.loadModel(named: filename)
             
-            // Add Anchor Entity
+            //          Add Anchor Entity
             let anchorEntity = AnchorEntity(plane: .any) // Preview Fail bcuz this (not available on the Simulator)
             anchorEntity.addChild(modelEntity)
             
@@ -94,15 +89,20 @@ struct ARViewContainer: UIViewRepresentable {
 struct ModelNameView: View {
     var model: String
     var body: some View {
-        VStack{
+        VStack (alignment: .leading) {
+            
             Text(self.model)
-                .font(.title)
-                .frame(maxWidth: .infinity)
+                .font(.system(size: 46))
+                .foregroundStyle(Color.white)
+                .frame(maxWidth: .infinity, maxHeight: 60)
+                .background(Color.black.opacity(0.8))
+                .cornerRadius(50)
+                .offset(y: 25)
+            Spacer()
         }
-        .frame(maxWidth: 260, maxHeight: 30)
-        .padding(20)
-        .background(Color.black.opacity(0.3))
-        .cornerRadius(50)
+        .frame(maxWidth: 300, maxHeight: .infinity)
+        .padding(30)
+        
     }
 }
 

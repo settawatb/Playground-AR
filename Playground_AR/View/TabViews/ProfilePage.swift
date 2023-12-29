@@ -75,26 +75,6 @@ struct ProfilePage: View {
                             .background(LightGray.ignoresSafeArea())
                     }
                     
-                    NavigationLink(destination: ARModeView()) {
-                        HStack {
-                            Text("AR Mode")
-                                .font(.custom(customFont, size: 17))
-                                .fontWeight(.semibold)
-                                .foregroundColor(.black)
-                            
-                            Spacer()
-                            
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.black)
-                        }
-                        .padding()
-                        .background(
-                            Color.white.cornerRadius(12)
-                        )
-                        .padding(.horizontal)
-                        .padding(.top, 10)
-                    }
-                    
                     CustomNavigationLink(title: "Logout") {
                         Text("")
                             .navigationTitle("Logout")
