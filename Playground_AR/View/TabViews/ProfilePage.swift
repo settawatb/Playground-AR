@@ -10,7 +10,7 @@ import SwiftUI
 struct ProfilePage: View {
     var body: some View {
         
-        NavigationView{
+        NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
                 
                 VStack{
@@ -23,7 +23,7 @@ struct ProfilePage: View {
                         
                         Image("logo")
                             .resizable()
-                            .aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
+                            .aspectRatio(contentMode: .fill)
                             .frame(width: 60, height: 60)
                             .clipShape(Circle())
                             .offset(y: -30)
@@ -41,7 +41,7 @@ struct ProfilePage: View {
                             Text("Example \nAddress \nBangkok, Thailand")
                                 .font(.custom(customFont, size: 15))
                         }
-                        .frame(maxWidth:.infinity, alignment:.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     }
                     .padding([.horizontal,.bottom])
@@ -54,35 +54,48 @@ struct ProfilePage: View {
                     
                     // Custom Navigation Link
                     
-                    CustomNavigationLink(title: "Edit Profile"){
+                    CustomNavigationLink(title: "Edit Profile") {
                         Text("")
                             .navigationTitle("Edit Profile")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
                     }
                     
-                    CustomNavigationLink(title: "Shoping Address"){
+                    CustomNavigationLink(title: "Shoping Address") {
                         Text("")
                             .navigationTitle("Shoping Address")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
                     }
                     
-                    CustomNavigationLink(title: "Order History"){
+                    CustomNavigationLink(title: "Order History") {
                         Text("")
                             .navigationTitle("Order History")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
                     }
                     
-                    CustomNavigationLink(title: "Edit Profile"){
-                        Text("")
-                            .navigationTitle("Edit Profile")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(LightGray.ignoresSafeArea())
+                    NavigationLink(destination: ARModeView()) {
+                        HStack {
+                            Text("AR Mode")
+                                .font(.custom(customFont, size: 17))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.black)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.black)
+                        }
+                        .padding()
+                        .background(
+                            Color.white.cornerRadius(12)
+                        )
+                        .padding(.horizontal)
+                        .padding(.top, 10)
                     }
                     
-                    CustomNavigationLink(title: "Logout"){
+                    CustomNavigationLink(title: "Logout") {
                         Text("")
                             .navigationTitle("Logout")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -90,19 +103,17 @@ struct ProfilePage: View {
                     }
                     
                 }
-                .padding(. horizontal, 22)
-                .padding(. vertical, 20)
+                .padding(.horizontal, 22)
+                .padding(.vertical, 20)
             }
             .navigationBarHidden(true)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(LightGray
-                .ignoresSafeArea()
+            .background(
+                LightGray.ignoresSafeArea()
             )
         }
-        
     }
     
-    // Avoiding new Structs
     @ViewBuilder
     func CustomNavigationLink<Detail: View>(title: String, @ViewBuilder content: @escaping () -> Detail) -> some View {
         NavigationLink {
@@ -127,9 +138,10 @@ struct ProfilePage: View {
             .padding(.top, 10)
         }
     }
-
 }
 
-#Preview {
-    ProfilePage()
+struct ProfilePage_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfilePage()
+    }
 }
