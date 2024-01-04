@@ -1,5 +1,5 @@
 # Online Shopping Application with AR 🚀
-**Work in Process 🚧**
+**🚧 Work in Process 🚧**
 
 <p align="center">
   <img alt="AR Application" src="https://github.com/settawatb/Playground_AR_dev/assets/90975874/0aa0d1ae-453f-4d2b-b7b5-2cf55bb38516">
