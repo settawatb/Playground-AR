@@ -134,10 +134,10 @@ struct ProductDetailView: View {
                                 .padding(.vertical, 20)
                                 .frame(maxWidth: .infinity)
                                 .background (
-                                    Color(.black)
-                                        .cornerRadius(10)
-                                        .shadow(color: Color.black.opacity(0.06), radius: 5, x:5, y:5)
+                                    isAddedToCart() ? Color(PurPle).opacity(0.5) : Color(.black)
                                 )
+                                .cornerRadius(10)
+                                .shadow(color: Color.black.opacity(0.06), radius: 5, x:5, y:5)
                         }
                     }
                 }

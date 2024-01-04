@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfilePage: View {
+    @StateObject var loginData: LoginPageModel = LoginPageModel()
     var body: some View {
         
         NavigationView {
@@ -21,7 +22,7 @@ struct ProfilePage: View {
                     
                     VStack(spacing: 25){
                         
-                        Image("logo")
+                        Image("myprofile")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 60, height: 60)

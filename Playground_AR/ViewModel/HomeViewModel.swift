@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 //Using Combine to monitor search field
 import Combine
 

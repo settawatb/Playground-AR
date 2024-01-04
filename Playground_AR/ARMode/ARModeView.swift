@@ -18,7 +18,13 @@ struct ARModeView : View {
     var productTitle: String
     
     // Name of Product for display AR Object
-    var model: String = "toy"
+    var model_list: [String] = ["toy", "pokemon", "robot", "biplane"]
+    
+    var model: String? {
+        return model_list.randomElement()
+    }
+    
+    //    var model: String = "toy"
     
     var body: some View {
         ZStack{
@@ -39,7 +45,13 @@ struct ARViewContainer: UIViewRepresentable {
     @Binding var modelPlacement: Bool?
     var arView: ARView?
     var productTitle: String
-    var model: String = "toy"
+//    var model: String = "toy"
+    var model_list: [String] = ["toy", "pokemon", "robot", "biplane"]
+    
+    var model: String {
+        return model_list.randomElement() ?? "pokemon"
+    }
+    
     
     func makeUIView(context: Context) -> ARView {
         let arView = FocusARView(frame: .zero)

@@ -37,7 +37,7 @@ class LoginPageModel: ObservableObject {
     }
     
     func ForgotPassword(){
-        // Do Action ForgotPassword
+        // Action ForgotPassword
     }
 }
 
