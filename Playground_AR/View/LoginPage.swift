@@ -57,9 +57,8 @@ struct LoginPage: View {
                     if loginData.registerUser{
                         CustomTextField(icon: "lock", title: "Re-Enter Password", hint: "Abc1234", value: $loginData.re_Enter_Password, showPassword: $loginData.showReEnterPassword)
                             .padding(.top,10)
-                        
-                        CustomTextField(icon: "phone", title: "Telephone Number", hint: "0961238875", value: $loginData.re_Enter_Password, showPassword: $loginData.showReEnterPassword)
-                            .padding(.top,10)
+                        CustomTextField(icon: "phone", title: "Telephone Number", hint: "09XXXXXXXX", value: $loginData.phoneNum, showPassword:.constant(false))
+                            .padding(.top,20)
                         
                     }
                     
