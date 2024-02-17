@@ -63,29 +63,35 @@ struct LoginPage: View {
                     }
                     
                     // Forgot Password Button
-                    Button {
-                        loginData.ForgotPassword()
-                    } label: {
-                        
-                        Text("Forgot Password ?")
-                            .font(.custom(customFont, size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color(red: 125/255, green: 122/255, blue: 255/255))
-                    }
-                    .padding(.top, 8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    Button {
+//                        loginData.ForgotPassword()
+//                    } label: {
+//                        
+//                        Text("Forgot Password ?")
+//                            .font(.custom(customFont, size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color(red: 125/255, green: 122/255, blue: 255/255))
+//                    }
+//                    .padding(.top, 8)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
                     
                     // Login Button
-                    
                     Button {
-                        if loginData.registerUser{
+                        if loginData.registerUser {
                             loginData.Register()
-                        }
-                        else {
-                            loginData.Login()
+                        } else {
+                            loginData.login { result in
+                                switch result {
+                                case .success:
+                                    // Handle successful login, e.g., navigate to the next screen
+                                    print("Login successful")
+                                case .failure(let error):
+                                    // Handle login failure
+                                    print("Login failed: \(error)")
+                                }
+                            }
                         }
                     } label: {
-                        
                         Text("Login")
                             .font(.custom(customFont, size: 17))
                             .padding(.vertical, 20)
@@ -93,11 +99,11 @@ struct LoginPage: View {
                             .foregroundColor(.white)
                             .background(Color(.black))
                             .cornerRadius(15)
-                            .shadow(color:Color.black.opacity(0.1),radius: 5, x: 5, y: 5)
-                            
+                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 5, y: 5)
                     }
                     .padding(.top, 8)
                     .padding(.horizontal)
+
                     
                     // Register Button
                     Button {

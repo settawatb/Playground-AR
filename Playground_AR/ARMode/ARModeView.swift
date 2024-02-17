@@ -79,11 +79,11 @@ struct ARViewContainer: UIViewRepresentable {
             let modelEntity = try! ModelEntity.loadModel(named: filename)
             
             // Add Anchor Entity
-            let anchorEntity = AnchorEntity(plane: .any) // Preview Fail because this is not available on the Simulator
-            anchorEntity.addChild(modelEntity)
-            
-            // Place Model to scene
-            uiView.scene.addAnchor(anchorEntity)
+//            let anchorEntity = AnchorEntity(plane: .any) // Preview Fail because this is not available on the Simulator
+//            anchorEntity.addChild(modelEntity)
+//            
+//            // Place Model to scene
+//            uiView.scene.addAnchor(anchorEntity)
             
             // Generate collision shape
             modelEntity.generateCollisionShapes(recursive: true)

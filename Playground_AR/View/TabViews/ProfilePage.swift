@@ -9,28 +9,34 @@ import SwiftUI
 
 struct ProfilePage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
+    @Environment(\.presentationMode) var presentationMode
+    @State private var isActive: Bool = false
+    
     var body: some View {
         
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
                 
-                VStack{
+                VStack {
                     
                     Text("My Profile")
-                        .font(.custom(customFont, size:28).bold())
+                        .font(.custom(customFont, size: 28).bold())
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .offset(x: 20)
                     
-                    VStack(spacing: 25){
+                    Spacer()
+                    
+                    VStack(spacing: 25) {
                         
-                        Image("myprofile")
+                        Image("user_placeholder")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 60, height: 60)
                             .clipShape(Circle())
                             .offset(y: -30)
-                            .padding(.bottom,-30)
+                            .padding(.bottom, -30)
                         
-                        Text("Settawat Buddhakanchana")
+                        Text(loginData.userEmail)
                             .font(.custom(customFont, size: 16))
                             .fontWeight(.semibold)
                         
@@ -38,20 +44,23 @@ struct ProfilePage: View {
                             Image(systemName: "location.north.circle.fill")
                                 .foregroundColor(.gray)
                                 .rotationEffect(.init(degrees: 180))
-
+                            
                             Text("Example \nAddress \nBangkok, Thailand")
                                 .font(.custom(customFont, size: 15))
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-
+                        
                     }
-                    .padding([.horizontal,.bottom])
+                    .padding([.horizontal, .bottom])
                     .background(
                         Color.white
                             .cornerRadius(12)
                     )
                     .padding()
                     .padding(.top, 40)
+                    .onAppear {
+                        loginData.fetchUserProfile()
+                    }
                     
                     // Custom Navigation Link
                     
@@ -62,9 +71,9 @@ struct ProfilePage: View {
                             .background(LightGray.ignoresSafeArea())
                     }
                     
-                    CustomNavigationLink(title: "Shoping Address") {
+                    CustomNavigationLink(title: "Shopping Address") {
                         Text("")
-                            .navigationTitle("Shoping Address")
+                            .navigationTitle("Shopping Address")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
                     }
@@ -76,24 +85,35 @@ struct ProfilePage: View {
                             .background(LightGray.ignoresSafeArea())
                     }
                     
-                    CustomNavigationLink(title: "Logout") {
-                        Text("")
-                            .navigationTitle("Logout")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(LightGray.ignoresSafeArea())
-                    }
                     
+                    Button {
+                        loginData.logout()
+                        // Dismiss current view and navigate back to the root view (login page)
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("Logout")
+                            .font(.custom(customFont, size: 17))
+                            .padding(.horizontal, 135)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(Color.red)
+                            .cornerRadius(12)
+                    }
+                    .padding(.top, 10)
+                    .offset(y: 170)
                 }
-                .padding(.horizontal, 22)
-                .padding(.vertical, 20)
+                
             }
             .navigationBarHidden(true)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 LightGray.ignoresSafeArea()
             )
+            
         }
+        
     }
+    
     
     @ViewBuilder
     func CustomNavigationLink<Detail: View>(title: String, @ViewBuilder content: @escaping () -> Detail) -> some View {
@@ -104,12 +124,12 @@ struct ProfilePage: View {
                 Text(title)
                     .font(.custom(customFont, size: 17))
                     .fontWeight(.semibold)
-                    .foregroundColor(title == "Logout" ? .red : .black)
+                    .foregroundColor(.black)
                 
                 Spacer()
                 
                 Image(systemName: "chevron.right")
-                    .foregroundColor(title == "Logout" ? .red : .black)
+                    .foregroundColor(.black)
             }
             .padding()
             .background(
