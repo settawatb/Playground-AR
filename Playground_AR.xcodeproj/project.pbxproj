@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F18B2A12B821A990046FEA9 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F18B2A02B821A990046FEA9 /* ArrayExtensions.swift */; };
+		3F18B2A92B823D650046FEA9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3F18B2A82B823D650046FEA9 /* Kingfisher */; };
+		3F18B2AF2B8245F40046FEA9 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F18B2AE2B8245F40046FEA9 /* AsyncImage.swift */; };
+		3F18B2B52B82643C0046FEA9 /* ProductImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F18B2B42B82643C0046FEA9 /* ProductImageView.swift */; };
 		3F2986122B46113C003932AD /* pokemon.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 3F2986112B46113C003932AD /* pokemon.usdz */; };
 		3F345A012B3EFAFF00DE10E2 /* biplane.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 3F3459FE2B3EFAFF00DE10E2 /* biplane.usdz */; };
 		3F345A022B3EFAFF00DE10E2 /* robot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 3F3459FF2B3EFAFF00DE10E2 /* robot.usdz */; };
@@ -58,6 +62,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F18B2A02B821A990046FEA9 /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		3F18B2AE2B8245F40046FEA9 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		3F18B2B42B82643C0046FEA9 /* ProductImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductImageView.swift; sourceTree = "<group>"; };
 		3F2986112B46113C003932AD /* pokemon.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = pokemon.usdz; sourceTree = "<group>"; };
 		3F3459FE2B3EFAFF00DE10E2 /* biplane.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = biplane.usdz; sourceTree = "<group>"; };
 		3F3459FF2B3EFAFF00DE10E2 /* robot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = robot.usdz; sourceTree = "<group>"; };
@@ -99,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F18B2A92B823D650046FEA9 /* Kingfisher in Frameworks */,
 				3F834F8C2B3F13000035C2A9 /* FocusEntity in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -223,6 +231,9 @@
 				3FF462F12B1DE2250053797B /* MainPage.swift */,
 				3F9422452B385E01007056AF /* SearchView.swift */,
 				3FF9C9E92B39A07100C990B1 /* ProductDetailView.swift */,
+				3F18B2A02B821A990046FEA9 /* ArrayExtensions.swift */,
+				3F18B2AE2B8245F40046FEA9 /* AsyncImage.swift */,
+				3F18B2B42B82643C0046FEA9 /* ProductImageView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -274,6 +285,7 @@
 			name = Playground_AR;
 			packageProductDependencies = (
 				3F834F8B2B3F13000035C2A9 /* FocusEntity */,
+				3F18B2A82B823D650046FEA9 /* Kingfisher */,
 			);
 			productName = Playground_AR;
 			productReference = 3F3D49E12B08C95F00A46B5E /* Playground AR.app */;
@@ -349,6 +361,8 @@
 			mainGroup = 3F3D49D82B08C95F00A46B5E;
 			packageReferences = (
 				3F834F8A2B3F13000035C2A9 /* XCRemoteSwiftPackageReference "FocusEntity" */,
+				3F18B2A22B82266D0046FEA9 /* XCRemoteSwiftPackageReference "url-image" */,
+				3F18B2A72B823D650046FEA9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 3F3D49E22B08C95F00A46B5E /* Products */;
 			projectDirPath = "";
@@ -402,13 +416,16 @@
 				3F3D4A1C2B08DD6500A46B5E /* LoginPage.swift in Sources */,
 				3FF9C9EA2B39A07100C990B1 /* ProductDetailView.swift in Sources */,
 				3F3D4A222B08E1DF00A46B5E /* CustomCorners.swift in Sources */,
+				3F18B2B52B82643C0046FEA9 /* ProductImageView.swift in Sources */,
 				3FF9C9E82B38B1BD00C990B1 /* ProfilePage.swift in Sources */,
 				3FF462F82B1DF1BC0053797B /* Product.swift in Sources */,
 				3FF9C9EC2B39A0AF00C990B1 /* SharedDataModel.swift in Sources */,
+				3F18B2AF2B8245F40046FEA9 /* AsyncImage.swift in Sources */,
 				3FF462FA2B1DF4850053797B /* HomeViewModel.swift in Sources */,
 				3F3D4A202B08DDC500A46B5E /* LoginPageModel.swift in Sources */,
 				3F3D49E72B08C95F00A46B5E /* ContentView.swift in Sources */,
 				3F3D4A182B08CE8600A46B5E /* OnBoardingPage.swift in Sources */,
+				3F18B2A12B821A990046FEA9 /* ArrayExtensions.swift in Sources */,
 				3F6356762B3E1313009DD829 /* FavoritePage.swift in Sources */,
 				3FF462F22B1DE2250053797B /* MainPage.swift in Sources */,
 				3FF462F52B1DED8E0053797B /* Home.swift in Sources */,
@@ -752,6 +769,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3F18B2A22B82266D0046FEA9 /* XCRemoteSwiftPackageReference "url-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dmytro-anokhin/url-image.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.1;
+			};
+		};
+		3F18B2A72B823D650046FEA9 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.11.0;
+			};
+		};
 		3F834F8A2B3F13000035C2A9 /* XCRemoteSwiftPackageReference "FocusEntity" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maxxfrazer/FocusEntity";
@@ -763,6 +796,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3F18B2A82B823D650046FEA9 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F18B2A72B823D650046FEA9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		3F834F8B2B3F13000035C2A9 /* FocusEntity */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3F834F8A2B3F13000035C2A9 /* XCRemoteSwiftPackageReference "FocusEntity" */;

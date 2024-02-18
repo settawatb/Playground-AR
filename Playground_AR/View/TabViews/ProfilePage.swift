@@ -2,7 +2,7 @@
 //  ProfilePage.swift
 //  Playground_AR
 //
-//  Created by Settawat Buddhakanchana on 25/12/2566 BE.
+//  Created by Settawat Buddhakanchana on 17/02/2567 BE.
 //
 
 import SwiftUI
@@ -31,13 +31,13 @@ struct ProfilePage: View {
                         Image("user_placeholder")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 60, height: 60)
+                            .frame(width: 100, height: 100)
                             .clipShape(Circle())
                             .offset(y: -30)
                             .padding(.bottom, -30)
                         
                         Text(loginData.userEmail)
-                            .font(.custom(customFont, size: 16))
+                            .font(.custom(customFont, size: 25))
                             .fontWeight(.semibold)
                         
                         HStack {
@@ -100,7 +100,7 @@ struct ProfilePage: View {
                             .cornerRadius(12)
                     }
                     .padding(.top, 10)
-                    .offset(y: 170)
+                    .offset(y: 140)
                 }
                 
             }

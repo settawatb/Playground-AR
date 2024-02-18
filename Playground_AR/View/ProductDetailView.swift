@@ -51,11 +51,8 @@ struct ProductDetailView: View {
                 .padding()
                 
                 // Product Image
-                Image(product.productImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+                ProductImageView(urlString: product.productImage)
                     .matchedGeometryEffect(id: "\(product.id)\(sharedData.fromSearchPage ? "SEARCH" : "IMAGE")", in: animation)
-                    .cornerRadius(25)
                     .padding(.horizontal)
                     .offset(y: -12)
                     .frame(maxHeight: .infinity)
@@ -70,7 +67,7 @@ struct ProductDetailView: View {
                     Text(product.title)
                         .font(.custom(customFont, size: 20).bold())
                     
-                    Text(product.subtitle)
+                    Text(product.description)
                         .font(.custom(customFont, size: 18))
                         .foregroundStyle(Color.gray)
                     
@@ -78,17 +75,6 @@ struct ProductDetailView: View {
                         .font(.custom(customFont, size: 16))
                         .foregroundStyle(Color.gray)
                     
-                    Button {
-                        // Since image at right
-                    } label: {
-                        Label {
-                            Image(systemName: "arrow.right")
-                        } icon: {
-                            Text("Full Description")
-                        }
-                        .font(.custom(customFont, size: 15).bold())
-                        .foregroundColor(PurPle)
-                    }
                     
                     Spacer()
                     VStack(alignment: .leading){
@@ -182,12 +168,14 @@ struct ProductDetailView: View {
     }
     
     func addToCart() {
-        if let index = sharedData.cartProducts.firstIndex(where: { product in
-            self.product.id == product.id
-        }) {
-            sharedData.cartProducts.remove(at: index)
+        // Check if the product is already in the cart
+        if let existingProduct = sharedData.cartProducts.first(where: { $0.id == product.id }) {
+            // If the product is already in the cart, do nothing (prevent duplicates)
         } else {
-            sharedData.cartProducts.append(product)
+            // If the product is not in the cart, add it with quantity 1
+            var newProduct = product
+            newProduct.quantity = 1
+            sharedData.cartProducts.append(newProduct)
         }
     }
 }
@@ -211,4 +199,9 @@ struct ProductDetailView_Previews: PreviewProvider {
     static var previews: some View {
         MainPage()
     }
+}
+
+@ViewBuilder
+func ProductImage(urlString: String) -> some View {
+    ProductImageView(urlString: urlString)
 }

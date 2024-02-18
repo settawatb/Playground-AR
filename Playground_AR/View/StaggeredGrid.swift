@@ -9,8 +9,7 @@ import SwiftUI
 
 // Custom View Builder
 
-struct StaggeredGrid<Content: View, T: Identifiable>: View
-where T: Hashable {
+struct StaggeredGrid<Content: View, T: Identifiable>: View where T: Hashable {
     
     var content: (T) -> Content
     var list: [T]
@@ -32,29 +31,25 @@ where T: Hashable {
     
     // Staggered Grid Function
     func setUpList() -> [[T]] {
-        
         // creating empty sub arrays of column count
         var gridArray: [[T]] = Array(repeating: [], count: columns)
-        
-        // spiliting array for VStack oriented View
-        var currentIndex: Int = 0
-        
-        for object in list {
-            gridArray[currentIndex].append(object)
-            
-            // increasing index count
-            // and resetting if over bounds the columns count
-            if currentIndex == (columns - 1) {
-                currentIndex = 0
-            } else {
-                currentIndex += 1
-            }
+
+        // calculating the average number of objects per column
+        let averageCount = list.count / columns
+
+        // distributing objects among columns
+        for (index, object) in list.enumerated() {
+            let columnIndex = index % columns
+            gridArray[columnIndex].append(object)
         }
-        
+
         return gridArray
     }
+
     
     var body: some View {
+        
+        
         
         ScrollView(.vertical, showsIndicators: showsIndicators) {
             HStack(alignment: .top, spacing: 20) {
@@ -69,12 +64,13 @@ where T: Hashable {
                         }
                     }
                 }
+                
             }
             
             // vertical padding
-            // horizontal padding
             .padding(.vertical)
         }
+        
     }
 }
 

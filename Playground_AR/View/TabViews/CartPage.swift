@@ -172,9 +172,7 @@ struct CartView: View{
     var body: some View{
         
         HStack(spacing: 15){
-            Image(product.productImage)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            ProductImageView(urlString: product.productImage)
                 .frame(width: 100, height: 100)
                 .cornerRadius(15)
             
@@ -184,20 +182,22 @@ struct CartView: View{
                     .font(.custom(customFont, size: 18).bold())
                     .lineLimit(2)
                 
-                Text(product.subtitle)
+                Text(product.description)
                     .font(.custom(customFont, size: 17))
+                    .lineLimit(2)
                     .fontWeight(.semibold)
                     .foregroundColor(PurPle)
                 
                 // Quantity Buttons
                 HStack(spacing: 10){
-                    
                     Text("Quantity")
                         .font(.custom(customFont, size: 14))
                         .foregroundColor(.gray)
-                    
+
                     Button {
-                        product.quantity = (product.quantity > 0 ? (product.quantity - 1) : 0)
+                        if product.quantity ?? 0 > 0 {
+                            product.quantity! -= 1
+                        }
                     } label: {
                         Image(systemName: "minus")
                             .font(.caption)
@@ -206,15 +206,14 @@ struct CartView: View{
                             .background(Color(.red))
                             .cornerRadius(20)
                     }
-                    
-                    Text ("\(product.quantity)")
+
+                    Text ("\(product.quantity ?? 0)")
                         .font(.custom(customFont, size: 14))
                         .fontWeight(.semibold)
                         .foregroundColor(.black)
-                    
+
                     Button {
-                        product.quantity += 1
-                        
+                        product.quantity! += 1
                     } label: {
                         Image(systemName: "plus")
                             .font(.caption)

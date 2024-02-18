@@ -25,11 +25,13 @@ class SharedDataModel: ObservableObject {
     // calculating Total price
     func getTotalPrice() -> String {
         var total: Int = 0
-        cartProducts.forEach { product in
-            let price = product.price.replacingOccurrences(of: "THB", with: "") as NSString
-            let quantity = product.quantity
-            let priceTotal = quantity * price.integerValue
-            total += priceTotal
+
+        for product in cartProducts {
+            let price = product.price.replacingOccurrences(of: "THB", with: "")
+            if let quantity = product.quantity, let priceInt = Int(price) {
+                let priceTotal = quantity * priceInt
+                total += priceTotal
+            }
         }
 
         // Format the total with separators

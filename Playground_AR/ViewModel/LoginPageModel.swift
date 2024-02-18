@@ -5,10 +5,18 @@
 //  Created by Settawat Buddhakanchana on 18/11/2566 BE.
 //
 
+// LoginPageModel.swift
+
 import SwiftUI
 
 enum NetworkError: Error {
     case noData
+}
+
+struct LoginResponse: Decodable {
+    let token: String?
+    let error: String?
+    // Add other properties if needed
 }
 
 class LoginPageModel: ObservableObject {
@@ -19,8 +27,8 @@ class LoginPageModel: ObservableObject {
     @Published var showPassword: Bool = false
     
     // Register Properties
-    @Published var registerUser : Bool = false
-    @Published var phoneNum : String = ""
+    @Published var registerUser: Bool = false
+    @Published var phoneNum: String = ""
     @Published var re_Enter_Password: String = ""
     @Published var showReEnterPassword: Bool = false
     
@@ -60,11 +68,21 @@ class LoginPageModel: ObservableObject {
 
             do {
                 let decodedResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
-                DispatchQueue.main.async {
+
+                if let error = decodedResponse.error {
+                    // Handle incorrect email or password
+                    DispatchQueue.main.async {
+                        print("Login error: \(error)")
+                        // Notify the user about the error, e.g., show an alert or set a flag
+                        // You can extend this logic to display more user-friendly messages
+                    }
+                } else if let token = decodedResponse.token {
                     // Handle successful login, e.g., save the token to UserDefaults
-                    UserDefaults.standard.set(decodedResponse.token, forKey: "token")
+                    UserDefaults.standard.set(token, forKey: "token")
                     self.log_Status = true
-                    completion(.success(()))
+                    DispatchQueue.main.async {
+                        completion(.success(()))
+                    }
                 }
             } catch {
                 DispatchQueue.main.async {
@@ -75,33 +93,33 @@ class LoginPageModel: ObservableObject {
     }
     
     // Fetch User Profile
-        func fetchUserProfile() {
-            guard let token = UserDefaults.standard.string(forKey: "token") else {
-                // Handle case where there's no token (user not logged in)
-                return
-            }
-
-            let url = URL(string: "http://192.168.1.39:3000/users/profile")! // Use the correct endpoint
-
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                if let data = data {
-                    do {
-                        let decodedResponse = try JSONDecoder().decode(UserProfileResponse.self, from: data)
-                        DispatchQueue.main.async {
-                            self.userEmail = decodedResponse.user.email
-                        }
-                    } catch {
-                        print("Error decoding user profile response: \(error.localizedDescription)")
-                    }
-                } else if let error = error {
-                    print("Error fetching user profile: \(error.localizedDescription)")
-                }
-            }.resume()
+    func fetchUserProfile() {
+        guard let token = UserDefaults.standard.string(forKey: "token") else {
+            // Handle case where there's no token (user not logged in)
+            return
         }
+
+        let url = URL(string: "http://192.168.1.39:3000/users/profile")! // Use the correct endpoint
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data {
+                do {
+                    let decodedResponse = try JSONDecoder().decode(UserProfileResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        self.userEmail = decodedResponse.user.email
+                    }
+                } catch {
+                    print("Error decoding user profile response: \(error.localizedDescription)")
+                }
+            } else if let error = error {
+                print("Error fetching user profile: \(error.localizedDescription)")
+            }
+        }.resume()
+    }
     
     struct UserProfileResponse: Decodable {
         let user: User
@@ -114,24 +132,18 @@ class LoginPageModel: ObservableObject {
     }
     
     func logout() {
-            withAnimation {
-                log_Status = false
-            }
+        withAnimation {
+            log_Status = false
         }
+    }
 
-
-    func Register(){
-        withAnimation{
+    func Register() {
+        withAnimation {
             log_Status = true
         }
     }
-    
-    func ForgotPassword(){
+
+    func ForgotPassword() {
         // Action ForgotPassword
     }
-}
-
-struct LoginResponse: Decodable {
-    let token: String
-    // Add other properties if needed
 }

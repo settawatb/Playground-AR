@@ -131,6 +131,7 @@ struct SearchView: View {
             }
         }
     }
+    
     @ViewBuilder
     func ProductCardView(product: Product) -> some View {
         HStack() {
@@ -138,40 +139,110 @@ struct SearchView: View {
                 
                 ZStack{
                     if sharedData.showDetailProduct{
-                        Image(product.productImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .opacity(0)
-                            .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
-                            .cornerRadius(15)
-                            .shadow(radius: 5)
-                            .offset(y: 20)
-                            .padding(.bottom, 20)
-                            .fixedSize(horizontal: true, vertical: false)
+                        AsyncImage(url: URL(string: product.productImage)) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .opacity(0)
+                                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                                    .cornerRadius(15)
+                                    .shadow(radius: 5)
+                                    .offset(y: 20)
+                                    .padding(.bottom, 20)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            case .failure:
+                                Image("image_placeholder") // Placeholder image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                                    .cornerRadius(15)
+                                    .shadow(radius: 5)
+                                    .offset(y: 20)
+                                    .padding(.bottom, 20)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            case .empty:
+                                Image("image_placeholder") // Placeholder image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                                    .cornerRadius(15)
+                                    .shadow(radius: 5)
+                                    .offset(y: 20)
+                                    .padding(.bottom, 20)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            @unknown default:
+                                Image("image_placeholder") // Placeholder image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                                    .cornerRadius(15)
+                                    .shadow(radius: 5)
+                                    .offset(y: 20)
+                                    .padding(.bottom, 20)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            }
+                        }
                     }
                     else{
-                        Image(product.productImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .matchedGeometryEffect(id: "\(product.id)SEARCH", in: animation)
-                            .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
-                            .cornerRadius(15)
-                            .shadow(radius: 5)
-                            .offset(y: 20)
-                            .padding(.bottom, 20)
-                            .fixedSize(horizontal: true, vertical: false)
+                        AsyncImage(url: URL(string: product.productImage)) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .matchedGeometryEffect(id: "\(product.id)SEARCH", in: animation)
+                                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                                    .cornerRadius(15)
+                                    .shadow(radius: 5)
+                                    .offset(y: 20)
+                                    .padding(.bottom, 20)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            case .failure:
+                                Image("image_placeholder") // Placeholder image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                                    .cornerRadius(15)
+                                    .shadow(radius: 5)
+                                    .offset(y: 20)
+                                    .padding(.bottom, 20)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            case .empty:
+                                Image("image_placeholder") // Placeholder image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                                    .cornerRadius(15)
+                                    .shadow(radius: 5)
+                                    .offset(y: 20)
+                                    .padding(.bottom, 20)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            @unknown default:
+                                Image("image_placeholder") // Placeholder image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                                    .cornerRadius(15)
+                                    .shadow(radius: 5)
+                                    .offset(y: 20)
+                                    .padding(.bottom, 20)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            }
+                        }
                     }
                 }
                 
-                
                 Text(product.title)
+                    .lineLimit(2)
                     .font(.custom(customFont, size: 18))
                     .frame(width: getRect().width / 2 - 40, alignment: .leading)
                     .fontWeight(.semibold)
                     .padding(.top)
-                    .lineLimit(2)
                 
-                Text(product.subtitle)
+                Text(product.description)
+                    .lineLimit(2)
                     .font(.custom(customFont, size: 14))
                     .frame(width: getRect().width / 2 - 40, alignment: .leading)
                     .foregroundStyle(.gray)
@@ -200,7 +271,6 @@ struct SearchView: View {
         }
     }
 }
-
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View{

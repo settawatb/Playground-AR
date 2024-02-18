@@ -12,14 +12,17 @@ import Combine
 class HomeViewModel: ObservableObject {
 
     @Published var productType: ProductType = .All
+    @Published var products: [Product] = []
 
     //Sample Products
-    @Published var products: [Product] = [
-        Product(type: [.All, .Arttoy], title: "KAWS X PEANUTS JOE KAWS", subtitle: "Arttoys", price: "12000", productImage: "product_1_kaws"),
-        Product(type: [.All, .Arttoy], title: "KAWS MONO FLAYED COMPANION", subtitle: "Arttoys", price: "23599", productImage: "product_2_kaws_mono"),
-        Product(type: [.All, .Doll], title: "TEDDY HOUSE MARTIE", subtitle: "Doll", price: "650", productImage: "product_3_martie_doll"),
-        Product(type: [.All, .Arttoy], title: "POLYGO LITTLE GREEN MAN", subtitle: "Arttoys", price: "760", productImage: "product_4_green_man")
-    ]
+//    @Published var products: [Product] = [
+//        Product(type: [.All, .Arttoy], title: "KAWS X PEANUTS JOE KAWS", subtitle: "Arttoys", price: "12000", productImage: "product_1_kaws"),
+//        Product(type: [.All, .Arttoy], title: "KAWS MONO FLAYED COMPANION", subtitle: "Arttoys", price: "23599", productImage: "product_2_kaws_mono"),
+//        Product(type: [.All, .Doll], title: "TEDDY HOUSE MARTIE", subtitle: "Doll", price: "650", productImage: "product_3_martie_doll"),
+//        Product(type: [.All, .Arttoy], title: "POLYGO LITTLE GREEN MAN", subtitle: "Arttoys", price: "760", productImage: "product_4_green_man")
+//    ]
+    
+    var searchCancellable: AnyCancellable?
 
 
     // Filtered Products
@@ -32,10 +35,10 @@ class HomeViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var searchActivated: Bool = false
     @Published var searchedProducts: [Product]?
-    
-    var searchCancellable: AnyCancellable?
 
     init(){
+        fetchProductsFromAPI() // Call the function to fetch data when the view model is initialized
+        
         filterProductByType()
         
         searchCancellable = $searchText.removeDuplicates()
@@ -49,6 +52,34 @@ class HomeViewModel: ObservableObject {
                 }
             })
     }
+        
+    func fetchProductsFromAPI() {
+        guard let url = URL(string: "http://192.168.1.39:3000/products/") else {
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else {
+                print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            do {
+                let decoder = JSONDecoder()
+                let decodedProducts = try decoder.decode([Product].self, from: data)
+
+                DispatchQueue.main.async {
+                    self.products = decodedProducts
+                    self.filterProductByType() // Update filteredProducts after fetching data
+                }
+            } catch let decodingError {
+                print("Error decoding JSON: \(decodingError)")
+                print("Raw JSON Data: \(String(data: data, encoding: .utf8) ?? "Unable to convert to String")")
+            }
+        }.resume()
+    }
+
+
 
     func filterProductByType(){
         // Filtering Product By Product Type
@@ -58,7 +89,6 @@ class HomeViewModel: ObservableObject {
                 .filter { product in
                     return product.type.contains(self.productType)
                 }
-                .prefix(4)
             DispatchQueue.main.async {
                 self.filteredProducts = results.compactMap { product in
                     return product
