@@ -1,7 +1,7 @@
 ### Online shopping Application with AR  🚧 Work in Process 🚧
 <img align="left" alt="AR Application" width="200" height="400" src="https://github.com/settawatb/settawatb/assets/90975874/c1b3ab80-23c1-4beb-83d1-91ad9bb855c3">
 <img align="center" alt="Draft UX/UI Figma" width="390" height="400" src="https://github.com/settawatb/settawatb/assets/90975874/4059b6d4-636e-48a0-8c29-79157fce4585">
-
+<img alt="ar" width="600" src="https://github.com/settawatb/Playground-AR/assets/90975874/a586d6af-c737-476f-a7b0-cf975e22435c">
 
 ### Tools🛠️
 
@@ -11,3 +11,7 @@
 * 🤖 AR : ARKit, RealityKit
 * Design pattern 🏛️ : MVMM
 * Programming language 🐦 : Swift, Javascript
+
+REST API repo: [express-api-app](https://github.com/settawatb/express-api-app)
+
+
