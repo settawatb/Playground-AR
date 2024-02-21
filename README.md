@@ -9,5 +9,5 @@
 * ⚙️ Back-end : Node-JS, Express
 * 📙 Database : MongoDB
 * 🤖 AR : ARKit, RealityKit
-* Disign pattern 🏛️ : MVMM
+* Design pattern 🏛️ : MVMM
 * Programming language 🐦 : Swift, Javascript, HTML
