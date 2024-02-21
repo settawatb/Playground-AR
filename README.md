@@ -10,4 +10,4 @@
 * 📙 Database : MongoDB
 * 🤖 AR : ARKit, RealityKit
 * Design pattern 🏛️ : MVMM
-* Programming language 🐦 : Swift, Javascript, HTML
+* Programming language 🐦 : Swift, Javascript
