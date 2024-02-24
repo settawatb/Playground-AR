@@ -49,7 +49,7 @@ struct LoginPage: View {
                     
                     // Custom Text Field
                     
-                    CustomTextField(icon: "envelope", title: "Email", hint: "Example@gmail.com", value: $loginData.email, showPassword:.constant(false))
+                    CustomTextField(icon: "envelope", title: "Username", hint: "username01", value: $loginData.username, showPassword:.constant(false))
                         .padding(.top,20)
                     
                     CustomTextField(icon: "lock", title: "Password", hint: "Abc1234", value: $loginData.password, showPassword:$loginData.showPassword)
@@ -150,7 +150,7 @@ struct LoginPage: View {
         
         // Clearing data when change
         .onChange(of: loginData.registerUser) { _, _ in
-            loginData.email = ""
+            loginData.username = ""
             loginData.password = ""
             loginData.re_Enter_Password = ""
             loginData.showPassword = false

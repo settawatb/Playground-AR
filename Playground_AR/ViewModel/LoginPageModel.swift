@@ -25,7 +25,7 @@ struct LoginResponse: Decodable {
 class LoginPageModel: ObservableObject {
     
     // Login Properties..
-    @Published var email: String = ""
+    @Published var username: String = ""
     @Published var password: String = ""
     @Published var showPassword: Bool = false
     
@@ -36,7 +36,7 @@ class LoginPageModel: ObservableObject {
     @Published var showReEnterPassword: Bool = false
     
     // Profile Properties
-    @Published var userEmail: String = ""
+    @Published var userName: String = ""
     
     // Log Status
     @AppStorage("log_Status") var log_Status: Bool = false
@@ -49,7 +49,7 @@ class LoginPageModel: ObservableObject {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let parameters = ["email": email, "password": password]
+        let parameters = ["username": username, "password": password]
         request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
         
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
@@ -120,7 +120,7 @@ class LoginPageModel: ObservableObject {
                 do {
                     let decodedResponse = try JSONDecoder().decode(UserProfileResponse.self, from: data)
                     DispatchQueue.main.async {
-                        self.userEmail = decodedResponse.user.email
+                        self.userName = decodedResponse.user.username
                     }
                 } catch {
                     print("Error decoding user profile response: \(error.localizedDescription)")
@@ -137,7 +137,7 @@ class LoginPageModel: ObservableObject {
     }
     
     struct User: Decodable {
-        let email: String
+        let username: String
         // Add other properties if needed
     }
     
@@ -186,7 +186,7 @@ enum LoginError: Error {
                 return "Network error: \(message)"
             case .noData:
                 return "No data received from the server"
-            case .incorrectCredentials(let message) where message == "Incorrect email or password":
+            case .incorrectCredentials(let message) where message == "Incorrect username or password":
                 return "Incorrect username or password."
             case .incorrectCredentials(let message):
                 return "Incorrect username or password.\n\(message)"
