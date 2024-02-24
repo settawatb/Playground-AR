@@ -6,16 +6,16 @@
 //
 
 import SwiftUI
-import SwiftUIX
-
 
 struct LoginPage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     var body: some View {
         VStack{
             
             VStack{
-            
+                
                 
                 ZStack{
                     
@@ -45,9 +45,9 @@ struct LoginPage: View {
                 VStack(spacing: 15){
                     Text(loginData.registerUser ? "Register" :  "Login")
                         .font(.custom(customFont, size: 25).bold())
-                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
-                // Custom Text Field
+                    // Custom Text Field
                     
                     CustomTextField(icon: "envelope", title: "Email", hint: "Example@gmail.com", value: $loginData.email, showPassword:.constant(false))
                         .padding(.top,20)
@@ -55,7 +55,7 @@ struct LoginPage: View {
                     CustomTextField(icon: "lock", title: "Password", hint: "Abc1234", value: $loginData.password, showPassword:$loginData.showPassword)
                         .padding(.top,10)
                     
-                // Register Reenter Password
+                    // Register Reenter Password
                     if loginData.registerUser{
                         CustomTextField(icon: "lock", title: "Re-Enter Password", hint: "Abc1234", value: $loginData.re_Enter_Password, showPassword: $loginData.showReEnterPassword)
                             .padding(.top,10)
@@ -65,17 +65,17 @@ struct LoginPage: View {
                     }
                     
                     // Forgot Password Button
-//                    Button {
-//                        loginData.ForgotPassword()
-//                    } label: {
-//                        
-//                        Text("Forgot Password ?")
-//                            .font(.custom(customFont, size: 14))
-//                            .fontWeight(.semibold)
-//                            .foregroundColor(Color(red: 125/255, green: 122/255, blue: 255/255))
-//                    }
-//                    .padding(.top, 8)
-//                    .frame(maxWidth: .infinity, alignment: .leading)
+                    //                    Button {
+                    //                        loginData.ForgotPassword()
+                    //                    } label: {
+                    //
+                    //                        Text("Forgot Password ?")
+                    //                            .font(.custom(customFont, size: 14))
+                    //                            .fontWeight(.semibold)
+                    //                            .foregroundColor(Color(red: 125/255, green: 122/255, blue: 255/255))
+                    //                    }
+                    //                    .padding(.top, 8)
+                    //                    .frame(maxWidth: .infinity, alignment: .leading)
                     
                     // Login Button
                     Button {
@@ -85,11 +85,12 @@ struct LoginPage: View {
                             loginData.login { result in
                                 switch result {
                                 case .success:
-                                    // Handle successful login, e.g., navigate to the next screen
                                     print("Login successful")
                                 case .failure(let error):
                                     // Handle login failure
                                     print("Login failed: \(error)")
+                                    alertMessage = loginData.errorMessage(for: error)
+                                    showAlert = true
                                 }
                             }
                         }
@@ -105,7 +106,12 @@ struct LoginPage: View {
                     }
                     .padding(.top, 8)
                     .padding(.horizontal)
-
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")) {
+                            showAlert = false // Add this line to dismiss the alert explicitly
+                        })
+                    }
+                    
                     
                     // Register Button
                     Button {
@@ -124,6 +130,7 @@ struct LoginPage: View {
                 }
                 .padding(30)
                 
+                
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
@@ -132,6 +139,7 @@ struct LoginPage: View {
                     .clipShape(CustomCorners(corners:[.topLeft,.topRight], radius: 25))
                     .ignoresSafeArea()
             )
+            
             
         }
         
@@ -198,9 +206,8 @@ struct LoginPage: View {
             }
             
             ,alignment: .trailing
-        
+            
         )
-        
         
     }
 }
@@ -208,3 +215,4 @@ struct LoginPage: View {
 #Preview {
     LoginPage()
 }
+
