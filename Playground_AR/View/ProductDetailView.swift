@@ -169,7 +169,7 @@ struct ProductDetailView: View {
     
     func addToCart() {
         // Check if the product is already in the cart
-        if let existingProduct = sharedData.cartProducts.first(where: { $0.id == product.id }) {
+        if sharedData.cartProducts.first(where: { $0.id == product.id }) != nil {
             // If the product is already in the cart, do nothing (prevent duplicates)
         } else {
             // If the product is not in the cart, add it with quantity 1

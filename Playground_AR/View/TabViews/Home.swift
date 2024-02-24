@@ -185,7 +185,7 @@ struct Home: View {
             .frame(width: getRect().width / 2 - 40, alignment: .leading)
             .fontWeight(.semibold)
             .padding(.top)
-            .lineLimit(2)
+            .lineLimit(1)
         
         Text(product.description)
             .lineLimit(1)

@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SwiftUIX
+
 
 struct LoginPage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
@@ -164,10 +166,14 @@ struct LoginPage: View {
             if title.contains("Password") && !showPassword.wrappedValue{
                 SecureField(hint, text: value)
                     .padding(.top,2)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
             }
             else{
                 TextField(hint, text: value)
                     .padding(.top,2)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
             }
             
             Divider()

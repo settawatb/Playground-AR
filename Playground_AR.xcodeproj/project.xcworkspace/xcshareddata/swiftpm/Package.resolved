@@ -19,6 +19,24 @@
       }
     },
     {
+      "identity" : "swiftui-introspect",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
+      "state" : {
+        "revision" : "18e965f867e37a558ad13c12d330dbe047099180",
+        "version" : "1.1.2"
+      }
+    },
+    {
+      "identity" : "swiftuix",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftUIX/SwiftUIX",
+      "state" : {
+        "revision" : "a5a22a1aaca885c229f475af049d75a6d9144de8",
+        "version" : "0.1.9"
+      }
+    },
+    {
       "identity" : "url-image",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/dmytro-anokhin/url-image.git",

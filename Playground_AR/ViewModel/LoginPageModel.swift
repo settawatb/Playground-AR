@@ -40,7 +40,7 @@ class LoginPageModel: ObservableObject {
     
     // Login Call
     func login(completion: @escaping (Result<Void, Error>) -> Void) {
-        let url = URL(string: "http://192.168.1.39:3000/auth/login")! // Replace with your backend URL
+        let url = URL(string: "http://192.168.1.33:3000/auth/login")! // Replace with your backend URL
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -99,7 +99,7 @@ class LoginPageModel: ObservableObject {
             return
         }
 
-        let url = URL(string: "http://192.168.1.39:3000/users/profile")! // Use the correct endpoint
+        let url = URL(string: "http://192.168.1.33:3000/users/profile")! // Use the correct endpoint
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -132,16 +132,20 @@ class LoginPageModel: ObservableObject {
     }
     
     func logout() {
-        withAnimation {
-            log_Status = false
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.log_Status = false
+                }
+            }
         }
-    }
 
     func Register() {
-        withAnimation {
-            log_Status = true
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.log_Status = true
+                }
+            }
         }
-    }
 
     func ForgotPassword() {
         // Action ForgotPassword

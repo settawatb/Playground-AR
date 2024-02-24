@@ -35,7 +35,7 @@ struct StaggeredGrid<Content: View, T: Identifiable>: View where T: Hashable {
         var gridArray: [[T]] = Array(repeating: [], count: columns)
 
         // calculating the average number of objects per column
-        let averageCount = list.count / columns
+        _ = list.count / columns
 
         // distributing objects among columns
         for (index, object) in list.enumerated() {
