@@ -31,9 +31,12 @@ class LoginPageModel: ObservableObject {
     
     // Register Properties
     @Published var registerUser: Bool = false
+    @Published var email: String = ""
+    @Published var address: String = ""
     @Published var phoneNum: String = ""
     @Published var re_Enter_Password: String = ""
     @Published var showReEnterPassword: Bool = false
+    @Published var dateOfBirth = Date()
     
     // Profile Properties
     @Published var userName: String = ""
@@ -124,7 +127,8 @@ class LoginPageModel: ObservableObject {
                 do {
                     let decodedResponse = try JSONDecoder().decode(LoginPageModel.UserProfileResponse.self, from: data)
                     DispatchQueue.main.async {
-                        self.userProfileResponse = decodedResponse
+                        self.userName = decodedResponse.username
+                        // self.userProfileResponse = decodedResponse
                         // Update other UI components based on the user profile
                     }
                 } catch {
@@ -142,12 +146,10 @@ class LoginPageModel: ObservableObject {
     
     struct UserProfileResponse: Decodable {
         let username: String
-        // Add other properties if needed
     }
     
     struct User: Decodable {
         let username: String
-        // Add other properties if needed
     }
     
     func logout() {
@@ -161,13 +163,9 @@ class LoginPageModel: ObservableObject {
     func Register() {
         DispatchQueue.main.async {
             withAnimation {
-                self.log_Status = true
+                self.log_Status = false
             }
         }
-    }
-    
-    func ForgotPassword() {
-        // Action ForgotPassword
     }
     
     struct LoginResponse: Decodable {
@@ -178,7 +176,6 @@ class LoginPageModel: ObservableObject {
         struct Info: Decodable {
             let message: String
         }
-        // Add other properties if needed
     }
 }
 

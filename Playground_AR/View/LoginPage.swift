@@ -61,21 +61,15 @@ struct LoginPage: View {
                             .padding(.top,10)
                         CustomTextField(icon: "phone", title: "Telephone Number", hint: "09XXXXXXXX", value: $loginData.phoneNum, showPassword:.constant(false))
                             .padding(.top,20)
+                        CustomTextField(icon: "envelope", title: "Email", hint: "sample@mail.com", value: $loginData.email, showPassword:.constant(false))
+                            .padding(.top,20)
+                        CustomTextField(icon: "mappin.and.ellipse", title: "Address", hint: "your address", value: $loginData.address, showPassword:.constant(false))
+                            .padding(.top,20)
+                        DateOfBirthPicker(selectedDate: $loginData.dateOfBirth)
+                            .padding(.top,20)
                         
                     }
                     
-                    // Forgot Password Button
-                    //                    Button {
-                    //                        loginData.ForgotPassword()
-                    //                    } label: {
-                    //
-                    //                        Text("Forgot Password ?")
-                    //                            .font(.custom(customFont, size: 14))
-                    //                            .fontWeight(.semibold)
-                    //                            .foregroundColor(Color(red: 125/255, green: 122/255, blue: 255/255))
-                    //                    }
-                    //                    .padding(.top, 8)
-                    //                    .frame(maxWidth: .infinity, alignment: .leading)
                     
                     // Login Button
                     Button {
@@ -153,6 +147,8 @@ struct LoginPage: View {
             loginData.username = ""
             loginData.password = ""
             loginData.re_Enter_Password = ""
+            loginData.email = ""
+            loginData.address = ""
             loginData.showPassword = false
             loginData.showReEnterPassword = false
         }
@@ -176,6 +172,22 @@ struct LoginPage: View {
                     .padding(.top,2)
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
+            }
+            else if title.contains("Address") {
+                ZStack(alignment: .topLeading) {
+                            TextEditor(text: value)
+                                .frame(minWidth: 50, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
+                                .background(Color.gray.opacity(0.1))
+                                .padding(.top, 2)
+                                .disableAutocorrection(true)
+                                .autocapitalization(.none)
+
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1)
+                                .frame(minWidth: 50, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
+                                .padding(.top, 2)
+                                .padding(.bottom, 20)
+                        }
             }
             else{
                 TextField(hint, text: value)
@@ -209,6 +221,29 @@ struct LoginPage: View {
             
         )
         
+    }
+}
+
+struct DateOfBirthPicker: View {
+    @Binding var selectedDate: Date
+    
+    var body: some View {
+        
+        VStack(alignment: .center, spacing: 12) {
+            
+            Label {
+                Text("Date of Birth")
+                    .font(.custom(customFont, size:14))
+            } icon: {
+                Image(systemName: "calendar")
+            }
+            DatePicker("Date of Birth", selection: $selectedDate, displayedComponents: [.date])
+                .datePickerStyle(CompactDatePickerStyle())
+                .labelsHidden()
+                .padding(.bottom, 20)
+            Divider()
+                .background(Color.black.opacity(0.4))
+        }
     }
 }
 

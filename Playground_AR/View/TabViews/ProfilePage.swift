@@ -32,14 +32,9 @@ struct ProfilePage: View {
                             .offset(y: -30)
                             .padding(.bottom, -30)
                         
-                        if let userName = loginData.userProfileResponse?.username {
-                            Text(userName)
-                                .font(.custom(customFont, size: 25))
-                                .fontWeight(.semibold)
-                        } else {
-                            // Handle the case where userName is nil
-                            Text("Loading...")
-                        }
+                        Text(loginData.userName)
+                            .font(.custom(customFont, size: 25))
+                            .fontWeight(.semibold)
                         
                         HStack {
                             Image(systemName: "location.north.circle.fill")
