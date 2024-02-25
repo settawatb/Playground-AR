@@ -13,12 +13,9 @@ struct ProfilePage: View {
     @State private var isActive: Bool = false
     
     var body: some View {
-        
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
-                
                 VStack {
-                    
                     Text("My Profile")
                         .font(.custom(customFont, size: 28).bold())
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -27,7 +24,6 @@ struct ProfilePage: View {
                     Spacer()
                     
                     VStack(spacing: 25) {
-                        
                         Image("user_placeholder")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -36,9 +32,14 @@ struct ProfilePage: View {
                             .offset(y: -30)
                             .padding(.bottom, -30)
                         
-                        Text(loginData.userName)
-                            .font(.custom(customFont, size: 25))
-                            .fontWeight(.semibold)
+                        if let userName = loginData.userProfileResponse?.username {
+                            Text(userName)
+                                .font(.custom(customFont, size: 25))
+                                .fontWeight(.semibold)
+                        } else {
+                            // Handle the case where userName is nil
+                            Text("Loading...")
+                        }
                         
                         HStack {
                             Image(systemName: "location.north.circle.fill")
@@ -65,21 +66,21 @@ struct ProfilePage: View {
                     // Custom Navigation Link
                     
                     CustomNavigationLink(title: "Edit Profile") {
-                        Text("")
+                        Text("Edit Profile Content")
                             .navigationTitle("Edit Profile")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
                     }
                     
                     CustomNavigationLink(title: "Shopping Address") {
-                        Text("")
+                        Text("Shopping Address Content")
                             .navigationTitle("Shopping Address")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
                     }
                     
                     CustomNavigationLink(title: "Order History") {
-                        Text("")
+                        Text("Order History Content")
                             .navigationTitle("Order History")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
@@ -102,16 +103,13 @@ struct ProfilePage: View {
                     .padding(.top, 10)
                     .offset(y: 140)
                 }
-                
             }
             .navigationBarHidden(true)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 LightGray.ignoresSafeArea()
             )
-            
         }
-        
     }
     
     

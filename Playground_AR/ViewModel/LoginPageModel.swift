@@ -37,6 +37,7 @@ class LoginPageModel: ObservableObject {
     
     // Profile Properties
     @Published var userName: String = ""
+    @Published var userProfileResponse: UserProfileResponse?
     
     // Log Status
     @AppStorage("log_Status") var log_Status: Bool = false
@@ -117,10 +118,14 @@ class LoginPageModel: ObservableObject {
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
+                // Print the response data here
+                print("Response: \(String(data: data, encoding: .utf8) ?? "No data")")
+                
                 do {
-                    let decodedResponse = try JSONDecoder().decode(UserProfileResponse.self, from: data)
+                    let decodedResponse = try JSONDecoder().decode(LoginPageModel.UserProfileResponse.self, from: data)
                     DispatchQueue.main.async {
-                        self.userName = decodedResponse.user.username
+                        self.userProfileResponse = decodedResponse
+                        // Update other UI components based on the user profile
                     }
                 } catch {
                     print("Error decoding user profile response: \(error.localizedDescription)")
@@ -130,9 +135,13 @@ class LoginPageModel: ObservableObject {
             }
         }.resume()
     }
+
+
+
+
     
     struct UserProfileResponse: Decodable {
-        let user: User
+        let username: String
         // Add other properties if needed
     }
     
