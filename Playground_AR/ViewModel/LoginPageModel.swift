@@ -38,6 +38,8 @@ class LoginPageModel: ObservableObject {
     @Published var showReEnterPassword: Bool = false
     @Published var dateOfBirth = Date()
     
+    @Published var registeredUsername: String = ""
+    
     // Profile Properties
     @Published var userName: String = ""
     @Published var userProfileResponse: UserProfileResponse?
@@ -101,51 +103,95 @@ class LoginPageModel: ObservableObject {
                     completion(.failure(LoginError.decodingError(error.localizedDescription)))
                 }
             }
-
+            
         }.resume()
     }
+    
+    // Register
+    func register(completion: @escaping (Result<Void, Error>) -> Void) {
+        let url = URL(string: "http://192.168.1.33:3000/auth/register")! // Replace with your backend URL for registration
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let parameters: [String: Any] = [
+            "username": username,
+            "password": password,
+            "email": email,
+            "phoneNum": phoneNum,
+            "address": address,
+            "dateOfBirth": DateFormatter.yyyyMMdd.string(from: dateOfBirth)
+        ]
+        
+        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let _ = data, error == nil else {
+                    DispatchQueue.main.async {
+                        completion(.failure(error ?? NetworkError.noData))
+                    }
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    completion(.success(()))
+                }
+            }.resume()
+        }
     
     
     // Fetch User Profile
     func fetchUserProfile() {
-        guard let token = UserDefaults.standard.string(forKey: "token") else {
-            // Handle case where there's no token (user not logged in)
-            return
-        }
-        
-        let url = URL(string: "http://192.168.1.33:3000/users/profile")! // Use the correct endpoint
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                // Print the response data here
-                print("Response: \(String(data: data, encoding: .utf8) ?? "No data")")
-                
-                do {
-                    let decodedResponse = try JSONDecoder().decode(LoginPageModel.UserProfileResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        self.userName = decodedResponse.username
-                        // self.userProfileResponse = decodedResponse
-                        // Update other UI components based on the user profile
-                    }
-                } catch {
-                    print("Error decoding user profile response: \(error.localizedDescription)")
-                }
-            } else if let error = error {
-                print("Error fetching user profile: \(error.localizedDescription)")
+            guard let token = UserDefaults.standard.string(forKey: "token") else {
+                // Handle case where there's no token (user not logged in)
+                return
             }
-        }.resume()
-    }
 
+            let url = URL(string: "http://192.168.1.33:3000/users/profile")! // Use the correct endpoint
 
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let data = data {
+                    // Print the response data here
+                    print("Response: \(String(data: data, encoding: .utf8) ?? "No data")")
 
+                    do {
+                        let decodedResponse = try JSONDecoder().decode(LoginPageModel.UserProfileResponse.self, from: data)
+                        DispatchQueue.main.async {
+                            self.userName = decodedResponse.username
+                            self.email = decodedResponse.email
+                            self.address = decodedResponse.address
+                            self.phoneNum = decodedResponse.phoneNum
+                            self.dateOfBirth = DateFormatter.yyyyMMdd.date(from: decodedResponse.dateOfBirth) ?? Date()
+                            // Update other UI components based on the user profile
+                        }
+                    } catch {
+                        print("Error decoding user profile response: \(error.localizedDescription)")
+                    }
+                } else if let error = error {
+                    print("Error fetching user profile: \(error.localizedDescription)")
+                }
+            }.resume()
+        }
+    
+    
+    
+    
     
     struct UserProfileResponse: Decodable {
-        let username: String
+            let username: String
+            let email: String
+            let address: String
+            let phoneNum: String
+            let dateOfBirth: String
+        }
+    
+    struct RegisterResponse: Decodable {
+        // Define properties based on your backend's response structure
     }
     
     struct User: Decodable {
@@ -153,14 +199,6 @@ class LoginPageModel: ObservableObject {
     }
     
     func logout() {
-        DispatchQueue.main.async {
-            withAnimation {
-                self.log_Status = false
-            }
-        }
-    }
-    
-    func Register() {
         DispatchQueue.main.async {
             withAnimation {
                 self.log_Status = false
@@ -185,24 +223,24 @@ enum LoginError: Error {
     case incorrectCredentials(String)
     case customError(String)
     case decodingError(String)
-
+    
     var localizedDescription: String {
-            switch self {
-            case .networkError(let message):
-                return "Network error: \(message)"
-            case .noData:
-                return "No data received from the server"
-            case .incorrectCredentials(let message) where message == "Incorrect username or password":
-                return "Incorrect username or password."
-            case .incorrectCredentials(let message):
-                return "Incorrect username or password.\n\(message)"
-            case .customError(let message):
-                return "Custom error: \(message)"
-            case .decodingError(let message):
-                return "Decoding error: \(message)"
-            }
+        switch self {
+        case .networkError(let message):
+            return "Network error: \(message)"
+        case .noData:
+            return "No data received from the server"
+        case .incorrectCredentials(let message) where message == "Incorrect username or password":
+            return "Incorrect username or password."
+        case .incorrectCredentials(let message):
+            return "Incorrect username or password.\n\(message)"
+        case .customError(let message):
+            return "Custom error: \(message)"
+        case .decodingError(let message):
+            return "Decoding error: \(message)"
         }
     }
+}
 
 extension LoginPageModel {
     func errorMessage(for error: Error) -> String {
@@ -212,4 +250,12 @@ extension LoginPageModel {
             return "An unexpected error occurred."
         }
     }
+}
+
+extension DateFormatter {
+    static let yyyyMMdd: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd" // Use the desired date format
+        return formatter
+    }()
 }
