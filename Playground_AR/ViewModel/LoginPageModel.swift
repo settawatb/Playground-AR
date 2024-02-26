@@ -42,6 +42,7 @@ class LoginPageModel: ObservableObject {
     
     // Profile Properties
     @Published var userName: String = ""
+    @Published var addressUser: String = ""
     @Published var userProfileResponse: UserProfileResponse?
     
     // Log Status

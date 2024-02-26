@@ -51,6 +51,7 @@ struct FilePickerView: View {
                             .opacity(0.7)
                             .padding(5)
                         }
+                        .padding()
                     }
                 }
                 .padding(.horizontal, 20)

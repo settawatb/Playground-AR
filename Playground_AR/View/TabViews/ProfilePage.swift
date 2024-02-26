@@ -41,8 +41,11 @@ struct ProfilePage: View {
                                 .foregroundColor(.gray)
                                 .rotationEffect(.init(degrees: 180))
                             
-                            Text("Example \nAddress \nBangkok, Thailand")
+                            Text(loginData.address)
                                 .font(.custom(customFont, size: 15))
+                            
+//                            Text("Example \nAddress \nBangkok, Thailand")
+//                                .font(.custom(customFont, size: 15))
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
@@ -99,6 +102,7 @@ struct ProfilePage: View {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         Text("Logout")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .font(.custom(customFont, size: 17))
                             .padding(.horizontal, 135)
                             .padding()
@@ -106,8 +110,7 @@ struct ProfilePage: View {
                             .background(Color.red)
                             .cornerRadius(12)
                     }
-                    .padding(.top, 10)
-                    .offset(y: 140)
+                    .padding(16)
                 }
             }
             .navigationBarHidden(true)
