@@ -81,6 +81,17 @@ struct ProfilePage: View {
                             .background(LightGray.ignoresSafeArea())
                     }
                     
+                    CustomNavigationLink(title: "Add Product") {
+                        ScrollView {
+                            AddProductView()
+                                .navigationTitle("Add Product")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                                .background(LightGray.ignoresSafeArea())
+                        }
+                    }
+
+
+                    
                     
                     Button {
                         loginData.logout()
