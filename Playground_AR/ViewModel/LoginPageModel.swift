@@ -50,7 +50,7 @@ class LoginPageModel: ObservableObject {
     
     // Login Call
     func login(completion: @escaping (Result<Void, Error>) -> Void) {
-        let url = URL(string: "http://192.168.1.33:3000/auth/login")! // Replace with your backend URL
+        let url = URL(string: "http://192.168.1.39:3000/auth/login")! // Replace with your backend URL
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -110,7 +110,7 @@ class LoginPageModel: ObservableObject {
     
     // Register
     func register(completion: @escaping (Result<Void, Error>) -> Void) {
-        let url = URL(string: "http://192.168.1.33:3000/auth/register")! // Replace with your backend URL for registration
+        let url = URL(string: "http://192.168.1.39:3000/auth/register")! // Replace with your backend URL for registration
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -149,7 +149,7 @@ class LoginPageModel: ObservableObject {
                 return
             }
 
-            let url = URL(string: "http://192.168.1.33:3000/users/profile")! // Use the correct endpoint
+            let url = URL(string: "http://192.168.1.39:3000/users/profile")! // Use the correct endpoint
 
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
