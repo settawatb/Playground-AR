@@ -77,6 +77,9 @@ struct Home: View {
         .onChange(of: homeData.productType) { _, _ in
             homeData.filterProductByType()
         }
+        .onAppear {
+            homeData.fetchProductsFromAPI()
+        }
         
         // Displaying Search View
         .overlay(

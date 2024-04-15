@@ -188,7 +188,7 @@ struct LoginPage: View {
                     }, label: {
                         Text(showPassword.wrappedValue ? "Hide" : "Show")
                             .font(.custom(customFont, size: 13).bold())
-                            .foregroundColor(PurPle)
+                            .foregroundColor(Color(red: 125/255, green: 122/255, blue: 255/255))
                     })
                     .offset(y: 8)
                 }

@@ -55,7 +55,7 @@ struct MainPage: View {
                             .frame(width: 22, height: 22)
                             // Background Tab icon
                             .background(
-                                Color("Purple")
+                                Color(red: 125/255, green: 122/255, blue: 255/255)
                                     .opacity(0.1)
                                     .cornerRadius(5)
                                     // blur

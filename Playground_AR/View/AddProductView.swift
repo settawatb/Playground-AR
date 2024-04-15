@@ -103,6 +103,8 @@ struct AddProductView: View {
                     case .failure(let error):
                         // Handle error
                         print("Error fetching model 3D data:", error)
+                        // Handle Quick Look Thumbnail warning
+                        handleThumbnailWarning()
                     }
                 }
             }) {
@@ -121,6 +123,11 @@ struct AddProductView: View {
         }
     }
     
+    // Handle Quick Look Thumbnail warning
+    func handleThumbnailWarning() {
+        // Display a generic message to the user
+        print("Warning: Failed to associate thumbnails for picked URL")
+    }
 }
 
 struct AddProductView_Previews: PreviewProvider {
