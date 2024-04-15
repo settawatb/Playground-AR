@@ -41,6 +41,7 @@ class LoginPageModel: ObservableObject {
     @Published var registeredUsername: String = ""
     
     // Profile Properties
+    @Published var id: String = ""
     @Published var userName: String = ""
     @Published var addressUser: String = ""
     @Published var userProfileResponse: UserProfileResponse?
@@ -163,6 +164,7 @@ class LoginPageModel: ObservableObject {
                     do {
                         let decodedResponse = try JSONDecoder().decode(LoginPageModel.UserProfileResponse.self, from: data)
                         DispatchQueue.main.async {
+                            self.id = decodedResponse.id
                             self.userName = decodedResponse.username
                             self.email = decodedResponse.email
                             self.address = decodedResponse.address
@@ -184,6 +186,7 @@ class LoginPageModel: ObservableObject {
     
     
     struct UserProfileResponse: Decodable {
+            let id: String
             let username: String
             let email: String
             let address: String
@@ -192,7 +195,7 @@ class LoginPageModel: ObservableObject {
         }
     
     struct RegisterResponse: Decodable {
-        // Define properties based on your backend's response structure
+        // Define backend's response structure
     }
     
     struct User: Decodable {

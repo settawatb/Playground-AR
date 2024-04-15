@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AddProductView: View {
+    @StateObject var loginData: LoginPageModel = LoginPageModel()
     @State private var productName = ""
     @State private var productPrice = ""
     @State private var productQuantity = 1
@@ -18,19 +19,12 @@ struct AddProductView: View {
     
     var body: some View {
         VStack {
-//            Text("Add Product")
-//                .font(.title)
-//                .padding()
-            
-            // Upload product_images
             FilePickerView(viewModel: filePickerViewModel, allowedContentTypes: [.image, .usdz])
                 .sheet(isPresented: $isFilePickerPresented) {
-                    // This block of code is executed when the sheet is dismissed
-                    // You can put the logic to present AddProductView here
-                    AddProductView()
+                    // Handle the result after file selection if needed
+                    // Currently, it just dismisses the sheet
                 }
             
-            // TextFields and other input controls
             TextField("Product Name", text: $productName)
                 .padding()
             Divider()
@@ -71,10 +65,46 @@ struct AddProductView: View {
             }
             .padding()
             
-            // Button for product submission
             Button(action: {
-                // Add logic for submitting the product details to the database
-                // You can access the entered details from the @State variables
+                
+                let formData: [String: Any] = [
+                    "productName": productName,
+                    "productPrice": productPrice,
+                    "productQuantity": "\(productQuantity)",
+                    "productCategory": selectedCategory,
+                    "productDescription": productDescription,
+                    "productSellerId": loginData.id,
+                    "productSellerName": loginData.userName
+                ]
+
+                
+                // Convert the image to data
+                guard let imageData = filePickerViewModel.selectedImages.first?.pngData(),
+                      let model3DUrl = filePickerViewModel.selectedModel3D else {
+                    print("Error: Unable to retrieve image data or model URL")
+                    return
+                }
+                
+                // Fetch model 3D data from URL
+                NetworkManager.shared.fetchData(from: model3DUrl) { result in
+                    switch result {
+                    case .success(let model3DData):
+                        // Call your network manager to upload the product data
+                        NetworkManager.shared.uploadFiles(formData: formData, imageData: imageData, model3DData: model3DData) { result in
+                            switch result {
+                            case .success(let response):
+                                // Handle success response
+                                print("Product uploaded successfully:", response)
+                            case .failure(let error):
+                                // Handle error
+                                print("Error uploading product:", error)
+                            }
+                        }
+                    case .failure(let error):
+                        // Handle error
+                        print("Error fetching model 3D data:", error)
+                    }
+                }
             }) {
                 Text("Submit Product")
                     .padding()
@@ -83,8 +113,14 @@ struct AddProductView: View {
                     .cornerRadius(10)
             }
             .padding()
+
+
+
+        }.onAppear {
+            loginData.fetchUserProfile()
         }
     }
+    
 }
 
 struct AddProductView_Previews: PreviewProvider {
