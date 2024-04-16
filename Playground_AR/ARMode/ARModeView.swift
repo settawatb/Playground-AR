@@ -7,94 +7,84 @@
 
 import SwiftUI
 import RealityKit
-import ARKit
 import FocusEntity
 
 struct ARModeView : View {
-    // State for place model
-    @State private var modelPlacement: Bool?
-    
-    // Product title for display AR Object
+    @State private var modelPlacement: Bool = false
     var productTitle: String
-    
-    // Name of Product for display AR Object
-    var model_list: [String] = ["toy", "pokemon", "robot", "biplane"]
-    
-    var model: String? {
-        return model_list.randomElement()
-    }
-    
-    //    var model: String = "toy"
+    var model3DURL: URL
     
     var body: some View {
         ZStack{
-            ARViewContainer(modelPlacement: self.$modelPlacement, productTitle: productTitle).ignoresSafeArea()
+            ARViewContainer(productTitle: productTitle, model3DURL: model3DURL, modelPlacement: self.$modelPlacement).ignoresSafeArea()
             VStack {
-                ModelNameView(model: productTitle) // Use productTitle here
+                ModelNameView(model: productTitle)
                 Spacer()
                 CameraUIView(modelPlacement: self.$modelPlacement)
             }
-        }
-        .onAppear {
-            self.modelPlacement = false // Initialize to false
         }
     }
 }
 
 struct ARViewContainer: UIViewRepresentable {
-    @Binding var modelPlacement: Bool?
-    var arView: ARView?
     var productTitle: String
-//    var model: String = "toy"
-    var model_list: [String] = ["toy", "pokemon", "robot", "biplane"]
-    
-    var model: String {
-        return model_list.randomElement() ?? "pokemon"
-    }
-    
-    
+    var model3DURL: URL
+    @Binding var modelPlacement: Bool
+
     func makeUIView(context: Context) -> ARView {
         let arView = FocusARView(frame: .zero)
         ARVariables.arView = arView
-        
         return arView
     }
     
     func updateUIView(_ uiView: ARView, context: Context) {
-        
-        // if push place button
-        if (self.modelPlacement == true) {
-            
-            // condition for remove AR object before place
-            let modelAnchors = uiView.scene.anchors.filter { anchor in
-                return anchor.children.contains { $0 is ModelEntity }
-            }
-            modelAnchors.forEach { anchor in
-                uiView.scene.removeAnchor(anchor)
-            }
-            
-            // model name + type of files
-            let filename: String = model + ".usdz"
-            // load model to Model Entity
-            let modelEntity = try! ModelEntity.loadModel(named: filename)
-            
-            // Add Anchor Entity
-//            let anchorEntity = AnchorEntity(plane: .any) // Preview Fail because this is not available on the Simulator
-//            anchorEntity.addChild(modelEntity)
-//            
-//            // Place Model to scene
-//            uiView.scene.addAnchor(anchorEntity)
-            
-            // Generate collision shape
-            modelEntity.generateCollisionShapes(recursive: true)
-            
-            // Install gestures for rotation
-            uiView.installGestures([.rotation], for: modelEntity)
-            print("Model Placed")
+        if modelPlacement {
+            loadModelIfNeeded(into: uiView)
         }
+    }
+    
+    private func loadModelIfNeeded(into uiView: ARView) {
+        let request = URLRequest(url: model3DURL)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error downloading model:", error ?? "Unknown error")
+                return
+            }
+            
+            do {
+                let tempURL = try saveModelDataToTemporaryFile(data)
+                
+                DispatchQueue.main.async {
+                    try? loadModel(from: tempURL, into: uiView)
+                    print("loadModel successfully")
+                }
+            } catch {
+                print("Error processing model data:", error)
+            }
+        }
+        task.resume()
+    }
+
+    private func saveModelDataToTemporaryFile(_ data: Data) throws -> URL {
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(productTitle).appendingPathExtension("usdz")
+        try data.write(to: tempURL)
+        return tempURL
+    }
+
+    public func loadModel(from url: URL, into uiView: ARView) throws {
+        let modelEntity = try ModelEntity.loadModel(contentsOf: url)
+        let anchorEntity = AnchorEntity(plane: .horizontal)
+    
+        anchorEntity.addChild(modelEntity)
+        uiView.scene.addAnchor(anchorEntity)
+        
+        modelEntity.generateCollisionShapes(recursive: true)
+        uiView.installGestures([.rotation], for: modelEntity)
+        
+        print("Model Placed")
         
         DispatchQueue.main.async {
-            self.modelPlacement = nil
+            self.modelPlacement = false
         }
     }
 }
@@ -103,11 +93,10 @@ struct ModelNameView: View {
     var model: String
     var body: some View {
         VStack (alignment: .leading) {
-            //            Text(self.model)
             Text(self.model.prefix(14))
                 .font(.system(size: 26))
                 .lineLimit(1)
-                .foregroundStyle(Color.white)
+                .foregroundColor(Color.white)
                 .frame(maxWidth: .infinity, maxHeight: 70)
                 .background(Color.black.opacity(0.8))
                 .cornerRadius(50)
@@ -120,21 +109,27 @@ struct ModelNameView: View {
 }
 
 struct ARVariables {
-    static var arView: ARView!
+    static var arView: ARView?
 }
 
 struct CameraUIView: View {
-    @Binding var modelPlacement: Bool?
-    static var arView: ARView!
+    @Binding var modelPlacement: Bool
+
     var body: some View {
         HStack {
             // Camera Button
             Button(action: {
-                ARVariables.arView.snapshot(saveToHDR: false) { (image) in
-                    //Compress the image
-                    let compressedImage = UIImage(data: (image?.pngData())!)
-                    // Save to Photos
-                    UIImageWriteToSavedPhotosAlbum(compressedImage!, nil,nil,nil)
+                if let arView = ARVariables.arView {
+                    arView.snapshot(saveToHDR: false) { (image) in
+                        //Compress the image
+                        if let imageData = image?.pngData() {
+                            let compressedImage = UIImage(data: imageData)
+                            // Save to Photos
+                            if let compressedImage = compressedImage {
+                                UIImageWriteToSavedPhotosAlbum(compressedImage, nil,nil,nil)
+                            }
+                        }
+                    }
                 }
                 print("Press Camera Shot")
             }) {
@@ -145,15 +140,12 @@ struct CameraUIView: View {
                     .cornerRadius(30)
                     .padding(20)
             }
-            
             // Place Button
             Button(action: {
-                print("Press Place Button")
-                // place action
-                placeModel()
-                
+                print("Place Button")
+                modelPlacement.toggle()
             }) {
-                Image(systemName: "checkmark")
+                Image(systemName: "repeat")
                     .frame(width: 60, height: 60)
                     .font(.title)
                     .background(Color.white.opacity(0.75))
@@ -164,14 +156,10 @@ struct CameraUIView: View {
         .frame(maxWidth: .infinity)
         .background(Color.black.opacity(0.3))
     }
-    
-    func placeModel() {
-        modelPlacement = true
-    }
 }
 
 struct ARModeView_Previews: PreviewProvider {
     static var previews: some View {
-        ARModeView(productTitle: "Sample Product")
+        ARModeView(productTitle: "Sample Product", model3DURL: URL(string: "http://192.168.1.39:3000/download/1713189854280-model.usdz")!)
     }
 }

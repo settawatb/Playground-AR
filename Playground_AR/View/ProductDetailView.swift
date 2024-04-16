@@ -106,8 +106,7 @@ struct ProductDetailView: View {
                                 )
                         }
                         .sheet(isPresented: $isShowingARModeView) {
-                            ARModeView(productTitle: product.title)
-                                .navigationTitle("AR Mode Title")
+                                ARModeView(productTitle: product.title, model3DURL: product.productModel).navigationTitle("AR Mode Title")
                         }
                         
                         // Add to cart button
@@ -205,3 +204,5 @@ struct ProductDetailView_Previews: PreviewProvider {
 func ProductImage(urlString: String) -> some View {
     ProductImageView(urlString: urlString)
 }
+
+

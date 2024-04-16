@@ -15,6 +15,7 @@ struct Product: Identifiable, Hashable, Decodable {
     var description: String
     var price: String
     var productImage: String
+    var productModel : URL
     var quantity: Int?
     var updateAt: Date // Add this property for 'update_at'
     
@@ -28,6 +29,7 @@ struct Product: Identifiable, Hashable, Decodable {
         case productImage = "product_images"
         case quantity = "product_quantity"
         case updateAt = "update_at"
+        case productModel = "product_model3D"
         // Add other cases for additional properties
     }
     
@@ -42,7 +44,7 @@ struct Product: Identifiable, Hashable, Decodable {
         // Decode price as Int and then convert it to String
         let priceInt = try container.decode(Int.self, forKey: .price)
         price = String(priceInt)
-        
+        productModel = try container.decode(URL.self, forKey: .productModel)
         productImage = try container.decode(String.self, forKey: .productImage)
         quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
         
