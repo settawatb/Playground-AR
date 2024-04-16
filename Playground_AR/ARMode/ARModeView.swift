@@ -16,7 +16,7 @@ struct ARModeView : View {
     
     var body: some View {
         ZStack{
-            ARViewContainer(productTitle: productTitle, model3DURL: model3DURL, modelPlacement: self.$modelPlacement).ignoresSafeArea()
+            ARViewContainer(modelPlacement: self.$modelPlacement, productTitle: productTitle, model3DURL: model3DURL).ignoresSafeArea()
             VStack {
                 ModelNameView(model: productTitle)
                 Spacer()
@@ -27,9 +27,9 @@ struct ARModeView : View {
 }
 
 struct ARViewContainer: UIViewRepresentable {
+    @Binding var modelPlacement: Bool
     var productTitle: String
     var model3DURL: URL
-    @Binding var modelPlacement: Bool
 
     func makeUIView(context: Context) -> ARView {
         let arView = FocusARView(frame: .zero)
@@ -38,7 +38,14 @@ struct ARViewContainer: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: ARView, context: Context) {
-        if modelPlacement {
+        if self.modelPlacement {
+            // remove AR object before place
+            let modelAnchors = uiView.scene.anchors.filter { anchor in
+                return anchor.children.contains { $0 is ModelEntity }
+            }
+            modelAnchors.forEach { anchor in
+                uiView.scene.removeAnchor(anchor)
+            }
             loadModelIfNeeded(into: uiView)
         }
     }
@@ -145,7 +152,8 @@ struct CameraUIView: View {
                 print("Place Button")
                 modelPlacement.toggle()
             }) {
-                Image(systemName: "repeat")
+                
+                Image(systemName: "square.stack.3d.up")
                     .frame(width: 60, height: 60)
                     .font(.title)
                     .background(Color.white.opacity(0.75))
@@ -160,6 +168,6 @@ struct CameraUIView: View {
 
 struct ARModeView_Previews: PreviewProvider {
     static var previews: some View {
-        ARModeView(productTitle: "Sample Product", model3DURL: URL(string: "http://192.168.1.39:3000/download/1713189854280-model.usdz")!)
+        ARModeView(productTitle: "Sample Product", model3DURL: URL(string: "sample")!)
     }
 }
