@@ -6,8 +6,9 @@
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>GeneralSans-Variable.ttf</string>
-		<string>GeneralSans-VariableItalic.ttf</string>
+		<string>PoppinsRegular.ttf</string>
+		<string>PoppinsBlack.ttf</string>
+		<string>PoppinsBold.ttf</string>
 	</array>
 </dict>
 </plist>

@@ -25,7 +25,7 @@ struct FavoritePage: View {
                         
                         HStack{
                             Text("Favorite")
-                                .font(.custom(customFont, size: 28).bold())
+                                .font(.custom(customFontBold, size: 40))
                             
                             Spacer()
                             

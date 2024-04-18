@@ -26,7 +26,7 @@ struct CartPage: View {
                         
                         HStack{
                             Text("Cart")
-                                .font(.custom(customFont, size: 28).bold())
+                                .font(.custom(customFontBold, size: 40))
                             
                             Spacer()
                             

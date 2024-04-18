@@ -24,7 +24,6 @@ struct MainPage: View {
     var body: some View {
         
         VStack(spacing: 0){
-            
             // Tab View
             TabView(selection: $currentTab) {
                 Home(animation: animation)
@@ -33,13 +32,14 @@ struct MainPage: View {
                 FavoritePage()
                     .environmentObject(sharedData)
                     .tag(Tab.Favorite)
-                ProfilePage()
-                    .tag(Tab.Profile)
                 CartPage()
                     .environmentObject(sharedData)
                     .tag(Tab.Cart)
+                ProfilePage()
+                    .tag(Tab.Profile)
             }
-            
+            Divider()
+                .background(Color.black.opacity(0.4))
             //Custom Tab Bar
             HStack(spacing :0){
                 ForEach(Tab.allCases,id: \.self){tab in
@@ -52,7 +52,7 @@ struct MainPage: View {
                             .resizable()
                             .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 22, height: 22)
+                            .frame(width: 30, height: 30)
                             // Background Tab icon
                             .background(
                                 Color(red: 125/255, green: 122/255, blue: 255/255)
@@ -71,8 +71,8 @@ struct MainPage: View {
                     }
                 }
             }
-            .padding([.horizontal,.bottom,.top])
-            .padding(.bottom,10)
+            .padding(.top, 23)
+            .padding(.bottom)
         }
         .background(Color(.white).ignoresSafeArea())
         .overlay(
@@ -99,8 +99,8 @@ enum Tab: String,CaseIterable {
     //Image in asset
     case Home = "Home"
     case Favorite = "Favorite"
-    case Profile = "Profile"
     case Cart = "Cart"
+    case Profile = "Profile"
 }
 
 

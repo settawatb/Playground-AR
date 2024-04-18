@@ -17,32 +17,32 @@ struct Home: View {
     @StateObject var homeData: HomeViewModel = HomeViewModel()
     
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 15) {
-                Text("Discovery")
-                    .font(.custom(customFont, size: 28).bold())
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top)
-                    .padding(.horizontal, 25)
+                HStack(spacing: 15){
+                    Text("Discovery")
+                        .font(.custom(customFontBold, size: 40))
+                        .padding(.horizontal, 2)
+                    
+                    // Search Bar
+                    ZStack {
+                        if homeData.searchActivated {
+                            SearchBar()
+                                .transition(.opacity)
+                        } else {
+                            SearchBar()
+                                .matchedGeometryEffect(id: "SEARCHBAR", in: animation)
+                                .transition(.opacity)
+                        }
+                    }
+                    .frame(width: getRect().width / 3)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation {
+                            homeData.searchActivated.toggle()
+                        }
+                    }
+                }
                 
-                // Search Bar
-                ZStack{
-                    if homeData.searchActivated{
-                        SearchBar()
-                    }
-                    else {
-                        SearchBar()
-                            .matchedGeometryEffect(id: "SEARCHBAR", in: animation)
-                    }
-                }
-                .frame(width: getRect().width / 1.6)
-                .padding(.horizontal, 25)
-                .contentShape(Rectangle())
-                .onTapGesture{
-                    withAnimation(.easeInOut){
-                        homeData.searchActivated = true
-                    }
-                }
                 
                 // Product Tab
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -54,6 +54,8 @@ struct Home: View {
                     }
                     .padding(.horizontal, 25)
                 }
+                Divider()
+                    .background(Color.black.opacity(0.4))
                 
                 // Products Page
                 ScrollView(showsIndicators: false) {
@@ -70,7 +72,7 @@ struct Home: View {
                 }
             }
             .padding(.vertical)
-        }
+        
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white)
         // Updating data whenever tab changes
@@ -95,13 +97,14 @@ struct Home: View {
     @ViewBuilder
     func SearchBar() -> some View {
         // Search Bar
-        HStack(spacing: 15) {
+        HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .font(.title2)
                 .foregroundColor(.gray)
             
             // Search Bar
             TextField("Search", text: .constant(""))
+                .font(.custom(customFont, size: 15))
                 .disabled(true)
         }
         .padding(.vertical, 12)
@@ -190,7 +193,7 @@ struct Home: View {
             .padding(.top)
             .lineLimit(1)
         
-        Text(product.description)
+        Text(product.type[0].rawValue)
             .lineLimit(1)
             .font(.custom(customFont, size: 14))
             .frame(width: getRect().width / 2 - 40, alignment: .leading)

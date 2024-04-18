@@ -80,8 +80,8 @@ struct ARViewContainer: UIViewRepresentable {
 
     public func loadModel(from url: URL, into uiView: ARView) throws {
         let modelEntity = try ModelEntity.loadModel(contentsOf: url)
+        // comment because simmulate build error
         let anchorEntity = AnchorEntity(plane: .horizontal)
-    
         anchorEntity.addChild(modelEntity)
         uiView.scene.addAnchor(anchorEntity)
         
@@ -101,7 +101,7 @@ struct ModelNameView: View {
     var body: some View {
         VStack (alignment: .leading) {
             Text(self.model.prefix(14))
-                .font(.system(size: 26))
+                .font(.custom(customFontBold, size: 26))
                 .lineLimit(1)
                 .foregroundColor(Color.white)
                 .frame(maxWidth: .infinity, maxHeight: 70)

@@ -17,7 +17,7 @@ struct ProfilePage: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
                     Text("My Profile")
-                        .font(.custom(customFont, size: 28).bold())
+                        .font(.custom(customFontBold, size: 40))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .offset(x: 20)
                     
@@ -27,10 +27,10 @@ struct ProfilePage: View {
                         Image("user_placeholder")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 100, height: 100)
+                            .frame(width: 130, height: 130)
                             .clipShape(Circle())
-                            .offset(y: -30)
-                            .padding(.bottom, -30)
+                            .offset(y: -60)
+                            .padding(.bottom, -80)
                         
                         Text(loginData.userName)
                             .font(.custom(customFont, size: 25))
@@ -63,11 +63,22 @@ struct ProfilePage: View {
                     
                     // Custom Navigation Link
                     
+                    CustomNavigationLink(title: "Add Product") {
+                        ScrollView {
+                            AddProductView()
+                                .navigationTitle("Add Product")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                                .background(LightGray.ignoresSafeArea())
+                        }
+                    }
+                    
                     CustomNavigationLink(title: "Edit Profile") {
-                        Text("Edit Profile Content")
-                            .navigationTitle("Edit Profile")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(LightGray.ignoresSafeArea())
+                        ScrollView {
+                            EditProfileView()
+                                .navigationTitle("Add Product")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                                .background(LightGray.ignoresSafeArea())
+                        }
                     }
                     
                     CustomNavigationLink(title: "Shopping Address") {
@@ -82,16 +93,9 @@ struct ProfilePage: View {
                             .navigationTitle("Order History")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
-                    }
+                    }.padding(.bottom, 20)
                     
-                    CustomNavigationLink(title: "Add Product") {
-                        ScrollView {
-                            AddProductView()
-                                .navigationTitle("Add Product")
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                                .background(LightGray.ignoresSafeArea())
-                        }
-                    }
+                    
 
 
                     
@@ -130,16 +134,16 @@ struct ProfilePage: View {
             HStack {
                 Text(title)
                     .font(.custom(customFont, size: 17))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.black)
+                    .foregroundColor(title == "Add Product" ? .white : .black)
                 
                 Spacer()
                 
                 Image(systemName: "chevron.right")
-                    .foregroundColor(.black)
+                    .foregroundColor(title == "Add Product" ? .white : .black)
             }
             .padding()
             .background(
+                title == "Add Product" ? PurPle.cornerRadius(12) :
                 Color.white.cornerRadius(12)
             )
             .padding(.horizontal)
