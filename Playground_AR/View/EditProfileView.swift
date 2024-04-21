@@ -17,6 +17,34 @@ struct EditProfileView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 15) {
+                // Button to pick an image for the profile picture
+                Button(action: {
+                    profileImagePickerViewModel.pickImage()
+                }) {
+                    if let imageData = loginData.image {
+                                                Image(uiImage: UIImage(data: imageData) ?? UIImage())
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .frame(width: 200, height: 200)
+                                                    .clipShape(Circle())
+                                            } else {
+                                                // Placeholder image
+                                                Image("user_placeholder")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .frame(width: 200, height: 200)
+                                                    .clipShape(Circle())
+                                            }
+                }
+                .padding(.top, 8)
+                .padding(.horizontal)
+                // Observe the selected image and update loginData.image
+                .onReceive(profileImagePickerViewModel.$selectedImage) { image in
+                    if let selectedImage = image {
+                        loginData.image = selectedImage.jpegData(compressionQuality: 0.8)
+                    }
+                }
+                
                 // Text fields for user inputs
                 CustomTextFieldEdit(icon: "envelope", title: "Username", hint: "username01", value: $loginData.userName, showPassword: .constant(false))
                     .padding(.top, 20)
@@ -28,29 +56,6 @@ struct EditProfileView: View {
                     .padding(.top, 20)
                 DateOfBirthPicker(selectedDate: $loginData.dateOfBirth)
                     .padding(.top, 20)
-
-                // Button to pick an image for the profile picture
-                Button(action: {
-                    profileImagePickerViewModel.pickImage()
-                }) {
-                    Text("Change Profile Picture")
-                        .font(.custom(customFontBold, size: 17))
-                        .padding(.vertical, 20)
-                        .frame(maxWidth: .infinity)
-                        .foregroundColor(.white)
-                        .background(Color.black)
-                        .cornerRadius(15)
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 5, y: 5)
-                }
-                .padding(.top, 8)
-                .padding(.horizontal)
-
-                // Observe the selected image and update loginData.image
-                .onReceive(profileImagePickerViewModel.$selectedImage) { image in
-                    if let selectedImage = image {
-                        loginData.image = selectedImage.jpegData(compressionQuality: 0.8)
-                    }
-                }
 
 
                 // Submit button

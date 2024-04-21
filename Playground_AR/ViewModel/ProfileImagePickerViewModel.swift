@@ -2,7 +2,7 @@
 //  ProfileImagePickerViewModel.swift
 //  Playground_AR
 //
-//  Created by Kisses MJ on 21/4/2567 BE.
+//  Created by Settawat Buddhakanchana on 21/4/2567 BE.
 //
 
 import SwiftUI

@@ -392,7 +392,7 @@ extension LoginPageModel {
 
             do {
                 if let httpResponse = response as? HTTPURLResponse {
-                    let responseBody = String(data: data, encoding: .utf8)
+                    let _ = String(data: data, encoding: .utf8)
 
                     if httpResponse.statusCode == 200 {
                         // Handle success
