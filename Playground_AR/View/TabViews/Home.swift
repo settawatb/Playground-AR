@@ -21,7 +21,7 @@ struct Home: View {
                 HStack(spacing: 15){
                     Text("Discovery")
                         .font(.custom(customFontBold, size: 40))
-                        .padding(.horizontal, 2)
+                        .padding(.trailing, 2)
                     
                     // Search Bar
                     ZStack {

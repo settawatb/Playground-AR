@@ -221,7 +221,8 @@ struct DateOfBirthPicker: View {
                 Image(systemName: "calendar")
             }
             DatePicker("Date of Birth", selection: $selectedDate, displayedComponents: [.date])
-                .datePickerStyle(CompactDatePickerStyle())
+//                .datePickerStyle(CompactDatePickerStyle())
+                .datePickerStyle(.wheel)
                 .labelsHidden()
                 .padding(.bottom, 20)
             Divider()

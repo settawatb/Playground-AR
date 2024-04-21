@@ -24,13 +24,24 @@ struct ProfilePage: View {
                     Spacer()
                     
                     VStack(spacing: 25) {
-                        Image("user_placeholder")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 130, height: 130)
-                            .clipShape(Circle())
-                            .offset(y: -60)
-                            .padding(.bottom, -80)
+                        if let imageData = loginData.image {
+                                                    Image(uiImage: UIImage(data: imageData) ?? UIImage())
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fill)
+                                                        .frame(width: 130, height: 130)
+                                                        .clipShape(Circle())
+                                                        .offset(y: -60)
+                                                        .padding(.bottom, -80)
+                                                } else {
+                                                    // Placeholder image
+                                                    Image("user_placeholder")
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fill)
+                                                        .frame(width: 130, height: 130)
+                                                        .clipShape(Circle())
+                                                        .offset(y: -60)
+                                                        .padding(.bottom, -80)
+                                                }
                         
                         Text(loginData.userName)
                             .font(.custom(customFont, size: 25))
@@ -75,7 +86,7 @@ struct ProfilePage: View {
                     CustomNavigationLink(title: "Edit Profile") {
                         ScrollView {
                             EditProfileView()
-                                .navigationTitle("Add Product")
+                                .navigationTitle("Edit Profile")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                                .background(LightGray.ignoresSafeArea())
                         }
