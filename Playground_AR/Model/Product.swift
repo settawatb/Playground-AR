@@ -78,6 +78,7 @@ enum ProductType: String, CaseIterable, Decodable {
     case Arttoy = "Arttoy"
     case Doll = "Doll"
     case Figure = "Figure"
+    case Game = "Game"
 
     init(from decoder: Decoder) throws {
         let rawValue = try decoder.singleValueContainer().decode(String.self)
@@ -92,6 +93,8 @@ enum ProductType: String, CaseIterable, Decodable {
             self = .Doll
         } else if rawValue.lowercased() == "figure" {
             self = .Figure
+        } else if rawValue.lowercased() == "game" {
+            self = .Game
         } else {
             throw DecodingError.dataCorruptedError(
                 in: try decoder.singleValueContainer(),

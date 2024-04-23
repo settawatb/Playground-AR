@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-//Using Combine to monitor search field
 import Combine
 
 class HomeViewModel: ObservableObject {
@@ -16,10 +15,7 @@ class HomeViewModel: ObservableObject {
 
     //Sample Products
 //    @Published var products: [Product] = [
-//        Product(type: [.All, .Arttoy], title: "KAWS X PEANUTS JOE KAWS", subtitle: "Arttoys", price: "12000", productImage: "product_1_kaws"),
-//        Product(type: [.All, .Arttoy], title: "KAWS MONO FLAYED COMPANION", subtitle: "Arttoys", price: "23599", productImage: "product_2_kaws_mono"),
-//        Product(type: [.All, .Doll], title: "TEDDY HOUSE MARTIE", subtitle: "Doll", price: "650", productImage: "product_3_martie_doll"),
-//        Product(type: [.All, .Arttoy], title: "POLYGO LITTLE GREEN MAN", subtitle: "Arttoys", price: "760", productImage: "product_4_green_man")
+//        Product(type: [.All, .Arttoy], title: "Offline Sample Product", subtitle: "Arttoys", price: "12000", productImage: "product_1_kaws" and other ),
 //    ]
     
     var searchCancellable: AnyCancellable?

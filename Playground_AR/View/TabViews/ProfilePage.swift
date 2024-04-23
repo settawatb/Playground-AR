@@ -88,15 +88,8 @@ struct ProfilePage: View {
                             EditProfileView()
                                 .navigationTitle("Edit Profile")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                                .background(LightGray.ignoresSafeArea())
+                                .background(LightGray.ignoresSafeArea())
                         }
-                    }
-                    
-                    CustomNavigationLink(title: "Shopping Address") {
-                        Text("Shopping Address Content")
-                            .navigationTitle("Shopping Address")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(LightGray.ignoresSafeArea())
                     }
                     
                     CustomNavigationLink(title: "Order History") {
@@ -104,9 +97,14 @@ struct ProfilePage: View {
                             .navigationTitle("Order History")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
-                    }.padding(.bottom, 20)
+                    }
                     
-                    
+                    CustomNavigationLink(title: "My Products") {
+                        Text("My Purchase")
+                            .navigationTitle("My Purchase")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .background(LightGray.ignoresSafeArea())
+                    }
 
 
                     
@@ -126,6 +124,7 @@ struct ProfilePage: View {
                             .cornerRadius(12)
                     }
                     .padding(16)
+                    .padding(.top, 20)
                 }
             }
             .navigationBarHidden(true)

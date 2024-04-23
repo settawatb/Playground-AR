@@ -142,7 +142,7 @@ struct Home: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
                     .cornerRadius(15)
-                    .shadow(radius: 5)
+                    .shadow(radius: 3)
                     .offset(y: 20)
                     .padding(.bottom, 20)
                     .fixedSize(horizontal: true, vertical: false)

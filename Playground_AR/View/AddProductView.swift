@@ -40,109 +40,119 @@ struct AddProductView: View {
     }
 
     var body: some View {
-        VStack(spacing: 10) {
-            // Product input fields and other views
-            CustomTitle(icon: "signature", title: "Product Name")
-            TextField("Enter Product Name", text: $productName)
-                .font(.custom(customFont, size: 15))
-                .foregroundColor(PurPle)
-            Divider().background(Color.black.opacity(0.4))
-
-            // Product Price input
-            CustomTitle(icon: "bitcoinsign.circle", title: "Product Price")
-            TextField("Enter Product Price", text: $productPrice)
-                .keyboardType(.numberPad)
-                .font(.custom(customFont, size:15))
-                .foregroundColor(PurPle)
-            Divider().background(Color.black.opacity(0.4))
-
-            // Product Quantity Stepper
-            Stepper {
-                HStack {
-                    Text("Product Quantity")
-                        .font(.custom(customFontBold, size: 30))
-                    Text("    \(productQuantity)")
-                        .font(.custom(customFontBold, size: 40))
-                        .foregroundColor(PurPle)
-                }
-            } onIncrement: {
-                productQuantity += 1
-            } onDecrement: {
-                if productQuantity > 1 {
-                    productQuantity -= 1
-                }
-            }
-            Divider().background(Color.black.opacity(0.4))
-
-            // Product Category Picker
-            Text("Product Category")
-                .font(.custom(customFontBold, size: 30))
-            Picker("Product Category", selection: $selectedCategory) {
-                Text("Arttoy").tag("Arttoy")
-                Text("Figure").tag("Figure")
-                Text("Doll").tag("Doll")
-                Text("Game").tag("Game")
-            }
-            .pickerStyle(.segmented)
-            .padding(.bottom)
-            Divider().background(Color.black.opacity(0.4))
-
-            // Product Details Text Editor
-            Text("Product Details").font(.custom(customFontBold, size:30))
-            ZStack(alignment: .topLeading) {
-                TextEditor(text: $productDescription)
-                    .font(.custom(customFontBold, size: 20))
-                    .foregroundColor(PurPle)
-                    .frame(minHeight: 50)
-                    .padding()
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.black, lineWidth: 1)
-            }
-            .padding()
-            Divider().background(Color.black.opacity(0.4))
-                .padding(.bottom)
-
+        ScrollView(){
+            VStack(spacing: 10) {
             // File picker view for image and 3D model
             FilePickerView(viewModel: filePickerViewModel, allowedContentTypes: [.image, .usdz])
                 .sheet(isPresented: $isFilePickerPresented) {}
-            Divider().background(Color.black.opacity(0.4))
+            Divider().background(Color.black.opacity(0.4)).padding(.bottom, 30)
+                // Product input fields and other views
+                CustomTitle(icon: "signature", title: "Product Name")
+                TextField("Enter Product Name", text: $productName)
+                    .font(.custom(customFont, size: 12))
+                    .foregroundColor(PurPle)
+                Divider().background(Color.black.opacity(0.4))
 
-            // Submit button
-            Button(action: {
-                // Validate inputs before uploading
-                guard validateInputs() else {
-                    return
-                }
-                
-                // Proceed with product upload
-                uploadProduct()
-            }) {
-                Text("Submit Product")
-                    .font(.custom(customFont, size: 20).bold())
-                    .foregroundColor(Color.white)
-                    .padding(.vertical, 20)
-                    .frame(maxWidth: .infinity)
-                    .background(PurPle)
-                    .cornerRadius(10)
-                    .shadow(color: Color.black.opacity(0.06), radius: 5, x: 5, y: 5)
-                    .padding()
-            }
-        }
-        .padding(.top, 20)
-        .frame(width: 350)
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text(addProductSuccess ? "Upload Successfully" : "Error"),
-                message: Text(alertMessage),
-                dismissButton: .default(Text("OK")) {
-                    // If the upload was successful, navigate to MainPage
-                    if addProductSuccess {
-                        presentationMode.wrappedValue.dismiss()
+                // Product Price input
+                CustomTitle(icon: "bitcoinsign.circle", title: "Price")
+                TextField("Enter Product Price", text: $productPrice)
+                    .keyboardType(.numberPad)
+                    .font(.custom(customFont, size:12))
+                    .foregroundColor(PurPle)
+                Divider().background(Color.black.opacity(0.4))
+
+                // Product Quantity Stepper
+                Stepper {
+                    HStack(alignment: .center) {
+                        Text("Quantity :")
+                            .font(.custom(customFontBold, size: 14))
+                            .foregroundColor(.black) // Add color for better visibility
+
+                        Text("\(productQuantity)")
+                            .font(.custom(customFontBold, size: 14))
+                            .foregroundColor(PurPle)
+                            .padding(.horizontal, 8) // Add padding for spacing
+                    }
+                } onIncrement: {
+                    productQuantity += 1
+                } onDecrement: {
+                    if productQuantity > 1 {
+                        productQuantity -= 1
                     }
                 }
-            )
-        }
-        .onAppear {
+                Divider().background(Color.black.opacity(0.4))
+
+                // Product Category Picker
+                VStack {
+                    Text("Category")
+                        .font(.custom(customFontBold, size: 14))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                Picker("Category", selection: $selectedCategory) {
+                    Text("Arttoy").tag("Arttoy")
+                    Text("Figure").tag("Figure")
+                    Text("Doll").tag("Doll")
+                    Text("Game").tag("Game")
+                }
+                .pickerStyle(.segmented)
+                .padding(.bottom)
+                Divider().background(Color.black.opacity(0.4))
+
+                // Product Details Text Editor
+                VStack {
+                    Text("Detail")
+                        .font(.custom(customFontBold, size: 14))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                ZStack(alignment: .topLeading) {
+                    TextEditor(text: $productDescription)
+                        .font(.custom(customFontBold, size: 14))
+                        .foregroundColor(PurPle)
+                        .frame(minHeight: 50)
+                        .padding()
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.black, lineWidth: 1)
+                }
+                .padding()
+                Divider().background(Color.black.opacity(0.4))
+
+                // Submit button
+                Button(action: {
+                    // Validate inputs before uploading
+                    guard validateInputs() else {
+                        return
+                    }
+                    
+                    // Proceed with product upload
+                    uploadProduct()
+                }) {
+                    Text("Submit Product")
+                        .font(.custom(customFont, size: 20).bold())
+                        .foregroundColor(Color.white)
+                        .padding(.vertical, 20)
+                        .frame(maxWidth: .infinity)
+                        .background(PurPle)
+                        .cornerRadius(10)
+                        .shadow(color: Color.black.opacity(0.06), radius: 5, x: 5, y: 5)
+                        .padding()
+                }
+            }
+            .padding(.top, 20)
+            .frame(width: 350)
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text(addProductSuccess ? "Upload Successfully" : "Error"),
+                    message: Text(alertMessage),
+                    dismissButton: .default(Text("OK")) {
+                        // If the upload was successful, navigate to MainPage
+                        if addProductSuccess {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+                )
+            }
+        }.onAppear {
             // Fetch user profile data on appear
             loginData.fetchUserProfile()
         }
@@ -223,10 +233,9 @@ func CustomTitle(icon: String, title: String) -> some View {
     VStack(alignment: .leading) {
         Label {
             Text(title)
-                .font(.custom(customFontBold, size: 30))
+                .font(.custom(customFontBold, size: 14))
         } icon: {
-            Image(systemName: icon).resizable()
-                .frame(width: 30, height: 30)
+            Image(systemName: icon)
                 .padding(.trailing, 5)
         }
         .foregroundColor(Color.black.opacity(0.8))
