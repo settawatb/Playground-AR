@@ -12,6 +12,7 @@
 		3F18B2AF2B8245F40046FEA9 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F18B2AE2B8245F40046FEA9 /* AsyncImage.swift */; };
 		3F18B2B52B82643C0046FEA9 /* ProductImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F18B2B42B82643C0046FEA9 /* ProductImageView.swift */; };
 		3F2986122B46113C003932AD /* pokemon.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 3F2986112B46113C003932AD /* pokemon.usdz */; };
+		3F2B667D2BD8D40700DDE1AA /* OrderHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2B667C2BD8D40700DDE1AA /* OrderHistoryView.swift */; };
 		3F345A012B3EFAFF00DE10E2 /* biplane.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 3F3459FE2B3EFAFF00DE10E2 /* biplane.usdz */; };
 		3F345A022B3EFAFF00DE10E2 /* robot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 3F3459FF2B3EFAFF00DE10E2 /* robot.usdz */; };
 		3F345A032B3EFAFF00DE10E2 /* toy.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 3F345A002B3EFAFF00DE10E2 /* toy.usdz */; };
@@ -88,6 +89,7 @@
 		3F18B2AE2B8245F40046FEA9 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		3F18B2B42B82643C0046FEA9 /* ProductImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductImageView.swift; sourceTree = "<group>"; };
 		3F2986112B46113C003932AD /* pokemon.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = pokemon.usdz; sourceTree = "<group>"; };
+		3F2B667C2BD8D40700DDE1AA /* OrderHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryView.swift; sourceTree = "<group>"; };
 		3F3459FE2B3EFAFF00DE10E2 /* biplane.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = biplane.usdz; sourceTree = "<group>"; };
 		3F3459FF2B3EFAFF00DE10E2 /* robot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = robot.usdz; sourceTree = "<group>"; };
 		3F345A002B3EFAFF00DE10E2 /* toy.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy.usdz; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				3F18B2A02B821A990046FEA9 /* ArrayExtensions.swift */,
 				3F18B2AE2B8245F40046FEA9 /* AsyncImage.swift */,
 				3F18B2B42B82643C0046FEA9 /* ProductImageView.swift */,
+				3F2B667C2BD8D40700DDE1AA /* OrderHistoryView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -525,6 +528,7 @@
 				3F6356762B3E1313009DD829 /* FavoritePage.swift in Sources */,
 				3FF462F22B1DE2250053797B /* MainPage.swift in Sources */,
 				3FF462F52B1DED8E0053797B /* Home.swift in Sources */,
+				3F2B667D2BD8D40700DDE1AA /* OrderHistoryView.swift in Sources */,
 				3F345A052B3EFB6900DE10E2 /* ARModeView.swift in Sources */,
 				3F834F8E2B3F13590035C2A9 /* FocusARView.swift in Sources */,
 				3F3D49E52B08C95F00A46B5E /* Playground_ARApp.swift in Sources */,

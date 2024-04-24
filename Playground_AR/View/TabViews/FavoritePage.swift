@@ -49,7 +49,7 @@ struct FavoritePage: View {
                         if sharedData.favoritedProducts.isEmpty{
                             
                             Group{
-                                Image("logo")
+                                Image("astronaut_3")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .padding()

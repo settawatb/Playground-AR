@@ -41,11 +41,12 @@ struct AddProductView: View {
 
     var body: some View {
         ScrollView(){
+     
             VStack(spacing: 10) {
             // File picker view for image and 3D model
             FilePickerView(viewModel: filePickerViewModel, allowedContentTypes: [.image, .usdz])
                 .sheet(isPresented: $isFilePickerPresented) {}
-            Divider().background(Color.black.opacity(0.4)).padding(.bottom, 30)
+            Divider().background(Color.black.opacity(0.4)).padding(.top, 20)
                 // Product input fields and other views
                 CustomTitle(icon: "signature", title: "Product Name")
                 TextField("Enter Product Name", text: $productName)
@@ -64,9 +65,13 @@ struct AddProductView: View {
                 // Product Quantity Stepper
                 Stepper {
                     HStack(alignment: .center) {
-                        Text("Quantity :")
-                            .font(.custom(customFontBold, size: 14))
-                            .foregroundColor(.black) // Add color for better visibility
+                        Label {
+                            Text("Quantity")
+                                .font(.custom(customFontBold, size: 14))
+                        } icon: {
+                            Image(systemName: "plusminus")
+                        }
+                        .foregroundColor(Color.black.opacity(0.8))
 
                         Text("\(productQuantity)")
                             .font(.custom(customFontBold, size: 14))
@@ -84,8 +89,15 @@ struct AddProductView: View {
 
                 // Product Category Picker
                 VStack {
-                    Text("Category")
-                        .font(.custom(customFontBold, size: 14))
+                    Label {
+                        Text("Category")
+                            .font(.custom(customFontBold, size: 14))
+                    } icon: {
+                        Image(systemName: "puzzlepiece")
+                            .resizable()
+                            .frame(width:18, height: 15)
+                    }
+                    .foregroundColor(Color.black.opacity(0.8))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -101,15 +113,22 @@ struct AddProductView: View {
 
                 // Product Details Text Editor
                 VStack {
-                    Text("Detail")
-                        .font(.custom(customFontBold, size: 14))
+                    Label {
+                        Text("Detail")
+                            .font(.custom(customFontBold, size: 14))
+                    } icon: {
+                        Image(systemName: "info.circle")
+                            .resizable()
+                            .frame(width:18, height: 18)
+                    }
+                    .foregroundColor(Color.black.opacity(0.8))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 ZStack(alignment: .topLeading) {
                     TextEditor(text: $productDescription)
                         .font(.custom(customFontBold, size: 14))
                         .foregroundColor(PurPle)
-                        .frame(minHeight: 50)
+                        .frame(minHeight: 120)
                         .padding()
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.black, lineWidth: 1)
@@ -227,6 +246,7 @@ struct AddProductView: View {
     }
 }
 
+
 // Define the custom title view
 @ViewBuilder
 func CustomTitle(icon: String, title: String) -> some View {
@@ -236,7 +256,8 @@ func CustomTitle(icon: String, title: String) -> some View {
                 .font(.custom(customFontBold, size: 14))
         } icon: {
             Image(systemName: icon)
-                .padding(.trailing, 5)
+                .resizable()
+                .frame(width:18, height: 15)
         }
         .foregroundColor(Color.black.opacity(0.8))
     }

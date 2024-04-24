@@ -75,7 +75,7 @@ struct SearchView: View {
                     // No Results Found
                     VStack(spacing: 0){
                         
-                        Image("logo")
+                        Image("astronaut_2")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                         Text("Item Not Found")

@@ -50,7 +50,7 @@ struct CartPage: View {
                         if sharedData.cartProducts.isEmpty{
                             
                             Group{
-                                Image("logo")
+                                Image("astronaut_1")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .padding()

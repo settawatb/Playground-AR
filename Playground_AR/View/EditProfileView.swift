@@ -46,14 +46,13 @@ struct EditProfileView: View {
                 }
                 
                 // Text fields for user inputs
-                CustomTextFieldEdit(icon: "envelope", title: "Username", hint: "username01", value: $loginData.userName, showPassword: .constant(false))
-                    .padding(.top, 20)
+                Text($loginData.userName.wrappedValue.isEmpty ? "username01" : $loginData.userName.wrappedValue)
+                    .font(.custom(customFontBold, size: 20))
+                Divider()
+                    .background(Color.black.opacity(0.4))
                 CustomTextFieldEdit(icon: "phone", title: "Telephone Number", hint: "09XXXXXXXX", value: $loginData.phoneNum, showPassword: .constant(false))
-                    .padding(.top, 20)
                 CustomTextFieldEdit(icon: "envelope", title: "Email", hint: "sample@mail.com", value: $loginData.email, showPassword: .constant(false))
-                    .padding(.top, 20)
                 CustomTextFieldEdit(icon: "mappin.and.ellipse", title: "Address", hint: "your address", value: $loginData.address, showPassword: .constant(false))
-                    .padding(.top, 20)
                 DateOfBirthPicker(selectedDate: $loginData.dateOfBirth)
                     .padding(.top, 20)
 
@@ -101,7 +100,7 @@ struct EditProfileView: View {
             .padding(30)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white.clipShape(CustomCorners(corners: [.topLeft, .topRight], radius: 25)).ignoresSafeArea())
+        .background(Color.white.ignoresSafeArea())
         .onAppear {
             loginData.fetchUserProfile()
         }
@@ -121,8 +120,11 @@ func CustomTextFieldEdit(icon: String, title: String, hint: String, value: Bindi
         .foregroundColor(Color.black.opacity(0.8))
         if title.contains("Username") {
             TextField(hint, text: value)
+                .background(Color.black.opacity(0.1))
                 .padding(.top, 2)
                 .disableAutocorrection(true)
+                .frame(width: .infinity, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .cornerRadius(15)
                 .disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 .autocapitalization(.none)
             
@@ -138,7 +140,7 @@ func CustomTextFieldEdit(icon: String, title: String, hint: String, value: Bindi
                 
                 // Outlined view for the text editor
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.gray, lineWidth: 1)
+                    .stroke(Color.black.opacity(0.1), lineWidth: 1)
                     .frame(minWidth: 50, maxWidth: .infinity, minHeight: 100, maxHeight: 100)
                     .padding(.top, 2)
                     .padding(.bottom, 20)
