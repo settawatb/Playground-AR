@@ -22,6 +22,9 @@ class SharedDataModel: ObservableObject {
     // Cart Products
     @Published var cartProducts: [Product] = []
     
+    // My Products
+    @Published var myProducts: [Product] = []
+    
     // calculating Total price
     func getTotalPrice() -> String {
         var total: Int = 0

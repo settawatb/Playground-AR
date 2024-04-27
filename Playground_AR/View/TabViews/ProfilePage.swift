@@ -93,15 +93,15 @@ struct ProfilePage: View {
                     }
                     
                     CustomNavigationLink(title: "Order History") {
-                        Text("Order History Content")
-                            .navigationTitle("Order History")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(LightGray.ignoresSafeArea())
+                            OrderHistoryView()
+                                .navigationTitle("Order History")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(LightGray.ignoresSafeArea())
                     }
                     
                     CustomNavigationLink(title: "My Products") {
-                        Text("My Purchase")
-                            .navigationTitle("My Purchase")
+                        MyProductView()
+                            .navigationTitle("My Products")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .background(LightGray.ignoresSafeArea())
                     }

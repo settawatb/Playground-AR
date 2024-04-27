@@ -213,7 +213,7 @@ struct DateOfBirthPicker: View {
     @Binding var selectedDate: Date
     
     var body: some View {
-        VStack(alignment: .center, spacing: 12) {
+        VStack(alignment: .leading, spacing: 12) {
             Label {
                 Text("Date of Birth")
                     .font(.custom(customFontBold, size:14))

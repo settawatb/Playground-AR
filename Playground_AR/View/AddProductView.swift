@@ -38,6 +38,22 @@ struct AddProductView: View {
         UINavigationBar.appearance().compactAppearance = appear
         UINavigationBar.appearance().scrollEdgeAppearance = appear
     }
+    
+    private var productQuantityBinding: Binding<String> {
+            Binding(
+                get: {
+                    return String(productQuantity)
+                },
+                set: { newValue in
+                    // Convert the String back to an Int
+                    if let intValue = Int(newValue) {
+                        productQuantity = intValue
+                    } else {
+                        productQuantity = 0
+                    }
+                }
+            )
+        }
 
     var body: some View {
         ScrollView(){
@@ -61,31 +77,38 @@ struct AddProductView: View {
                     .font(.custom(customFont, size:12))
                     .foregroundColor(PurPle)
                 Divider().background(Color.black.opacity(0.4))
+                
+                CustomTitle(icon: "plusminus", title: "Quantity")
+                TextField("Enter Product Quantity", text: productQuantityBinding)
+                    .keyboardType(.numberPad)
+                    .font(.custom(customFont, size:12))
+                    .foregroundColor(PurPle)
+                Divider().background(Color.black.opacity(0.4))
 
                 // Product Quantity Stepper
-                Stepper {
-                    HStack(alignment: .center) {
-                        Label {
-                            Text("Quantity")
-                                .font(.custom(customFontBold, size: 14))
-                        } icon: {
-                            Image(systemName: "plusminus")
-                        }
-                        .foregroundColor(Color.black.opacity(0.8))
-
-                        Text("\(productQuantity)")
-                            .font(.custom(customFontBold, size: 14))
-                            .foregroundColor(PurPle)
-                            .padding(.horizontal, 8) // Add padding for spacing
-                    }
-                } onIncrement: {
-                    productQuantity += 1
-                } onDecrement: {
-                    if productQuantity > 1 {
-                        productQuantity -= 1
-                    }
-                }
-                Divider().background(Color.black.opacity(0.4))
+//                Stepper {
+//                    HStack(alignment: .center) {
+//                        Label {
+//                            Text("Quantity")
+//                                .font(.custom(customFontBold, size: 14))
+//                        } icon: {
+//                            Image(systemName: "plusminus")
+//                        }
+//                        .foregroundColor(Color.black.opacity(0.8))
+//
+//                        Text("\(productQuantity)")
+//                            .font(.custom(customFontBold, size: 14))
+//                            .foregroundColor(PurPle)
+//                            .padding(.horizontal, 8) // Add padding for spacing
+//                    }
+//                } onIncrement: {
+//                    productQuantity += 1
+//                } onDecrement: {
+//                    if productQuantity > 1 {
+//                        productQuantity -= 1
+//                    }
+//                }
+//                Divider().background(Color.black.opacity(0.4))
 
                 // Product Category Picker
                 VStack {
@@ -126,7 +149,7 @@ struct AddProductView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 ZStack(alignment: .topLeading) {
                     TextEditor(text: $productDescription)
-                        .font(.custom(customFontBold, size: 14))
+                        .font(.custom(customFont, size: 14))
                         .foregroundColor(PurPle)
                         .frame(minHeight: 120)
                         .padding()
@@ -171,7 +194,8 @@ struct AddProductView: View {
                     }
                 )
             }
-        }.onAppear {
+        }
+        .onAppear {
             // Fetch user profile data on appear
             loginData.fetchUserProfile()
         }

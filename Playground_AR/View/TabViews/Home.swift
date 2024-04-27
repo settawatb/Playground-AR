@@ -17,11 +17,12 @@ struct Home: View {
     @StateObject var homeData: HomeViewModel = HomeViewModel()
     
     var body: some View {
-            VStack(spacing: 15) {
+            VStack(spacing: 0) {
                 HStack(spacing: 15){
                     Text("Discovery")
                         .font(.custom(customFontBold, size: 40))
-                        .padding(.trailing, 2)
+                        
+                    Spacer()
                     
                     // Search Bar
                     ZStack {
@@ -41,7 +42,8 @@ struct Home: View {
                             homeData.searchActivated.toggle()
                         }
                     }
-                }
+                }.padding(.horizontal)
+                    .padding(.vertical)
                 
                 
                 // Product Tab
@@ -59,20 +61,87 @@ struct Home: View {
                 
                 // Products Page
                 ScrollView(showsIndicators: false) {
-                    LazyVGrid(columns: Array(repeating: GridItem(), count: 2), spacing: 10) {
-                        ForEach(homeData.filteredProducts.chunked(into: 2), id: \.self) { row in
-                            ForEach(row) { product in
-                                // Product View Card
+                    VStack {
+                        // Calculate the range of products to display on the current page
+                        let startIndex = homeData.currentPage * homeData.productsPerPage
+                        let endIndex = min(startIndex + homeData.productsPerPage, homeData.filteredProducts.count)
+                        
+                        // Display products for the current page
+                        LazyVGrid(columns: Array(repeating: GridItem(), count: 2), spacing: 10) {
+                            ForEach(homeData.filteredProducts[startIndex..<endIndex], id: \.self) { product in
                                 ProductCardView(product: product)
                             }
                         }
+                        .padding(.horizontal, 25)
+                        .padding(.bottom)
                     }
-                    .padding(.horizontal, 25)
-                    .padding(.bottom) 
                 }
+                Divider()
+                    .background(Color.black.opacity(0.4))
+                // Page Button
+                HStack {
+                    // Previous page button
+                    Button(action: {
+                        if homeData.currentPage > 0 {
+                            homeData.currentPage -= 1
+                        }
+                    }) {
+                        Text("prev")
+                            .font(.custom(customFont, size: 15))
+                            .foregroundColor(homeData.currentPage > 0 ? PurPle : .gray)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(
+                                Capsule()
+                                    .stroke(PurPle, lineWidth: 1)
+                            )
+                    }
+                    .disabled(homeData.currentPage == 0) // Disable button if on first page
+
+                    Spacer()
+
+                    // Page numbers
+                    ForEach(0..<(homeData.filteredProducts.count / homeData.productsPerPage + (homeData.filteredProducts.count % homeData.productsPerPage == 0 ? 0 : 1)), id: \.self) { index in
+                        Text("\(index + 1)")
+                            .font(.custom(customFont, size: 15))
+                            .foregroundColor(homeData.currentPage == index ? .white : .gray)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(
+                                Circle()
+                                    .stroke(homeData.currentPage == index ? PurPle : .gray, lineWidth: 1)
+                                    .fill(homeData.currentPage == index ? PurPle : .clear)
+                            )
+                            .onTapGesture {
+                                homeData.currentPage = index
+                            }
+                    }
+
+                    Spacer()
+
+                    // Next page button
+                    Button(action: {
+                        if homeData.currentPage < homeData.filteredProducts.count / homeData.productsPerPage {
+                            homeData.currentPage += 1
+                        }
+                    }) {
+                        Text("next")
+                            .font(.custom(customFont, size: 15))
+                            .foregroundColor(homeData.currentPage < homeData.filteredProducts.count / homeData.productsPerPage ? PurPle : .gray)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(
+                                Capsule()
+                                    .stroke(PurPle, lineWidth: 1)
+                            )
+                    }
+                    .disabled(homeData.currentPage >= homeData.filteredProducts.count / homeData.productsPerPage) // Disable button if on last page
+                }
+                .padding(.horizontal, 25)
+                .padding(.vertical, 10)
+
+
             }
-            .padding(.vertical)
-        
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white)
         // Updating data whenever tab changes
@@ -118,7 +187,7 @@ struct Home: View {
     @ViewBuilder
     func ProductCardView(product: Product) -> some View {
         HStack {
-            VStack(spacing: 1) {
+            VStack(spacing: 10) {
                 ProductImage(urlString: product.productImage)
                 ProductDetails(product: product)
                 ProductPrice(product: product)
@@ -186,29 +255,45 @@ struct Home: View {
     @ViewBuilder
     func ProductDetails(product: Product) -> some View {
         // Product Details
-        Text(product.title)
-            .font(.custom(customFont, size: 18))
-            .frame(width: getRect().width / 2 - 40, alignment: .leading)
-            .fontWeight(.semibold)
-            .padding(.top)
-            .lineLimit(1)
-        
-        Text(product.type[0].rawValue)
-            .lineLimit(1)
-            .font(.custom(customFont, size: 14))
-            .frame(width: getRect().width / 2 - 40, alignment: .leading)
-            .foregroundStyle(.gray)
+        VStack(alignment:.leading, spacing: 0){
+            Text(product.title)
+//                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .font(.custom(customFont, size: 20))
+                .fontWeight(.semibold)
+                .padding(.top)
+                .lineLimit(1)
+            HStack {
+                Text(product.type[0].rawValue)
+                    .lineLimit(1)
+                    .font(.custom(customFont, size: 14))
+                    .foregroundStyle(.gray)
+                if let quantity = product.quantity {
+                    Text("Qty : \(quantity)")
+                        .lineLimit(1)
+                        .font(.custom(customFont, size: 14))
+                        .foregroundStyle(.gray)
+                }
+            }
+            Text((Int(product.price) ?? 0).formattedWithSeparator + " THB")
+                .font(.custom(customFont, size: 16))
+                .fontWeight(.bold)
+                .frame(width: getRect().width / 2 - 40, alignment: .leading)
+                .foregroundStyle(Color(red: 125/255, green: 122/255, blue: 255/255))
+        }
+        .padding(0)
+//        .padding(.horizontal,10)
+//        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder
     func ProductPrice(product: Product) -> some View {
         // Product Price
-        Text((Int(product.price) ?? 0).formattedWithSeparator + " THB")
-            .font(.custom(customFont, size: 16))
-            .fontWeight(.bold)
-            .frame(width: getRect().width / 2 - 40, alignment: .leading)
-            .foregroundStyle(Color(red: 125/255, green: 122/255, blue: 255/255))
-            .padding(.top, 5)
+//        Text((Int(product.price) ?? 0).formattedWithSeparator + " THB")
+//            .font(.custom(customFont, size: 16))
+//            .fontWeight(.bold)
+//            .frame(width: getRect().width / 2 - 40, alignment: .leading)
+//            .foregroundStyle(Color(red: 125/255, green: 122/255, blue: 255/255))
+//            .padding(.top, 5)
     }
     
     @ViewBuilder

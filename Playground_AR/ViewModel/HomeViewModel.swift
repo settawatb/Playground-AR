@@ -12,6 +12,9 @@ class HomeViewModel: ObservableObject {
 
     @Published var productType: ProductType = .All
     @Published var products: [Product] = []
+    @Published var currentPage: Int = 0
+    
+    let productsPerPage = 6
 
     //Sample Products
 //    @Published var products: [Product] = [
@@ -77,18 +80,15 @@ class HomeViewModel: ObservableObject {
 
 
 
-    func filterProductByType(){
-        // Filtering Product By Product Type
+    func filterProductByType() {
         DispatchQueue.global(qos: .userInteractive).async {
-            let results = self.products
-                .lazy
-                .filter { product in
-                    return product.type.contains(self.productType)
-                }
+            let results = self.products.filter { product in
+                product.type.contains(self.productType)
+            }
+
             DispatchQueue.main.async {
-                self.filteredProducts = results.compactMap { product in
-                    return product
-                }
+                self.filteredProducts = results
+                self.currentPage = 0
             }
         }
     }
