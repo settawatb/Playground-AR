@@ -139,7 +139,7 @@ struct SearchView: View {
                 
                 ZStack{
                     if sharedData.showDetailProduct{
-                        AsyncImage(url: URL(string: product.productImage)) { phase in
+                        AsyncImage(url: URL(string: product.productImages[0])) { phase in
                             switch phase {
                             case .success(let image):
                                 image
@@ -186,7 +186,7 @@ struct SearchView: View {
                         }
                     }
                     else{
-                        AsyncImage(url: URL(string: product.productImage)) { phase in
+                        AsyncImage(url: URL(string: product.productImages[0])) { phase in
                             switch phase {
                             case .success(let image):
                                 image

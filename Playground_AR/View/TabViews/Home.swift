@@ -183,7 +183,7 @@ struct Home: View {
     func ProductCardView(product: Product) -> some View {
         HStack {
             VStack(spacing: 10) {
-                ProductImage(urlString: product.productImage)
+                ProductImage(urlString: product.productImages[0])
                 ProductDetails(product: product)
                 ProductPrice(product: product)
             }

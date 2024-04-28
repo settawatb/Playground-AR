@@ -14,10 +14,10 @@ struct Product: Identifiable, Hashable, Decodable {
     var title: String
     var description: String
     var price: String
-    var productImage: String
-    var productModel : URL
+    var productImages: [String] // Changed to array of strings
+    var productModel: URL
     var quantity: Int?
-    var updateAt: Date // Add this property for 'update_at'
+    var updateAt: Date
     
     // Coding keys if your property names differ from the JSON keys
     enum CodingKeys: String, CodingKey {
@@ -26,11 +26,10 @@ struct Product: Identifiable, Hashable, Decodable {
         case title = "product_name"
         case description = "product_desc"
         case price = "product_price"
-        case productImage = "product_images"
+        case productImages = "product_images" // Changed the key to match the JSON key
         case quantity = "product_quantity"
         case updateAt = "update_at"
         case productModel = "product_model3D"
-        // Add other cases for additional properties
     }
     
     // Remove the custom date decoding strategy
@@ -44,8 +43,11 @@ struct Product: Identifiable, Hashable, Decodable {
         // Decode price as Int and then convert it to String
         let priceInt = try container.decode(Int.self, forKey: .price)
         price = String(priceInt)
+        
+        // Decode productImages as an array of strings
+        productImages = try container.decode([String].self, forKey: .productImages)
+        
         productModel = try container.decode(URL.self, forKey: .productModel)
-        productImage = try container.decode(String.self, forKey: .productImage)
         quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
         
         // Use a single date decoding strategy for both formats
@@ -67,9 +69,6 @@ struct Product: Identifiable, Hashable, Decodable {
             )
         }
     }
-
-
-
 }
 
 // Product Types

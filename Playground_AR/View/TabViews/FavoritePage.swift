@@ -114,7 +114,7 @@ struct FavoritePage: View {
     @ViewBuilder
     func CardView(product: Product)->some View{
         HStack(spacing: 15){
-            ProductImageView(urlString: product.productImage)
+            ProductImageView(urlString: product.productImages[0])
                 .frame(width: 100, height: 100)
                 .cornerRadius(15)
             

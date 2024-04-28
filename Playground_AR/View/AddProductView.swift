@@ -8,8 +8,10 @@
 import SwiftUI
 import Combine
 
+// Define the AddProductView structure
 struct AddProductView: View {
-    @StateObject var loginData: LoginPageModel = LoginPageModel()
+    // State and view model definitions
+    @StateObject var loginData = LoginPageModel()
     @State private var productName = ""
     @State private var productPrice = ""
     @State private var productQuantity = 1
@@ -22,15 +24,13 @@ struct AddProductView: View {
     @State private var addProductSuccess = false
     
     @Environment(\.presentationMode) var presentationMode
-
-    // Initialize navigation bar appearance
+    
+    // Initialization of navigation bar appearance
     init() {
         let appear = UINavigationBarAppearance()
-
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont(name: customFontBold, size: 20)!
         ]
-
         appear.largeTitleTextAttributes = attributes
         appear.titleTextAttributes = attributes
         UIBarButtonItem.appearance().tintColor = .black
@@ -39,31 +39,28 @@ struct AddProductView: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appear
     }
     
+    // Binding for product quantity
     private var productQuantityBinding: Binding<String> {
-            Binding(
-                get: {
-                    return String(productQuantity)
-                },
-                set: { newValue in
-                    // Convert the String back to an Int
-                    if let intValue = Int(newValue) {
-                        productQuantity = intValue
-                    } else {
-                        productQuantity = 0
-                    }
+        Binding(
+            get: { String(productQuantity) },
+            set: { newValue in
+                if let intValue = Int(newValue) {
+                    productQuantity = intValue
+                } else {
+                    productQuantity = 0
                 }
-            )
-        }
+            }
+        )
+    }
 
+    // Body of the view
     var body: some View {
-        ScrollView(){
-     
+        ScrollView() {
             VStack(spacing: 10) {
-            // File picker view for image and 3D model
-            FilePickerView(viewModel: filePickerViewModel, allowedContentTypes: [.image, .usdz])
-                .sheet(isPresented: $isFilePickerPresented) {}
-            Divider().background(Color.black.opacity(0.4)).padding(.top, 20)
-                // Product input fields and other views
+                // File picker view for image and 3D model
+                FilePickerView(viewModel: filePickerViewModel, allowedContentTypes: [.image, .usdz])
+                    .sheet(isPresented: $isFilePickerPresented) {}
+                Divider().background(Color.black.opacity(0.4)).padding(.top, 20)
                 CustomTitle(icon: "signature", title: "Product Name")
                 TextField("Enter Product Name", text: $productName)
                     .font(.custom(customFont, size: 12))
@@ -77,38 +74,14 @@ struct AddProductView: View {
                     .font(.custom(customFont, size:12))
                     .foregroundColor(PurPle)
                 Divider().background(Color.black.opacity(0.4))
-                
+
+                // Product Quantity
                 CustomTitle(icon: "plusminus", title: "Quantity")
                 TextField("Enter Product Quantity", text: productQuantityBinding)
                     .keyboardType(.numberPad)
                     .font(.custom(customFont, size:12))
                     .foregroundColor(PurPle)
                 Divider().background(Color.black.opacity(0.4))
-
-                // Product Quantity Stepper
-//                Stepper {
-//                    HStack(alignment: .center) {
-//                        Label {
-//                            Text("Quantity")
-//                                .font(.custom(customFontBold, size: 14))
-//                        } icon: {
-//                            Image(systemName: "plusminus")
-//                        }
-//                        .foregroundColor(Color.black.opacity(0.8))
-//
-//                        Text("\(productQuantity)")
-//                            .font(.custom(customFontBold, size: 14))
-//                            .foregroundColor(PurPle)
-//                            .padding(.horizontal, 8) // Add padding for spacing
-//                    }
-//                } onIncrement: {
-//                    productQuantity += 1
-//                } onDecrement: {
-//                    if productQuantity > 1 {
-//                        productQuantity -= 1
-//                    }
-//                }
-//                Divider().background(Color.black.opacity(0.4))
 
                 // Product Category Picker
                 VStack {
@@ -118,12 +91,11 @@ struct AddProductView: View {
                     } icon: {
                         Image(systemName: "puzzlepiece")
                             .resizable()
-                            .frame(width:18, height: 15)
+                            .frame(width: 18, height: 15)
                     }
                     .foregroundColor(Color.black.opacity(0.8))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-
                 Picker("Category", selection: $selectedCategory) {
                     Text("Arttoy").tag("Arttoy")
                     Text("Figure").tag("Figure")
@@ -142,7 +114,7 @@ struct AddProductView: View {
                     } icon: {
                         Image(systemName: "info.circle")
                             .resizable()
-                            .frame(width:18, height: 18)
+                            .frame(width: 18, height: 18)
                     }
                     .foregroundColor(Color.black.opacity(0.8))
                 }
@@ -187,7 +159,6 @@ struct AddProductView: View {
                     title: Text(addProductSuccess ? "Upload Successfully" : "Error"),
                     message: Text(alertMessage),
                     dismissButton: .default(Text("OK")) {
-                        // If the upload was successful, navigate to MainPage
                         if addProductSuccess {
                             presentationMode.wrappedValue.dismiss()
                         }
@@ -205,22 +176,25 @@ struct AddProductView: View {
     func validateInputs() -> Bool {
         if productName.isEmpty {
             alertMessage = "Please enter a product name."
+            return false
         } else if productPrice.isEmpty {
             alertMessage = "Please enter a product price."
+            return false
         } else if productDescription.isEmpty {
             alertMessage = "Please enter a product description."
+            return false
         } else if selectedCategory.isEmpty {
             alertMessage = "Please select a product category."
+            return false
         } else {
             // Additional validation logic if necessary
             return true
         }
-        showAlert = true
-        return false
     }
 
     // Upload product and handle the result
     func uploadProduct() {
+        // Create a dictionary to hold form data with product information
         let formData: [String: Any] = [
             "productName": productName,
             "productPrice": productPrice,
@@ -231,44 +205,51 @@ struct AddProductView: View {
             "productSellerName": loginData.userName
         ]
 
-        // Convert the image to data
-        guard let imageData = filePickerViewModel.selectedImages.first?.pngData(),
-              let model3DUrl = filePickerViewModel.selectedModel3D else {
-            print("Error: Unable to retrieve image data or model URL")
-            alertMessage = "Failed to retrieve image data or model URL."
+        // Convert selected images to an array of data
+        var imageDataArray: [Data] = []
+        for image in filePickerViewModel.selectedImages {
+            if let imageData = image.pngData() {
+                // Append image data to the imageDataArray
+                imageDataArray.append(imageData)
+            }
+        }
+
+        // Fetch model 3D data and handle the result
+        guard let model3DUrl = filePickerViewModel.selectedModel3D else {
+            alertMessage = "Failed to retrieve model 3D URL."
             showAlert = true
             return
         }
-        
-        // Fetch model 3D data from URL
+
         NetworkManager.shared.fetchData(from: model3DUrl) { result in
             switch result {
             case .success(let model3DData):
-                // Call your network manager to upload the product data
-                NetworkManager.shared.uploadFiles(formData: formData, imageData: imageData, model3DData: model3DData) { result in
+                // Call NetworkManager to upload files
+                NetworkManager.shared.uploadFiles(formData: formData, imageDataArray: imageDataArray, model3DData: model3DData) { result in
                     switch result {
                     case .success(let response):
-                        // Handle success response
                         print("Product uploaded successfully:", response)
                         addProductSuccess = true
                         alertMessage = "Product uploaded successfully."
                         showAlert = true
                     case .failure(let error):
-                        // Handle error
                         print("Error uploading product:", error)
                         alertMessage = "Failed to upload product. Please try again."
                         showAlert = true
                     }
                 }
             case .failure(let error):
-                // Handle error fetching model 3D data
                 print("Error fetching model 3D data:", error)
                 alertMessage = "Failed to fetch model 3D data. Please try again."
                 showAlert = true
             }
         }
     }
+
+
+
 }
+
 
 
 // Define the custom title view

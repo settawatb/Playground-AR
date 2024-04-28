@@ -85,7 +85,7 @@ struct CheckoutView: View {
                                     ForEach(products) { product in
                                         HStack(spacing: 15) {
                                             // Product Image and information
-                                            ProductImageCheckoutView(urlString: product.productImage)
+                                            ProductImageCheckoutView(urlString: product.productImages[0])
                                             
                                             VStack(alignment: .leading, spacing: 8) {
                                                 Text(product.title)

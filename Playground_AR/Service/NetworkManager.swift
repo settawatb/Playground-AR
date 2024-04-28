@@ -20,7 +20,6 @@ enum CustomNetworkError: Error {
     case authenticationError
 }
 
-
 struct NetworkManager {
     static let shared = NetworkManager()
 
@@ -53,11 +52,17 @@ struct NetworkManager {
             }
 
             guard let data = data else {
-                completion(.failure(NetworkError.noData))
+                completion(.failure(CustomNetworkError.noData))
                 return
             }
 
+            // Log the server response as a string for debugging
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Server response data: \(responseString)")
+            }
+
             do {
+                // Parse JSON response
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     // Check for authentication errors
                     if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 401 {
@@ -66,7 +71,7 @@ struct NetworkManager {
                         completion(.success(json))
                     }
                 } else {
-                    completion(.failure(NetworkError.noData))
+                    completion(.failure(CustomNetworkError.noData))
                 }
             } catch {
                 completion(.failure(error))
@@ -74,7 +79,7 @@ struct NetworkManager {
         }.resume()
     }
 
-    func uploadFiles(formData: [String: Any], imageData: Data, model3DData: Data, completion: @escaping (Result<[String: Any], Error>) -> Void) {
+    func uploadFiles(formData: [String: Any], imageDataArray: [Data], model3DData: Data, completion: @escaping (Result<[String: Any], Error>) -> Void) {
         guard let url = URL(string: "http://192.168.1.39:3000/products/upload") else {
             completion(.failure(CustomNetworkError.invalidURL))
             return
@@ -88,26 +93,38 @@ struct NetworkManager {
 
         var body = Data()
 
+        // Add form data to the body
         for (key, value) in formData {
-            body.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
             body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)!)
-            body.append("\(value)".data(using: .utf8)!)
+            body.append("\(value)\r\n".data(using: .utf8)!)
         }
 
-        body.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.png\"\r\n".data(using: .utf8)!)
-        body.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
-        body.append(imageData)
+        // Add image data to the body
+        for (index, imageData) in imageDataArray.enumerated() {
+            let fieldName = "image\(index)"
+            let fileName = "image\(index).png"
 
-        body.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n".data(using: .utf8)!)
+            body.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
+            body.append(imageData)
+            body.append("\r\n".data(using: .utf8)!)
+        }
+
+        // Add model 3D data to the body
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
         body.append("Content-Disposition: form-data; name=\"usdzFile\"; filename=\"model.usdz\"\r\n".data(using: .utf8)!)
-        body.append("Content-Type: model/vnd.usdz+zip\r\n\r\n".data(using: .utf8)!)
+        body.append("Content-Type: application/octet-stream\r\n\r\n".data(using: .utf8)!)
         body.append(model3DData)
+        body.append("\r\n".data(using: .utf8)!)
 
-        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        // End boundary
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
 
         request.httpBody = body
 
+        // Perform the network request
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 completion(.failure(error))
@@ -115,15 +132,20 @@ struct NetworkManager {
             }
 
             guard let data = data else {
-                completion(.failure(NetworkError.noData))
+                completion(.failure(CustomNetworkError.noData))
                 return
+            }
+
+            // Log the server response as a string for debugging
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Server response data: \(responseString)")
             }
 
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     completion(.success(json))
                 } else {
-                    completion(.failure(NetworkError.noData))
+                    completion(.failure(CustomNetworkError.noData))
                 }
             } catch {
                 completion(.failure(error))
@@ -137,15 +159,13 @@ struct NetworkManager {
                 completion(.failure(error))
                 return
             }
-            
+
             guard let data = data else {
-                completion(.failure(NetworkError.noData))
+                completion(.failure(CustomNetworkError.noData))
                 return
             }
-            
+
             completion(.success(data))
         }.resume()
     }
-
-
 }
