@@ -51,7 +51,7 @@ struct ProductDetailView: View {
                 .padding()
                 
                 // Product Image
-                ProductImageView(urlString: product.productImage)
+                ProductImageDetailView(urlString: product.productImage)
                     .matchedGeometryEffect(id: "\(product.id)\(sharedData.fromSearchPage ? "SEARCH" : "IMAGE")", in: animation)
                     .padding(.horizontal)
                     .offset(y: -12)
@@ -202,7 +202,7 @@ struct ProductDetailView_Previews: PreviewProvider {
 
 @ViewBuilder
 func ProductImage(urlString: String) -> some View {
-    ProductImageView(urlString: urlString)
+    ProductImageDetailView(urlString: urlString)
 }
 
 

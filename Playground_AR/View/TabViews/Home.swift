@@ -73,7 +73,7 @@ struct Home: View {
                             }
                         }
                         .padding(.horizontal, 25)
-                        .padding(.bottom)
+                        .padding(.vertical)
                     }
                 }
                 Divider()
@@ -86,15 +86,12 @@ struct Home: View {
                             homeData.currentPage -= 1
                         }
                     }) {
-                        Text("prev")
-                            .font(.custom(customFont, size: 15))
+                        Image(systemName: "arrowshape.left.fill")
+                            .resizable()
+                            .frame(width: 33,height: 24)
+                            .scaledToFit()
                             .foregroundColor(homeData.currentPage > 0 ? PurPle : .gray)
                             .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(
-                                Capsule()
-                                    .stroke(PurPle, lineWidth: 1)
-                            )
                     }
                     .disabled(homeData.currentPage == 0) // Disable button if on first page
 
@@ -125,15 +122,13 @@ struct Home: View {
                             homeData.currentPage += 1
                         }
                     }) {
-                        Text("next")
-                            .font(.custom(customFont, size: 15))
+                        
+                        Image(systemName: "arrowshape.right.fill")
+                            .resizable()
+                            .frame(width: 33,height: 24)
+                            .scaledToFit()
                             .foregroundColor(homeData.currentPage < homeData.filteredProducts.count / homeData.productsPerPage ? PurPle : .gray)
                             .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(
-                                Capsule()
-                                    .stroke(PurPle, lineWidth: 1)
-                            )
                     }
                     .disabled(homeData.currentPage >= homeData.filteredProducts.count / homeData.productsPerPage) // Disable button if on last page
                 }
@@ -209,41 +204,42 @@ struct Home: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+//                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                    .frame(width: 170,height: 170)
                     .cornerRadius(15)
                     .shadow(radius: 3)
                     .offset(y: 20)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 7)
                     .fixedSize(horizontal: true, vertical: false)
             case .failure:
                 Image("image_placeholder") // Placeholder image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                    .frame(width: 170,height: 170)
                     .cornerRadius(15)
                     .shadow(radius: 5)
                     .offset(y: 20)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 7)
                     .fixedSize(horizontal: true, vertical: false)
             case .empty:
                 Image("image_placeholder") // Placeholder image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                    .frame(width: 170,height: 170)
                     .cornerRadius(15)
                     .shadow(radius: 5)
                     .offset(y: 20)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 7)
                     .fixedSize(horizontal: true, vertical: false)
             @unknown default:
                 Image("image_placeholder") // Placeholder image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: getRect().width / 2 - 40, height: getRect().width / 2 - 40)
+                    .frame(width: 170,height: 170)
                     .cornerRadius(15)
                     .shadow(radius: 5)
                     .offset(y: 20)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 7)
                     .fixedSize(horizontal: true, vertical: false)
             }
         }

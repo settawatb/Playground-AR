@@ -11,6 +11,7 @@ struct ProfilePage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var isActive: Bool = false
+
     
     var body: some View {
         NavigationView {

@@ -5,145 +5,148 @@
 //
 
 import SwiftUI
-
-
+import PopupView
 
 struct CartPage: View {
     
     @EnvironmentObject var sharedData: SharedDataModel
-    
+    @Environment(\.presentationMode) var presentationMode
     // Delete Option
     @State var showDeleteOption: Bool = false
+    @State private var shouldClearCart: Bool = false
+
     
+    // clear product after place order
     var body: some View {
-        
         NavigationView{
-            
-            VStack(spacing: 10) {
-                ScrollView(.vertical, showsIndicators: false) {
-                    
-                    VStack{
+            VStack(spacing:0){
+                VStack(spacing: 10) {
+                    ScrollView(.vertical, showsIndicators: false) {
                         
-                        HStack{
-                            Text("Cart")
-                                .font(.custom(customFontBold, size: 40))
+                        VStack{
                             
-                            Spacer()
-                            
-                            Button {
+                            HStack{
+                                Text("Cart")
+                                    .font(.custom(customFontBold, size: 40))
                                 
-                                withAnimation{
-                                    showDeleteOption.toggle()
+                                Spacer()
+                                
+                                Button {
+                                    
+                                    withAnimation{
+                                        showDeleteOption.toggle()
+                                    }
+                                    
+                                } label: {
+                                    Image("Delete")
+                                        .resizable()
+                                        .colorMultiply(.red)
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 25, height: 25)
+                                }
+                                .opacity(sharedData.cartProducts.isEmpty ? 0 : 1)
+                            }
+                            
+                            // checking if cart product are empty
+                            if sharedData.cartProducts.isEmpty{
+                                
+                                Group{
+                                    Image("astronaut_1")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .padding()
+                                        .padding(.top,35)
+                                    
+                                    Text("No Items added")
+                                        .font(.custom(customFont, size: 25))
+                                        .fontWeight(.semibold)
+                                    
+                                    Text("Hit the button to save into Cart.")
+                                        .font(.custom(customFont, size: 18))
+                                        .foregroundColor(.gray)
+                                        .padding(.horizontal)
+                                        .padding(.top, 10)
+                                        .multilineTextAlignment(.center)
                                 }
                                 
-                            } label: {
-                                Image("Delete")
-                                    .resizable()
-                                    .colorMultiply(.red)
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 25, height: 25)
                             }
-                            .opacity(sharedData.cartProducts.isEmpty ? 0 : 1)
-                        }
-                        
-                        // checking if cart product are empty
-                        if sharedData.cartProducts.isEmpty{
-                            
-                            Group{
-                                Image("astronaut_1")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .padding()
-                                    .padding(.top,35)
+                            else {
                                 
-                                Text("No Items added")
-                                    .font(.custom(customFont, size: 25))
-                                    .fontWeight(.semibold)
-                                
-                                Text("Hit the button to save into Cart.")
-                                    .font(.custom(customFont, size: 18))
-                                    .foregroundColor(.gray)
-                                    .padding(.horizontal)
-                                    .padding(.top, 10)
-                                    .multilineTextAlignment(.center)
-                            }
-                            
-                        }
-                        else {
-                            
-                            // Displaying Products
-                            VStack(spacing: 15){
-                                
-                                ForEach($sharedData.cartProducts){$product in
+                                // Displaying Products
+                                VStack(spacing: 15){
                                     
-                                    HStack(spacing: 0){
+                                    ForEach($sharedData.cartProducts){$product in
                                         
-                                        if showDeleteOption{
+                                        HStack(spacing: 0){
                                             
-                                            Button {
-                                                deleteProduct(product: product)
-                                            } label: {
-                                                Image(systemName: "minus.circle.fill")
-                                                    .font(.title2)
-                                                    .foregroundColor(.red)
+                                            if showDeleteOption{
+                                                
+                                                Button {
+                                                    deleteProduct(product: product)
+                                                } label: {
+                                                    Image(systemName: "minus.circle.fill")
+                                                        .font(.title2)
+                                                        .foregroundColor(.red)
+                                                }
+                                                .padding(.trailing)
                                             }
-                                            .padding(.trailing)
+                                            CartView(product: $product)
                                         }
-                                        CartView(product: $product)
                                     }
                                 }
+                                .padding(.top, 25)
+                                .padding(.horizontal)
+                                
                             }
-                            .padding(.top, 25)
-                            .padding(.horizontal)
-                            
                         }
+                        .padding()
                     }
-                    .padding()
-                }
-                
-                // Showing Total and check out Button
-                if !sharedData.cartProducts.isEmpty{
                     
-                    Group{
+                    // Showing Total and check out Button
+                    if !sharedData.cartProducts.isEmpty{
                         
-                        HStack{
+                        Group {
+                            HStack {
+                                Text("Total")
+                                    .font(.custom(customFont, size: 14))
+                                    .fontWeight(.semibold)
+                                
+                                Spacer()
+                                
+                                Text(sharedData.getTotalPrice())
+                                    .font(.custom(customFont, size: 18).bold())
+                                    .foregroundColor(PurPle)
+                            }
                             
-                            Text("Total")
-                                .font(.custom(customFont, size: 14))
-                                .fontWeight(.semibold)
-                            
-                            Spacer()
-                            
-                            Text(sharedData.getTotalPrice())
-                                .font(.custom(customFont, size: 18).bold())
-                                .foregroundColor(PurPle)
+                            // Ensure you are passing the products array as a binding
+                            NavigationLink(destination: CheckoutView(products: $sharedData.cartProducts)) {
+                                Text("Proceed To Checkout")
+                                    .font(.custom(customFont, size: 18).bold())
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 18)
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color(PurPle))
+                                    .cornerRadius(15)
+                                    .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
+                            }
+                            .padding(.vertical)
                         }
-                        Button {
-                            
-                        } label: {
-                            
-                            Text("Checkout")
-                                .font(.custom(customFont, size: 18).bold())
-                                .foregroundColor(.white)
-                                .padding(.vertical,18)
-                                .frame(maxWidth: .infinity)
-                                .background(Color(PurPle))
-                                .cornerRadius(15)
-                                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
-                        }
-                        .padding(.vertical)
+                        .padding(.horizontal, 25)
+
                     }
-                    .padding(.horizontal, 25)
                 }
-            }
-            .navigationBarHidden(true)
-            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
-            .background(
+                .navigationBarHidden(true)
+                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
+                .background(
+                    Color(LightGray)
+                        .ignoresSafeArea()
+                )
                 
-                Color(LightGray)
-                    .ignoresSafeArea()
-            
-            )
+            }
+        }.onChange(of: shouldClearCart) {
+            sharedData.cartProducts.removeAll()
+            // Reset the state variable
+            shouldClearCart = false
         }
     }
     
@@ -174,7 +177,7 @@ struct CartView: View{
         HStack(spacing: 15){
             ProductImageView(urlString: product.productImage)
                 .frame(width: 100, height: 100)
-                .cornerRadius(15)
+                .cornerRadius(4)
             
             VStack(alignment: .leading, spacing: 8) {
                 

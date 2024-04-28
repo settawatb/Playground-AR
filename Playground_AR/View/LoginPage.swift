@@ -225,6 +225,8 @@ struct DateOfBirthPicker: View {
                 .datePickerStyle(.wheel)
                 .labelsHidden()
                 .padding(.bottom, 20)
+                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                .frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
             Divider()
                 .background(Color.black.opacity(0.4))
         }
