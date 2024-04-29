@@ -144,12 +144,13 @@ class LoginPageModel: ObservableObject {
         }
     
     
-    func fetchUserProfile() {
+    func fetchUserProfile(completion: @escaping () -> Void = {}) {
         guard let token = UserDefaults.standard.string(forKey: "token") else {
+            print("No token found in UserDefaults.")
             return
         }
 
-        let url = URL(string: "http://192.168.1.39:3000/users/profile")! // Update with your actual API URL
+        let url = URL(string: "http://192.168.1.39:3000/users/profile")!
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -158,6 +159,7 @@ class LoginPageModel: ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data else {
                 print("Error fetching user profile: \(error?.localizedDescription ?? "No data")")
+                completion()
                 return
             }
 
@@ -172,30 +174,33 @@ class LoginPageModel: ObservableObject {
                     self.dateOfBirth = DateFormatter.yyyyMMdd.date(from: decodedResponse.dateOfBirth) ?? Date()
 
                     // Handle the image
-                    if let imageURLString = decodedResponse.image {
-                        // Use the provided image URL string
-                        if let imageURL = URL(string: imageURLString) {
-                            URLSession.shared.dataTask(with: imageURL) { data, _, error in
-                                if let error = error {
-                                    print("Error downloading image: \(error.localizedDescription)")
-                                } else if let data = data {
-                                    DispatchQueue.main.async {
-                                        self.image = data // Update the image data
-                                    }
+                    if let imageURLString = decodedResponse.image, let imageURL = URL(string: imageURLString) {
+                        URLSession.shared.dataTask(with: imageURL) { imageData, _, error in
+                            if let error = error {
+                                print("Error downloading image: \(error.localizedDescription)")
+                            } else if let imageData = imageData {
+                                DispatchQueue.main.async {
+                                    self.image = imageData // Update the image data
                                 }
-                            }.resume()
-                        } else {
-                            print("Invalid image URL")
-                        }
+                            }
+                        }.resume()
                     } else {
                         self.image = nil // Set image to nil if there's no image file
                     }
+                    
+                    // Print debug logs
+                    print("User profile fetched successfully. ID: \(self.id), Username: \(self.userName)")
+                    
+                    // Call completion handler
+                    completion()
                 }
             } catch {
                 print("Error decoding user profile response: \(error.localizedDescription)")
+                completion()
             }
         }.resume()
     }
+
 
 
     

@@ -11,7 +11,9 @@ public let customFont = "Poppins-Regular"
 public let customFontBold = "Poppins-Bold"
 let PurPle = Color(red: 125/255, green: 122/255, blue: 255/255)
 let PurPle2 = Color(red: 211/255, green: 211/255, blue: 255/255)
-let LightGray = Color(red: 230 / 255, green: 228 / 255, blue: 230 / 255)
+//let LightGray = Color(red: 230 / 255, green: 228 / 255, blue: 230 / 255)
+let LightGray = Color(.white)
+let LightGray2 = Color(red: 242/255, green: 242/255, blue: 242/255)
 public let baseURL = "192.168.1.39"
 
 struct OnBoardingPage: View {

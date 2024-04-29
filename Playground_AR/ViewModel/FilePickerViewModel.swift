@@ -13,6 +13,13 @@ class FilePickerViewModel: NSObject, ObservableObject {
     @Published var selectedImages: [UIImage] = []
     @Published var selectedModel3D: URL?
 
+    func initializeImagesAndModel(images: [UIImage], modelPath: String?) {
+            self.selectedImages = images
+            if let modelPath = modelPath {
+                self.selectedModel3D = URL(fileURLWithPath: modelPath)
+            }
+        }
+    
     // Function to pick a single image
     func pickImage() {
         let imagePicker = UIImagePickerController()
@@ -68,7 +75,6 @@ extension FilePickerViewModel: PHPickerViewControllerDelegate {
                 }
             }
         }
-        // Dismiss the picker
         picker.dismiss(animated: true, completion: nil)
     }
 }

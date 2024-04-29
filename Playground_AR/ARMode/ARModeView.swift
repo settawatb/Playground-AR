@@ -81,9 +81,9 @@ struct ARViewContainer: UIViewRepresentable {
     public func loadModel(from url: URL, into uiView: ARView) throws {
         let modelEntity = try ModelEntity.loadModel(contentsOf: url)
         // comment because simmulate build error
-        let anchorEntity = AnchorEntity(plane: .horizontal)
-        anchorEntity.addChild(modelEntity)
-        uiView.scene.addAnchor(anchorEntity)
+//        let anchorEntity = AnchorEntity(plane: .horizontal)
+//        anchorEntity.addChild(modelEntity)
+//        uiView.scene.addAnchor(anchorEntity)
         
         modelEntity.generateCollisionShapes(recursive: true)
         uiView.installGestures([.rotation], for: modelEntity)

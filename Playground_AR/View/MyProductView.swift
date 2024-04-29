@@ -2,64 +2,92 @@
 //  MyProductView.swift
 //  Playground_AR
 //
-//  Created by Kisses MJ on 26/4/2567 BE.
+//  Created by Settawat Buddhakanchana 26/4/2567 BE.
 //
 
 import SwiftUI
 
 struct MyProductView: View {
+    @StateObject var viewModel = MyProductViewModel()
+    @StateObject var loginData = LoginPageModel()
+
     var body: some View {
         ScrollView {
-            MyProductCard()
-            MyProductCard()
-            MyProductCard()
+            if viewModel.isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: PurPle))
+                    .padding()
+            } else if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
+            } else {
+                VStack(spacing: 15) {
+                    ForEach(viewModel.products) { product in
+                        MyProductCard(product: product)
+                    }
+                }
+                .padding(.top, 15)
+            }
         }
-        .padding(.top,15)
-        .background(.white)
+        .navigationTitle("My Products")
+        .onAppear {
+            loginData.fetchUserProfile {
+                viewModel.fetchSellerProducts(for: loginData.id)
+            }
+        }
     }
 }
 
-struct MyProductCard: View{
-    
-    
-    var body: some View{
-        Button(action: {
-            
-        }, label: {
-            VStack{
-                HStack(spacing: 15){
-                    //            ProductImageView(urlString: product.productImage)
-                    Image("product_4_green_man")
-                        .resizable()
-                        .frame(width: 100,height: 100)
-                        .cornerRadius(6)
-                        .shadow(radius: 4, x:4, y:4)
-                    
+
+struct MyProductCard: View {
+    let product: ProductBySeller
+    let placeholderImage = "product_4_green_man" // Local placeholder image name
+
+    var body: some View {
+        NavigationLink(destination: EditProductView(product: product)) {
+            VStack(spacing: 0) {
+                HStack(spacing: 15) {
+                    // Display the first product image
+                    AsyncImage(url: URL(string: product.productImages.first ?? "")) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .cornerRadius(6)
+                                .shadow(radius: 4, x: 4, y: 4)
+                        default:
+                            // Use a local placeholder image during loading or failure
+                            Image(placeholderImage)
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .cornerRadius(6)
+                                .shadow(radius: 4, x: 4, y: 4)
+                        }
+                    }
+
                     VStack(alignment: .leading, spacing: 8) {
-                        // product.title
-                        Text("Sample")
-                            .font(.custom(customFontBold, size: 18).bold())
+                        Text(product.title)
+                            .font(.custom(customFontBold, size: 18))
                             .lineLimit(2)
                             .foregroundColor(PurPle)
-                        // product.description
-                        Text("Arttoy")
+                        
+                        Text(product.type.joined(separator: ", "))
                             .font(.custom(customFont, size: 14))
                             .lineLimit(2)
                             .foregroundColor(.black)
                         
-                        // Quantity Buttons
-                        Text("Amount: 12")
+                        Text("Amount: \(product.quantity)")
                             .font(.custom(customFont, size: 14))
                             .lineLimit(2)
                             .foregroundColor(.black)
                     }
-                    
                 }
                 .padding(.horizontal, 20)
-                .padding(.vertical, 20)
-                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment:  .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
-                    Color(.white)
+                    Color.white
                         .cornerRadius(18)
                 )
             }
@@ -68,13 +96,10 @@ struct MyProductCard: View{
                     .stroke(style: StrokeStyle(lineWidth: 2))
                     .foregroundColor(.black.opacity(0.2))
             )
-            .padding(.horizontal)
-            .padding(.vertical,8)
-            
-        })
+        }
     }
-    
 }
+
 
 #Preview {
     MyProductView()

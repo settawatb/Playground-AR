@@ -1,44 +1,51 @@
 //
-//  AddProductView.swift
+//  EditProductView.swift
 //  Playground_AR
 //
-//  Created by Settawat Buddhakanchana on 26/2/2567 BE.
+//  Created by Settawat Buddhakanchana on 29/4/2567 BE.
 //
 
 import SwiftUI
-import Combine
 
-// Define the AddProductView structure
-struct AddProductView: View {
-    // State and view model definitions
+struct EditProductView: View {
+    var product: ProductBySeller
+    
     @StateObject var loginData = LoginPageModel()
-    @State private var productName = ""
-    @State private var productPrice = ""
-    @State private var productQuantity = 1
-    @State private var selectedCategory = "Arttoy"
-    @State private var productDescription = ""
     @StateObject private var filePickerViewModel = FilePickerViewModel()
-    @State private var isFilePickerPresented = false
-    @State private var showAlert = false
-    @State private var alertMessage = ""
-    @State private var addProductSuccess = false
+    @State private var productID: String
+    @State private var productName: String
+    @State private var productPrice: String
+    @State private var productQuantity: Int
+    @State private var selectedCategory: String
+    @State private var productDescription: String
+    @State private var isFilePickerPresented: Bool = false
+    @State private var showAlert: Bool = false
+    @State private var alertMessage: String = ""
+    @State private var addProductSuccess: Bool = false
     
     @Environment(\.presentationMode) var presentationMode
     
-    // Initialization of navigation bar appearance
-    init() {
-        let appear = UINavigationBarAppearance()
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont(name: customFontBold, size: 20)!
-        ]
-        appear.largeTitleTextAttributes = attributes
-        appear.titleTextAttributes = attributes
+    // Initialize state properties in the initializer
+    init(product: ProductBySeller) {
+        self.product = product
+        self._productName = State(initialValue: product.title)
+        self._productPrice = State(initialValue: String(product.price))
+        self._productQuantity = State(initialValue: product.quantity)
+        self._selectedCategory = State(initialValue: product.type.first ?? "")
+        self._productDescription = State(initialValue: product.description)
+        self._productID = State(initialValue: product.id)
+        
+        // Initialize navigation appearance
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.font: UIFont(name: customFontBold, size: 20)!]
+        appearance.largeTitleTextAttributes = appearance.titleTextAttributes
         UIBarButtonItem.appearance().tintColor = .black
-        UINavigationBar.appearance().standardAppearance = appear
-        UINavigationBar.appearance().compactAppearance = appear
-        UINavigationBar.appearance().scrollEdgeAppearance = appear
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
-    
+
+
     // Binding for product quantity
     private var productQuantityBinding: Binding<String> {
         Binding(
@@ -54,28 +61,29 @@ struct AddProductView: View {
     }
 
     var body: some View {
-        ScrollView() {
+        ScrollView {
             VStack(spacing: 10) {
                 // File picker view for image and 3D model
                 FilePickerView(viewModel: filePickerViewModel, allowedContentTypes: [.image, .usdz])
                     .sheet(isPresented: $isFilePickerPresented) {}
+
                 Divider().background(Color.black.opacity(0.4)).padding(.top, 20)
-                CustomTitle(icon: "signature", title: "Product Name")
+
+                // Custom Title and TextField views
+                CustomTitleEdit(icon: "signature", title: "Product Name")
                 TextField("Enter Product Name", text: $productName)
                     .font(.custom(customFont, size: 12))
                     .foregroundColor(PurPle)
                 Divider().background(Color.black.opacity(0.4))
 
-                // Product Price input
-                CustomTitle(icon: "bitcoinsign.circle", title: "Price")
+                CustomTitleEdit(icon: "bitcoinsign.circle", title: "Price")
                 TextField("Enter Product Price", text: $productPrice)
-                    .keyboardType(.numberPad)
-                    .font(.custom(customFont, size:12))
+                    .keyboardType(.decimalPad)
+                    .font(.custom(customFont, size: 12))
                     .foregroundColor(PurPle)
                 Divider().background(Color.black.opacity(0.4))
 
-                // Product Quantity
-                CustomTitle(icon: "plusminus", title: "Quantity")
+                CustomTitleEdit(icon: "plusminus", title: "Quantity")
                 TextField("Enter Product Quantity", text: productQuantityBinding)
                     .keyboardType(.numberPad)
                     .font(.custom(customFont, size:12))
@@ -95,29 +103,19 @@ struct AddProductView: View {
                     .foregroundColor(Color.black.opacity(0.8))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+
                 Picker("Category", selection: $selectedCategory) {
                     Text("Arttoy").tag("Arttoy")
                     Text("Figure").tag("Figure")
                     Text("Doll").tag("Doll")
                     Text("Game").tag("Game")
                 }
-                .pickerStyle(.segmented)
+                .pickerStyle(SegmentedPickerStyle())
                 .padding(.bottom)
                 Divider().background(Color.black.opacity(0.4))
 
-                // Product Details Text Editor
-                VStack {
-                    Label {
-                        Text("Detail")
-                            .font(.custom(customFontBold, size: 14))
-                    } icon: {
-                        Image(systemName: "info.circle")
-                            .resizable()
-                            .frame(width: 18, height: 18)
-                    }
-                    .foregroundColor(Color.black.opacity(0.8))
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+
+                CustomTitleEdit(icon: "info.circle", title: "Detail")
                 ZStack(alignment: .topLeading) {
                     TextEditor(text: $productDescription)
                         .font(.custom(customFont, size: 14))
@@ -132,15 +130,14 @@ struct AddProductView: View {
 
                 // Submit button
                 Button(action: {
-                    // Validate inputs before uploading
                     guard validateInputs() else {
                         return
                     }
-                    
-                    // Proceed with product upload
-                    uploadProduct()
+
+                    // Proceed with product update
+                    updateProduct()
                 }) {
-                    Text("Submit Product")
+                    Text("Update Product")
                         .font(.custom(customFont, size: 20).bold())
                         .foregroundColor(Color.white)
                         .padding(.vertical, 20)
@@ -150,12 +147,26 @@ struct AddProductView: View {
                         .shadow(color: Color.black.opacity(0.06), radius: 5, x: 5, y: 5)
                         .padding()
                 }
+                
+                // Delete product button
+                Button(action: {
+                    // action for delete product
+                }) {
+                    Text("Delete Product")
+                        .font(.custom(customFont, size: 20).bold())
+                        .foregroundColor(Color.white)
+                        .padding(.vertical, 20)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red)
+                        .cornerRadius(10)
+                        .shadow(color: Color.black.opacity(0.06), radius: 5, x: 5, y: 5)
+                }
             }
             .padding(.top, 20)
             .frame(width: 350)
             .alert(isPresented: $showAlert) {
                 Alert(
-                    title: Text(addProductSuccess ? "Upload Successfully" : "Error"),
+                    title: Text(addProductSuccess ? "Update Successful" : "Error"),
                     message: Text(alertMessage),
                     dismissButton: .default(Text("OK")) {
                         if addProductSuccess {
@@ -164,10 +175,6 @@ struct AddProductView: View {
                     }
                 )
             }
-        }
-        .onAppear {
-            // Fetch user profile data on appear
-            loginData.fetchUserProfile()
         }
     }
 
@@ -186,87 +193,83 @@ struct AddProductView: View {
             alertMessage = "Please select a product category."
             return false
         } else {
-            
             return true
         }
     }
 
-    func uploadProduct() {
+    // Update product data
+    func updateProduct() {
+        // Prepare form data
         let formData: [String: Any] = [
             "productName": productName,
-            "productPrice": productPrice,
-            "productQuantity": "\(productQuantity)",
+            "productPrice": Double(productPrice) ?? 0.0,
+            "productQuantity": productQuantity,
             "productCategory": selectedCategory,
             "productDescription": productDescription,
             "productSellerId": loginData.id,
             "productSellerName": loginData.userName
         ]
 
-        // Convert selected images to an array of data
+        // Upload images and 3D model
         var imageDataArray: [Data] = []
         for image in filePickerViewModel.selectedImages {
-            if let imageData = image.pngData() {
-                imageDataArray.append(imageData)
+            if let data = image.pngData() {
+                imageDataArray.append(data)
             }
         }
 
-        // Fetch model 3D data and handle the result
         guard let model3DUrl = filePickerViewModel.selectedModel3D else {
-            alertMessage = "Failed to retrieve model 3D URL."
+            alertMessage = "Failed to retrieve 3D model URL."
             showAlert = true
             return
         }
 
+        // Fetch data from the 3D model URL
         NetworkManager.shared.fetchData(from: model3DUrl) { result in
-            switch result {
-            case .success(let model3DData):
-                // Call NetworkManager to upload files
-                NetworkManager.shared.uploadFiles(formData: formData, imageDataArray: imageDataArray, model3DData: model3DData) { result in
-                    switch result {
-                    case .success(let response):
-                        print("Product uploaded successfully:", response)
-                        addProductSuccess = true
-                        alertMessage = "Product uploaded successfully."
-                        showAlert = true
-                    case .failure(let error):
-                        print("Error uploading product:", error)
-                        alertMessage = "Failed to upload product. Please try again."
-                        showAlert = true
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let model3DData):
+                    // Update product via NetworkManager
+                    NetworkManager.shared.updateProduct(productID: productID, formData: formData, imageDataArray: imageDataArray, model3DData: model3DData) { updateResult in
+                        switch updateResult {
+                        case .success:
+                            addProductSuccess = true
+                            alertMessage = "Product updated successfully."
+                            showAlert = true
+                        case .failure(let error):
+                            print("Error updating product:", error)
+                            alertMessage = "Failed to update product. Please try again."
+                            showAlert = true
+                        }
                     }
+                case .failure(let error):
+                    print("Error fetching 3D model data:", error)
+                    alertMessage = "Failed to fetch 3D model data. Please try again."
+                    showAlert = true
                 }
-            case .failure(let error):
-                print("Error fetching model 3D data:", error)
-                alertMessage = "Failed to fetch model 3D data. Please try again."
-                showAlert = true
             }
         }
+
     }
-
-
-
 }
 
+struct CustomTitleEdit: View {
+    let icon: String
+    let title: String
 
-
-// Define the custom title view
-@ViewBuilder
-func CustomTitle(icon: String, title: String) -> some View {
-    VStack(alignment: .leading) {
-        Label {
-            Text(title)
-                .font(.custom(customFontBold, size: 14))
-        } icon: {
-            Image(systemName: icon)
-                .resizable()
-                .frame(width:18, height: 15)
+    var body: some View {
+        VStack(alignment: .leading) {
+            Label {
+                Text(title)
+                    .font(.custom(customFontBold, size: 14))
+            } icon: {
+                Image(systemName: icon)
+                    .resizable()
+                    .frame(width: 18, height: 15)
+            }
+            .foregroundColor(Color.black.opacity(0.8))
         }
-        .foregroundColor(Color.black.opacity(0.8))
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
-    .frame(maxWidth: .infinity, alignment: .leading)
 }
 
-struct AddProductView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddProductView()
-    }
-}

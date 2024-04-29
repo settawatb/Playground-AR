@@ -103,6 +103,16 @@ enum ProductType: String, CaseIterable, Decodable {
     }
 }
 
+struct Seller: Decodable {
+    var sellerId: String
+    var sellerName: String
+
+    enum CodingKeys: String, CodingKey {
+        case sellerId = "seller_id"
+        case sellerName = "seller_name"
+    }
+}
+
 
 //extension DateFormatter {
 //    static var iso8601Full: DateFormatter = {
@@ -125,4 +135,54 @@ extension DateFormatter {
         return formatter
     }()
 }
+
+
+// for product seller
+
+struct ProductBySeller: Identifiable, Decodable {
+    var id: String
+    var type: [String]
+    var title: String
+    var description: String
+    var price: Double
+    var productImages: [String]
+    var productModel3D: URL
+    var quantity: Int
+    var updateAt: Date
+
+    enum CodingKeys: String, CodingKey {
+        case id = "_id"
+        case type = "product_category"
+        case title = "product_name"
+        case description = "product_desc"
+        case price = "product_price"
+        case productImages = "product_images"
+        case productModel3D = "product_model3D"
+        case quantity = "product_quantity"
+        case updateAt = "update_at"
+    }
+
+    // Initialize the model
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        type = try container.decode([String].self, forKey: .type)
+        title = try container.decode(String.self, forKey: .title)
+        description = try container.decode(String.self, forKey: .description)
+        price = try container.decode(Double.self, forKey: .price)
+        productImages = try container.decode([String].self, forKey: .productImages)
+        productModel3D = try container.decode(URL.self, forKey: .productModel3D)
+        quantity = try container.decode(Int.self, forKey: .quantity)
+
+        let dateString = try container.decode(String.self, forKey: .updateAt)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        if let date = dateFormatter.date(from: dateString) {
+            updateAt = date
+        } else {
+            throw DecodingError.dataCorruptedError(forKey: .updateAt, in: container, debugDescription: "Invalid date format")
+        }
+    }
+}
+
 

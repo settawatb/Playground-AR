@@ -57,7 +57,7 @@ struct FilePickerView: View {
                     UploadImageView()
                 }
             }.foregroundColor(.black)
-            HStack{
+            HStack {
                 if !viewModel.selectedImages.isEmpty {
                     Button(action: {
                         if currentIndex > 0 {
@@ -72,15 +72,13 @@ struct FilePickerView: View {
                             .foregroundColor(currentIndex > 0 ? PurPle : .gray)
                     }
                     .disabled(currentIndex <= 0)
-                    
-                Text("Image \(currentIndex + 1) of \(viewModel.selectedImages.count)")
-                    .font(.custom(customFont, size: 15))
-                    .foregroundColor(Color.black)
-                    .frame(maxWidth: 230, maxHeight: 30)
-                    .shadow(color: Color.black.opacity(0.06), radius: 5, x: 5, y: 5)
-                    
-                    
-                    // Next image button
+
+                    Text("Image \(currentIndex + 1) of \(viewModel.selectedImages.count)")
+                        .font(.custom(customFont, size: 15))
+                        .foregroundColor(.black)
+                        .frame(maxWidth: 230, maxHeight: 30)
+                        .shadow(color: .black.opacity(0.06), radius: 5, x: 5, y: 5)
+
                     Button(action: {
                         if currentIndex < viewModel.selectedImages.count - 1 {
                             withAnimation {
@@ -94,7 +92,9 @@ struct FilePickerView: View {
                             .foregroundColor(currentIndex < viewModel.selectedImages.count - 1 ? PurPle : .gray)
                     }
                     .disabled(currentIndex >= viewModel.selectedImages.count - 1) // Disable if at the last image
-            }}
+                }
+            }
+
 
             Divider()
 

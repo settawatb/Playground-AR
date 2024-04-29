@@ -33,6 +33,7 @@ struct ProfilePage: View {
                                                         .clipShape(Circle())
                                                         .offset(y: -60)
                                                         .padding(.bottom, -80)
+                                                        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
                                                 } else {
                                                     // Placeholder image
                                                     Image("user_placeholder")
@@ -42,6 +43,7 @@ struct ProfilePage: View {
                                                         .clipShape(Circle())
                                                         .offset(y: -60)
                                                         .padding(.bottom, -80)
+                                                        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
                                                 }
                         
                         Text(loginData.userName)
@@ -64,9 +66,10 @@ struct ProfilePage: View {
                     }
                     .padding([.horizontal, .bottom])
                     .background(
-                        Color.white
+                        LightGray2
                             .cornerRadius(12)
                     )
+                    .shadow(color: Color.black.opacity(0.01), radius: 5, x: 5, y: 5)
                     .padding()
                     .padding(.top, 40)
                     .onAppear {
@@ -117,7 +120,7 @@ struct ProfilePage: View {
                     } label: {
                         Text("Logout")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .font(.custom(customFont, size: 17))
+                            .font(.custom(customFontBold, size: 20))
                             .padding(.horizontal, 135)
                             .padding()
                             .foregroundColor(.white)
@@ -126,6 +129,7 @@ struct ProfilePage: View {
                     }
                     .padding(16)
                     .padding(.top, 20)
+                    .shadow(color: Color.black.opacity(0.2), radius: 5, x: 5, y: 5)
                 }
             }
             .navigationBarHidden(true)
@@ -155,8 +159,11 @@ struct ProfilePage: View {
             .padding()
             .background(
                 title == "Add Product" ? PurPle.cornerRadius(12) :
-                Color.white.cornerRadius(12)
+                    LightGray2.cornerRadius(12)
             )
+            .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/.opacity(0.06), width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
+            .cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.02), radius: 5, x: 5, y: 5)
             .padding(.horizontal)
             .padding(.top, 10)
         }
