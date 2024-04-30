@@ -249,6 +249,7 @@ struct CheckoutView: View {
                 
                 HStack(spacing:0){
                     // Button Checkout to payment
+                    
                     VStack{
                         let totalPrice = calculateTotalPrice(for: products) + 15
                         let formattedTotalPrice = formatTotalPrice(totalPrice)

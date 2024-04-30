@@ -69,33 +69,30 @@ struct FavoritePage: View {
                             
                         }
                         else {
-                            
-                            // Displaying Products
+                                // Displaying Products
                             VStack(spacing: 15){
-                                
-                                ForEach($sharedData.favoritedProducts){$product in
-                                    
-                                    HStack(spacing: 0){
+                                    ForEach($sharedData.favoritedProducts){$product in
                                         
-                                        if showDeleteOption{
+                                        HStack(spacing: 15){
                                             
-                                            Button {
-                                                deleteProduct(product: product)
-                                            } label: {
-                                                Image(systemName: "minus.circle.fill")
-                                                    .font(.title2)
-                                                    .foregroundColor(.red)
+                                            if showDeleteOption{
+                                                
+                                                Button {
+                                                    deleteProduct(product: product)
+                                                } label: {
+                                                    Image(systemName: "minus.circle.fill")
+                                                        .font(.title2)
+                                                        .foregroundColor(.red)
+                                                }
+                                                .padding(.trailing)
                                             }
-                                            .padding(.trailing)
+                                            CardView2(product: product)
                                         }
-                                        CardView(product: product)
                                     }
                                 }
+                                .padding(.top, 25)
                             }
-                            .padding(.top, 25)
-                            .padding(.horizontal)
-                            
-                        }
+                        
                     }
                     .padding()
                 }
@@ -104,7 +101,7 @@ struct FavoritePage: View {
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
             .background(
                 
-                Color(LightGray)
+                Color(LightGray2)
                     .ignoresSafeArea()
             
             )
@@ -119,16 +116,10 @@ struct FavoritePage: View {
                 .cornerRadius(15)
             
             VStack(alignment: .leading, spacing: 8) {
-                
                 Text(product.title)
                     .font(.custom(customFont, size: 18).bold())
                     .lineLimit(2)
                 
-                Text(product.description)
-                    .font(.custom(customFont, size: 17))
-                    .lineLimit(2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(PurPle)
             }
         }
         .padding(.horizontal, 10)
@@ -139,6 +130,64 @@ struct FavoritePage: View {
                 .cornerRadius(10)
             
         )
+    }
+    
+    @ViewBuilder
+    func CardView2(product: Product)->some View{
+        HStack(spacing: 5){
+            ProductImageView(urlString: product.productImages[0])
+                .frame(width: 100, height: 100)
+                .cornerRadius(15)
+                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
+                .padding(.trailing)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text(product.title)
+                    .font(.custom(customFontBold, size: 20))
+                    .lineLimit(1)
+                
+                HStack{
+                    Text(product.type[0].rawValue)
+                        .font(.custom(customFont, size: 15))
+                        .lineLimit(1)
+                        .padding(.vertical,1)
+                        .padding(.horizontal,10)
+                        .overlay(
+                            Capsule()
+                                .stroke(PurPle, lineWidth: 2)
+                            
+                        )
+                    Spacer()
+                    Text("Seller: "+product.productSeller.sellerName)
+                        .font(.custom(customFont, size: 15))
+         
+                }
+                HStack{
+                    
+                    Text("฿ "+(Int(product.price) ?? 0).formattedWithSeparator)
+                        .font(.custom(customFont, size: 18))
+                        .lineLimit(2)
+                    Spacer()
+                    if let quantity = product.quantity {
+                        Text("Quantity: \(quantity)")
+                            .font(.custom(customFont, size: 15))
+                    } else {
+                        Text("Not available")
+                            .font(.custom(customFont, size: 15))
+                    }
+
+                }
+                
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            Color.white
+                .cornerRadius(10)
+        )
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
     }
     
     

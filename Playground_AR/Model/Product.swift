@@ -14,62 +14,100 @@ struct Product: Identifiable, Hashable, Decodable {
     var title: String
     var description: String
     var price: String
-    var productImages: [String] // Changed to array of strings
+    var productImages: [String]
     var productModel: URL
     var quantity: Int?
     var updateAt: Date
-    
-    // Coding keys if your property names differ from the JSON keys
+    var productSeller: ProductSeller
+
+    // Nested struct for the product seller
+    struct ProductSeller: Decodable, Hashable {
+        var sellerId: String
+        var sellerName: String
+
+        // Coding keys for ProductSeller if property names differ from JSON keys
+        enum CodingKeys: String, CodingKey {
+            case sellerId = "seller_id"
+            case sellerName = "seller_name"
+        }
+    }
+
+    // Coding keys for Product
     enum CodingKeys: String, CodingKey {
         case id = "_id"
         case type = "product_category"
         case title = "product_name"
         case description = "product_desc"
         case price = "product_price"
-        case productImages = "product_images" // Changed the key to match the JSON key
+        case productImages = "product_images"
+        case productModel = "product_model3D"
         case quantity = "product_quantity"
         case updateAt = "update_at"
-        case productModel = "product_model3D"
+        case productSeller = "product_seller"
     }
-    
-    // Remove the custom date decoding strategy
+
+    // Decodable initializer
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Decode properties of Product
         id = try container.decode(String.self, forKey: .id)
         type = try container.decode([ProductType].self, forKey: .type)
         title = try container.decode(String.self, forKey: .title)
         description = try container.decode(String.self, forKey: .description)
         
-        // Decode price as Int and then convert it to String
+        // Decode the nested ProductSeller struct
+        productSeller = try container.decode(ProductSeller.self, forKey: .productSeller)
+        
+        // Decode price as Int and convert to String
         let priceInt = try container.decode(Int.self, forKey: .price)
         price = String(priceInt)
         
         // Decode productImages as an array of strings
         productImages = try container.decode([String].self, forKey: .productImages)
         
+        // Decode product model URL
         productModel = try container.decode(URL.self, forKey: .productModel)
+        
+        // Decode quantity (if present)
         quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
         
-        // Use a single date decoding strategy for both formats
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        formatter.calendar = Calendar(identifier: .iso8601)
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        
+        // Decode date using the date formatter
         let updateAtString = try container.decode(String.self, forKey: .updateAt)
-        
-        if let date = formatter.date(from: updateAtString) {
-            updateAt = date
-        } else {
-            throw DecodingError.dataCorruptedError(
-                forKey: .updateAt,
-                in: container,
-                debugDescription: "Expected date string in ISO8601 format, but found \(updateAtString) instead."
-            )
-        }
+        let dateFormatter = ISO8601DateFormatter()
+        updateAt = dateFormatter.date(from: updateAtString) ?? Date()
+    }
+
+    // Conform to Equatable
+    static func == (lhs: Product, rhs: Product) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.type == rhs.type &&
+               lhs.title == rhs.title &&
+               lhs.description == rhs.description &&
+               lhs.price == rhs.price &&
+               lhs.productImages == rhs.productImages &&
+               lhs.productModel == rhs.productModel &&
+               lhs.quantity == rhs.quantity &&
+               lhs.updateAt == rhs.updateAt &&
+               lhs.productSeller == rhs.productSeller
+    }
+
+    // Conform to Hashable
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(type)
+        hasher.combine(title)
+        hasher.combine(description)
+        hasher.combine(price)
+        hasher.combine(productImages)
+        hasher.combine(productModel)
+        hasher.combine(quantity)
+        hasher.combine(updateAt)
+        hasher.combine(productSeller)
     }
 }
+
+
 
 // Product Types
 enum ProductType: String, CaseIterable, Decodable {
@@ -147,6 +185,7 @@ struct ProductBySeller: Identifiable, Decodable {
     var price: Double
     var productImages: [String]
     var productModel3D: URL
+    var productModel3DFilename: String
     var quantity: Int
     var updateAt: Date
 
@@ -172,6 +211,7 @@ struct ProductBySeller: Identifiable, Decodable {
         price = try container.decode(Double.self, forKey: .price)
         productImages = try container.decode([String].self, forKey: .productImages)
         productModel3D = try container.decode(URL.self, forKey: .productModel3D)
+        productModel3DFilename = productModel3D.lastPathComponent
         quantity = try container.decode(Int.self, forKey: .quantity)
 
         let dateString = try container.decode(String.self, forKey: .updateAt)
@@ -186,3 +226,8 @@ struct ProductBySeller: Identifiable, Decodable {
 }
 
 
+extension ProductBySeller {
+    func extractModel3DFilename() -> String {
+        return productModel3D.lastPathComponent
+    }
+}

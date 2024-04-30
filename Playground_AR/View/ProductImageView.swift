@@ -18,20 +18,20 @@ struct ProductImageView: View {
                 image
                     .resizable()
                     .frame(width: 100,height: 100)
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
             case .failure, .empty:
                 Image("image_placeholder")
                     .resizable()
                     .frame(width: 100,height: 100)
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
             @unknown default:
                 Image("image_placeholder")
                     .resizable()
                     .frame(width: 100,height: 100)
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
             }
         }
-        .cornerRadius(25)
+        .cornerRadius(15)
     }
 }
 
@@ -41,31 +41,33 @@ struct ProductImageDetailView: View {
     var body: some View {
         TabView {
             ForEach(urlStrings.indices, id: \.self) { index in
-                AsyncImage(url: URL(string: urlStrings[index])) { phase in
+                // Use ZoomableScrollView to wrap AsyncImage
+                ZoomableScrollView(content: AsyncImage(url: URL(string: urlStrings[index])) { phase in
                     switch phase {
                     case .success(let image):
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .cornerRadius(25)
-                    case .failure, .empty:
+                            .cornerRadius(15)
+                    case .failure:
                         Image("image_placeholder")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .cornerRadius(25)
-                    @unknown default:
-                        Image("image_placeholder")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .cornerRadius(25)
+                            .cornerRadius(15)
+                    default:
+                        ProgressView()
                     }
-                }
+                })
             }
         }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic)) // Add page control indicator
-        .frame(maxHeight: .infinity) // Set max height
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+        .frame(maxHeight: .infinity)
     }
 }
+
+
+
+
 
 
 struct ProductImageCheckoutView: View {

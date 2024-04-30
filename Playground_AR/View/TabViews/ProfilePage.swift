@@ -66,7 +66,7 @@ struct ProfilePage: View {
                     }
                     .padding([.horizontal, .bottom])
                     .background(
-                        LightGray2
+                        Color.white
                             .cornerRadius(12)
                     )
                     .shadow(color: Color.black.opacity(0.01), radius: 5, x: 5, y: 5)
@@ -83,7 +83,7 @@ struct ProfilePage: View {
                             AddProductView()
                                 .navigationTitle("Add Product")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                                .background(LightGray.ignoresSafeArea())
+                                .background(Color.white.ignoresSafeArea())
                         }
                     }
                     
@@ -159,7 +159,7 @@ struct ProfilePage: View {
             .padding()
             .background(
                 title == "Add Product" ? PurPle.cornerRadius(12) :
-                    LightGray2.cornerRadius(12)
+                    Color.white.cornerRadius(12)
             )
             .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/.opacity(0.06), width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
             .cornerRadius(12)

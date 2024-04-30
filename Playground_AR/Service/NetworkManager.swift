@@ -245,3 +245,41 @@ struct NetworkManager {
         }.resume()
     }
 }
+
+
+extension NetworkManager {
+    func deleteProduct(productID: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard let url = URL(string: "http://192.168.1.39:3000/products/\(productID)") else {
+            completion(.failure(CustomNetworkError.invalidURL))
+            return
+        }
+
+        // Create the URL request
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.delete.rawValue
+
+        // Perform the network request
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                // Handle the error
+                completion(.failure(error))
+                return
+            }
+
+            // Check the HTTP response status code
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(CustomNetworkError.noData))
+                return
+            }
+
+            // If the status code is 200, the deletion was successful
+            if httpResponse.statusCode == 200 {
+                completion(.success(true))
+            } else {
+                // If the status code is not 200, handle it as a failure
+                let error = NSError(domain: "NetworkError", code: httpResponse.statusCode, userInfo: nil)
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+}

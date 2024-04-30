@@ -28,8 +28,7 @@ struct EditProfileView: View {
                                                     .frame(width: 200, height: 200)
                                                     .clipShape(Circle())
                                             } else {
-                                                // Placeholder image
-                                                Image("user_placeholder")
+                                                Image("image_placeholder")
                                                     .resizable()
                                                     .aspectRatio(contentMode: .fill)
                                                     .frame(width: 200, height: 200)

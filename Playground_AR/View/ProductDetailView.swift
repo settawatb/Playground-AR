@@ -65,16 +65,23 @@ struct ProductDetailView: View {
                 // Product Data
                 VStack(alignment: .leading, spacing: 15) {
                     Text(product.title)
-                        .font(.custom(customFont, size: 20).bold())
+                        .font(.custom(customFont, size: 30).bold())
                     
                     Text(product.description)
                         .font(.custom(customFont, size: 18))
                         .foregroundStyle(Color.gray)
                     
-                    Text("Description of product example")
-                        .font(.custom(customFont, size: 16))
-                        .foregroundStyle(Color.gray)
+//                    Text(product.quantity)
+//                        .font(.custom(customFont, size: 18))
+//                        .foregroundStyle(Color.gray)
                     
+//                    Text(product.productSeller)
+//                        .font(.custom(customFont, size: 18))
+//                        .foregroundStyle(Color.gray)
+                    
+//                    Text(product.updateAt)
+//                        .font(.custom(customFont, size: 18))
+//                        .foregroundStyle(Color.gray)
                     
                     Spacer()
                     VStack(alignment: .leading){
