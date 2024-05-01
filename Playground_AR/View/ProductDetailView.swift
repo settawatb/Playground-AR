@@ -16,7 +16,7 @@ struct ProductDetailView: View {
     @State private var isShowingARModeView: Bool = false
     
     var body: some View {
-        VStack {
+        VStack (spacing: 0) {
             // Title Bar and Product Image
             VStack {
                 // Title Bar
@@ -53,96 +53,138 @@ struct ProductDetailView: View {
                 // Product Image
                 ProductImageDetailView(urlStrings: product.productImages)
                     .matchedGeometryEffect(id: "\(product.id)\(sharedData.fromSearchPage ? "SEARCH" : "IMAGE")", in: animation)
-                    .padding(.horizontal)
+                    .padding(.horizontal, 5)
                     .offset(y: -12)
                     .frame(maxHeight: .infinity)
             }
-            .frame(height: getRect().height / 2.7)
+            .padding(.top)
             .zIndex(1)
             
             // Product Details
             ScrollView(.vertical, showsIndicators: false) {
                 // Product Data
-                VStack(alignment: .leading, spacing: 15) {
+                VStack(alignment: .leading, spacing: 5) {
                     Text(product.title)
-                        .font(.custom(customFont, size: 30).bold())
-                    
-                    Text(product.description)
-                        .font(.custom(customFont, size: 18))
+                        .font(.custom(customFontBold, size: 35))
+                    let formattedDate = DateFormatter.dayMonthYear.string(from: product.updateAt)
+                    Text(product.type[0].rawValue)
+                        .font(.custom(customFont, size: 20))
+                        .lineLimit(1)
+                        .padding(.vertical,1)
+                        .padding(.horizontal,10)
+                        .overlay(
+                            Capsule()
+                                .stroke(PurPle, lineWidth: 2)
+                        )
+                        .padding(.bottom)
+                    HStack{
+                        Text("Seller : ")
+                            .font(.custom(customFontBold, size: 15))
+                            .foregroundStyle(Color.black)
+                        +
+                        Text(product.productSeller.sellerName)
+                            .font(.custom(customFont, size: 15))
+                            .foregroundStyle(Color.black)
+                        +
+                        Text("   Stock : ")
+                            .font(.custom(customFontBold, size: 15))
+                            .foregroundStyle(Color.black)
+                        +
+                        Text("\(product.quantity ?? 1)")
+                            .font(.custom(customFont, size: 15))
+                            .foregroundStyle(Color.gray)
+                        
+                        
+                        Text("   Update Date :  ")
+                            .font(.custom(customFontBold, size: 15))
+                            .foregroundStyle(Color.black)
+                        +
+                        Text(formattedDate)
+                            .font(.custom(customFont, size: 15))
+                            .foregroundStyle(Color.gray)
+                    }
+                    Text("Ships from   :  ")
+                        .font(.custom(customFontBold, size: 15))
+                        .foregroundStyle(Color.black)
+                    +
+                    Text(product.productSeller.sellerAddress)
+                        .font(.custom(customFont, size: 15))
                         .foregroundStyle(Color.gray)
                     
-//                    Text(product.quantity)
-//                        .font(.custom(customFont, size: 18))
-//                        .foregroundStyle(Color.gray)
+//                    Divider().background(Color.black.opacity(0.4)).padding(.vertical)
                     
-//                    Text(product.productSeller)
-//                        .font(.custom(customFont, size: 18))
-//                        .foregroundStyle(Color.gray)
-                    
-//                    Text(product.updateAt)
-//                        .font(.custom(customFont, size: 18))
-//                        .foregroundStyle(Color.gray)
-                    
-                    Spacer()
-                    VStack(alignment: .leading){
-                        Text("Price")
-                            .font(.custom(customFont, size: 17))
-                        
-                        Text((Int(product.price) ?? 0).formattedWithSeparator + " THB")
-                            .font(.custom(customFont, size: 20).bold())
-                            .foregroundColor(.black)
-                    }
-                    .padding(.vertical, 20)
-                    
-                    HStack {
-                        // AR button
-                        Button {
-                            // activateARMode()
-                            isShowingARModeView = true
-                        } label: {
-                            Image("AR")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .padding(.vertical, 6)
-                                .frame(maxWidth: 63, maxHeight: 63)
-                                .colorMultiply(Color.white)
-                                .background(
-                                    Color(PurPle)
-                                        .cornerRadius(10)
-                                        .shadow(color: Color.black.opacity(0.01), radius: 5, x: 5, y: 5)
-                                )
-                        }
-                        .sheet(isPresented: $isShowingARModeView) {
-                                ARModeView(productTitle: product.title, model3DURL: product.productModel).navigationTitle("AR Mode Title")
-                        }
-                        
-                        // Add to cart button
-                        Button {
-                            addToCart()
-                        } label: {
-                            Text("\(isAddedToCart() ? "Added" : "Add" ) to cart")
-                                .font(.custom(customFont, size: 20).bold())
-                                .foregroundColor(Color.white)
-                                .padding(.vertical, 20)
-                                .frame(maxWidth: .infinity)
-                                .background (
-                                    isAddedToCart() ? Color(PurPle).opacity(0.5) : Color(.black)
-                                )
-                                .cornerRadius(10)
-                                .shadow(color: Color.black.opacity(0.06), radius: 5, x:5, y:5)
-                        }
-                    }
+                    Text("Detail")
+                        .font(.custom(customFontBold, size: 15))
+                        .foregroundStyle(Color.black)
+                    Text(product.description)
+                        .font(.custom(customFont, size: 16))
+                        .foregroundStyle(Color.gray)
                 }
-                .padding([.horizontal,.bottom], 25)
-                .padding(.top, 25)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding([.horizontal,.top])
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .zIndex(0)
+//            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .zIndex(1)
             .background(Color.white)
             .clipShape(CustomCorners(corners: [.topLeft, .topRight], radius: 25))
-            .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing:0) {
+                VStack(alignment: .leading){
+                    Text("Price")
+                        .font(.custom(customFont, size: 20))
+                    
+                    Text((Int(product.price) ?? 0).formattedWithSeparator + " THB")
+                        .font(.custom(customFontBold, size: 30))
+                        .foregroundColor(.black)
+                }
+                .padding(.bottom, 10)
+                
+                HStack {
+                    // AR button
+                    Button {
+                        // activateARMode()
+                        isShowingARModeView = true
+                    } label: {
+                        Image("AR")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.vertical, 6)
+                            .frame(maxWidth: 63, maxHeight: 63)
+                            .colorMultiply(Color.white)
+                            .background(
+                                Color(PurPle)
+                                    .cornerRadius(10)
+                                    .shadow(color: Color.black.opacity(0.01), radius: 5, x: 5, y: 5)
+                            )
+                    }
+                    .sheet(isPresented: $isShowingARModeView) {
+                        ARModeView(productTitle: product.title, model3DURL: product.productModel).navigationTitle("AR Mode Title")
+                    }
+                    
+                    // Add to cart button
+                    Button {
+                        addToCart()
+                    } label: {
+                        Text("\(isAddedToCart() ? "Added" : "Add" ) to cart")
+                            .font(.custom(customFont, size: 20).bold())
+                            .foregroundColor(Color.white)
+                            .padding(.vertical, 20)
+                            .frame(maxWidth: .infinity)
+                            .background (
+                                isAddedToCart() ? Color(PurPle).opacity(0.5) : Color(.black)
+                            )
+                            .cornerRadius(10)
+                            .shadow(color: Color.black.opacity(0.1), radius: 5, x:5, y:5)
+                    }
+                }
+            }
+            .padding(30)
+            .zIndex(99)
+            .background(.white)
+            .clipShape(CustomCorners(corners: [.topLeft, .topRight], radius: 25))
+            .shadow(radius: 4)
         }
+        .padding(.top,8)
+        .ignoresSafeArea()
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }

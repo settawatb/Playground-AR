@@ -62,6 +62,8 @@ struct ProductImageDetailView: View {
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
         .frame(maxHeight: .infinity)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
     }
 }
 

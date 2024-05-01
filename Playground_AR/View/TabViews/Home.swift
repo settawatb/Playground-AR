@@ -69,7 +69,7 @@ struct Home: View {
                         
                         // Display products for the current page
                         LazyVGrid(columns: Array(repeating: GridItem(), count: 2), spacing: 10) {
-                            ForEach(homeData.filteredProducts[startIndex..<endIndex], id: \.self) { product in
+                            ForEach(homeData.filteredProducts.reversed()[startIndex..<endIndex], id: \.self) { product in
                                 ProductCardView(product: product)
                             }
                         }

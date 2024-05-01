@@ -24,11 +24,13 @@ struct Product: Identifiable, Hashable, Decodable {
     struct ProductSeller: Decodable, Hashable {
         var sellerId: String
         var sellerName: String
+        var sellerAddress: String
 
         // Coding keys for ProductSeller if property names differ from JSON keys
         enum CodingKeys: String, CodingKey {
             case sellerId = "seller_id"
             case sellerName = "seller_name"
+            case sellerAddress = "seller_address"
         }
     }
 
@@ -144,10 +146,12 @@ enum ProductType: String, CaseIterable, Decodable {
 struct Seller: Decodable {
     var sellerId: String
     var sellerName: String
+    var sellerAddress: String
 
     enum CodingKeys: String, CodingKey {
         case sellerId = "seller_id"
         case sellerName = "seller_name"
+        case sellerAddress = "seller_address"
     }
 }
 

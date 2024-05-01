@@ -266,7 +266,8 @@ struct EditProductView: View {
             "productCategory": selectedCategory,
             "productDescription": productDescription,
             "productSellerId": loginData.id,
-            "productSellerName": loginData.userName
+            "productSellerName": loginData.userName,
+            "productSellerAddress:": loginData.address,
         ]
 
         var imageDataArray: [Data]?

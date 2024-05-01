@@ -199,7 +199,8 @@ struct AddProductView: View {
             "productCategory": selectedCategory,
             "productDescription": productDescription,
             "productSellerId": loginData.id,
-            "productSellerName": loginData.userName
+            "productSellerName": loginData.userName,
+            "productSellerAddress": loginData.address
         ]
 
         // Convert selected images to an array of data
