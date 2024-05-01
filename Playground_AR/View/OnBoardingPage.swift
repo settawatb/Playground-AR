@@ -14,7 +14,7 @@ let PurPle2 = Color(red: 211/255, green: 211/255, blue: 255/255)
 let LightGray = Color(red: 230 / 255, green: 228 / 255, blue: 230 / 255)
 //let LightGray = Color(.white)
 let LightGray2 = Color(red: 242/255, green: 242/255, blue: 242/255)
-public let baseURL = "192.168.1.39"
+public let baseURL = "http://192.168.1.33:3000/"
 
 struct OnBoardingPage: View {
     // Showing Login Page

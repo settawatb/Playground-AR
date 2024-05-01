@@ -20,9 +20,6 @@ struct ZoomableScrollView<Content: View>: UIViewRepresentable {
         // Set the maximum and minimum zoom scale
         scrollView.maximumZoomScale = 3.0
         scrollView.minimumZoomScale = 1.0
-        
-        // Set the background color of the scroll view to red
-        scrollView.backgroundColor = UIColor.red
 
         // Add the hosting controller view to the scroll view
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false

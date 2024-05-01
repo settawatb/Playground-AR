@@ -53,7 +53,7 @@ class HomeViewModel: ObservableObject {
     }
         
     func fetchProductsFromAPI() {
-        guard let url = URL(string: "http://192.168.1.39:3000/products/") else {
+        guard let url = URL(string: baseURL+"products/") else {
             return
         }
 

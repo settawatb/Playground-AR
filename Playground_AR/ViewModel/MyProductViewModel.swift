@@ -15,7 +15,7 @@ class MyProductViewModel: ObservableObject {
     func fetchSellerProducts(for sellerId: String) {
         print("sellerId: \(sellerId)")
 
-        guard let url = URL(string: "http://192.168.1.39:3000/products/bySellerId/\(sellerId)") else {
+        guard let url = URL(string: baseURL+"products/bySellerId/\(sellerId)") else {
             errorMessage = "Invalid URL"
             return
         }

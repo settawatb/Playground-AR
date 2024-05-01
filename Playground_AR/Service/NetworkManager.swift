@@ -26,7 +26,7 @@ struct NetworkManager {
     private init() {}
 
     func request(_ endpoint: String, method: HTTPMethod, parameters: [String: Any]?, authToken: String? = nil, completion: @escaping (Result<[String: Any], Error>) -> Void) {
-        guard let url = URL(string: "http://192.168.1.39:3000/\(endpoint)") else {
+        guard let url = URL(string: baseURL+"\(endpoint)") else {
             completion(.failure(CustomNetworkError.invalidURL))
             return
         }
@@ -80,7 +80,7 @@ struct NetworkManager {
     }
 
     func uploadFiles(formData: [String: Any], imageDataArray: [Data], model3DData: Data, completion: @escaping (Result<[String: Any], Error>) -> Void) {
-        guard let url = URL(string: "http://192.168.1.39:3000/products/upload") else {
+        guard let url = URL(string: baseURL+"products/upload") else {
             completion(.failure(CustomNetworkError.invalidURL))
             return
         }
@@ -154,7 +154,7 @@ struct NetworkManager {
     }
     
     func updateProduct(productID: String, formData: [String: Any], imageDataArray: [Data], model3DData: Data?, completion: @escaping (Result<[String: Any], Error>) -> Void) {
-        guard let url = URL(string: "http://192.168.1.39:3000/products/update/\(productID)") else {
+        guard let url = URL(string: baseURL+"products/update/\(productID)") else {
             completion(.failure(CustomNetworkError.invalidURL))
             return
         }
@@ -249,7 +249,7 @@ struct NetworkManager {
 
 extension NetworkManager {
     func deleteProduct(productID: String, completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let url = URL(string: "http://192.168.1.39:3000/products/\(productID)") else {
+        guard let url = URL(string: baseURL+"products/\(productID)") else {
             completion(.failure(CustomNetworkError.invalidURL))
             return
         }

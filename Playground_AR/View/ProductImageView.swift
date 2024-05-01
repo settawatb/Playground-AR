@@ -47,12 +47,12 @@ struct ProductImageDetailView: View {
                     case .success(let image):
                         image
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .aspectRatio(contentMode: .fill)
                             .cornerRadius(15)
                     case .failure:
                         Image("image_placeholder")
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .aspectRatio(contentMode: .fill)
                             .cornerRadius(15)
                     default:
                         ProgressView()

@@ -52,7 +52,7 @@ class LoginPageModel: ObservableObject {
     
     // Login Call
     func login(completion: @escaping (Result<Void, Error>) -> Void) {
-        let url = URL(string: "http://192.168.1.39:3000/auth/login")! // Replace with your backend URL
+        let url = URL(string: baseURL+"auth/login")! // Replace with your backend URL
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -112,7 +112,7 @@ class LoginPageModel: ObservableObject {
     
     // Register
     func register(completion: @escaping (Result<Void, Error>) -> Void) {
-        let url = URL(string: "http://192.168.1.39:3000/auth/register")! // Replace with your backend URL for registration
+        let url = URL(string: baseURL+"auth/register")! // Replace with your backend URL for registration
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -150,7 +150,7 @@ class LoginPageModel: ObservableObject {
             return
         }
 
-        let url = URL(string: "http://192.168.1.39:3000/users/profile")!
+        let url = URL(string: baseURL+"users/profile")!
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -210,7 +210,7 @@ class LoginPageModel: ObservableObject {
                 return
             }
 
-            let url = URL(string: "http://192.168.1.39:3000/users/upload")!
+            let url = URL(string: baseURL+"users/upload")!
 
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
@@ -343,7 +343,7 @@ extension DateFormatter {
 extension LoginPageModel {
     func updateUserProfile(completion: @escaping (Result<Void, Error>) -> Void) {
         // Create the URL using the user ID
-        let url = URL(string: "http://192.168.1.39:3000/users/\(self.id)")!
+        let url = URL(string: baseURL+"users/\(self.id)")!
         var request = URLRequest(url: url)
         
         // Set the request method to PUT for updating the user profile
