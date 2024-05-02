@@ -17,18 +17,18 @@ struct ProductImageView: View {
             case .success(let image):
                 image
                     .resizable()
-                    .frame(width: 100,height: 100)
                     .aspectRatio(contentMode: .fill)
+                    .frame(width: 100,height: 100)
             case .failure, .empty:
                 Image("image_placeholder")
                     .resizable()
                     .frame(width: 100,height: 100)
-                    .aspectRatio(contentMode: .fill)
+                    .aspectRatio(contentMode: .fit)
             @unknown default:
                 Image("image_placeholder")
                     .resizable()
                     .frame(width: 100,height: 100)
-                    .aspectRatio(contentMode: .fill)
+                    .aspectRatio(contentMode: .fit)
             }
         }
         .cornerRadius(15)
@@ -52,7 +52,7 @@ struct ProductImageDetailView: View {
                     case .failure:
                         Image("image_placeholder")
                             .resizable()
-                            .aspectRatio(contentMode: .fill)
+                            .aspectRatio(contentMode: .fit)
                             .cornerRadius(9)
                     default:
                         ProgressView()
