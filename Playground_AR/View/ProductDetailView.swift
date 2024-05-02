@@ -8,6 +8,7 @@
 import SwiftUI
 import PopupView
 
+
 struct ProductDetailView: View {
     var product: Product
     var animation: Namespace.ID
@@ -19,6 +20,8 @@ struct ProductDetailView: View {
     @State var showingPopup = false
     @State var showingPopup2 = false
     @State var toggleFav = false
+    @State private var isFullScreenImagePresented: Bool = false
+    
     
     var body: some View {
         VStack(spacing: 0) {
@@ -93,14 +96,31 @@ struct ProductDetailView: View {
         .animation(.easeInOut, value: sharedData.favoritedProducts)
         .animation(.easeInOut, value: sharedData.cartProducts)
         .background(LightGray.ignoresSafeArea())
+        .fullScreenCover(isPresented: $isFullScreenImagePresented) {
+            let imageUrls = product.productImages.compactMap { URL(string: $0) }
+
+            if !imageUrls.isEmpty {
+                FullScreenImageView(imageUrls: imageUrls, isPresented: $isFullScreenImagePresented)
+            } else {
+                Text("Failed to load image URLs")
+                    .font(.headline)
+                    .foregroundColor(.red)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.white)
+            }
+        }
+
+
     }
 
     // Separate the title bar and product image into its own view
     private var titleBarAndProductImage: some View {
         VStack {
             titleBar
-            
             productImageView
+                .onTapGesture {
+                    isFullScreenImagePresented = true
+                }
         }
         .padding(.top)
         .zIndex(1)
@@ -140,12 +160,12 @@ struct ProductDetailView: View {
 
     // View for the product image
     private var productImageView: some View {
-        ProductImageDetailView(urlStrings: product.productImages)
-            .matchedGeometryEffect(id: "\(product.id)\(sharedData.fromSearchPage ? "SEARCH" : "IMAGE")", in: animation)
-            .padding(.horizontal, 5)
-            .offset(y: -12)
-            .frame(maxHeight: .infinity)
-    }
+            ProductImageDetailView(urlStrings: product.productImages)
+                .matchedGeometryEffect(id: "\(product.id)\(sharedData.fromSearchPage ? "SEARCH" : "IMAGE")", in: animation)
+                .padding(.horizontal, 5)
+                .offset(y: -16)
+                .frame(maxHeight: .infinity)
+        }
 
     // Separate the product details scroll view into its own view
     private var productDetailsScrollView: some View {
@@ -259,9 +279,6 @@ struct ProductDetailView: View {
                     )
                 }
 
-
-
-
                 
                 // Add to cart button
                 Button {
@@ -351,5 +368,78 @@ struct ProductDetailView_Previews: PreviewProvider {
 func ProductImage(urlString: String) -> some View {
     ProductImageDetailView(urlStrings: [urlString])
 }
+
+
+struct FullScreenImageView: View {
+    var imageUrls: [URL]
+    @Binding var isPresented: Bool
+    @State private var currentIndex: Int = 0
+    @State private var scale: CGFloat = 1.0
+    @State private var offset: CGSize = .zero
+
+    var body: some View {
+        ZStack {
+            // Image slider with TabView
+            TabView(selection: $currentIndex) {
+                ForEach(imageUrls.indices, id: \.self) { index in
+                    ZoomableScrollView2(content: AsyncImage(url: imageUrls[index]) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .scaleEffect(scale)
+                                .offset(offset)
+                                .gesture(
+                                    MagnificationGesture()
+                                        .onChanged { value in
+                                            let newScale = scale * value.magnitude
+                                            scale = min(max(1.0, newScale), 3.0)
+                                        }
+                                )
+                                .gesture(
+                                    DragGesture()
+                                        .onChanged { value in
+                                            offset = value.translation
+                                        }
+                                        .onEnded { _ in
+                                            offset = .zero
+                                        }
+                                )
+                        case .failure:
+                            Image("image_placeholder")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        default:
+                            ProgressView()
+                        }
+                    })
+                    .tag(index)
+                }
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            VStack {
+                HStack {
+                    Button(action: {
+                        isPresented = false
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .foregroundColor(.black)
+                            .padding()
+                            .padding(.top, 70)
+                    }
+                    Spacer()
+                }
+                Spacer()
+            }
+        }
+        .background(Color.black)
+        .ignoresSafeArea()
+    }
+}
+
+
 
 

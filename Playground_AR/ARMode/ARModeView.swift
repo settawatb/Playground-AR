@@ -43,7 +43,7 @@ struct ARModeView: View {
                             Color.black.opacity(0.5)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .transition(.opacity)
-                                .animation(.easeInOut(duration: 0.7), value: showFlash)
+                                .animation(.easeInOut(duration: 0.5), value: showFlash)
                                 .onAppear {
                                     // Hide flash after 0.5 seconds
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -85,7 +85,6 @@ struct ARModeView: View {
                 .background(PurPle)
                 .cornerRadius(10)
         }
-//            .background(.white)
         .padding(.horizontal)
     } customize: {
         $0
@@ -107,6 +106,24 @@ struct ARViewContainer: UIViewRepresentable {
     func makeUIView(context: Context) -> ARView {
         let arView = FocusARView(frame: .zero)
         ARVariables.arView = arView
+        
+        // Create an anchor entity to hold the light
+        let anchorEntity = AnchorEntity(world: simd_float4x4(1))
+        
+        // Create and configure the directional light component
+        let light = DirectionalLightComponent(color: .white, intensity: 1000)
+        let lightEntity = Entity()
+        lightEntity.components[DirectionalLightComponent.self] = light
+        
+        // Set the light position relative to the anchor entity
+        lightEntity.transform.translation = [0, 10, 0] // Adjust the position as needed
+        
+        // Add the light entity to the anchor entity
+        anchorEntity.addChild(lightEntity)
+        
+        // Add the anchor entity to the AR view scene
+        arView.scene.addAnchor(anchorEntity)
+        
         return arView
     }
 
@@ -136,7 +153,6 @@ struct ARViewContainer: UIViewRepresentable {
 
             do {
                 let tempURL = try saveModelDataToTemporaryFile(data)
-
                 DispatchQueue.main.async {
                     do {
                         try loadModel(from: tempURL, into: uiView)
@@ -162,10 +178,10 @@ struct ARViewContainer: UIViewRepresentable {
     private func loadModel(from url: URL, into uiView: ARView) throws {
         let modelEntity = try ModelEntity.loadModel(contentsOf: url)
 
-        // Place the model in the AR view
-        let anchorEntity = AnchorEntity(plane: .horizontal)
-        anchorEntity.addChild(modelEntity)
-        uiView.scene.addAnchor(anchorEntity)
+        // Uncomment these lines to place the model in the AR view
+         let anchorEntity = AnchorEntity(plane: .horizontal)
+         anchorEntity.addChild(modelEntity)
+         uiView.scene.addAnchor(anchorEntity)
 
         modelEntity.generateCollisionShapes(recursive: true)
         uiView.installGestures([.rotation], for: modelEntity)
@@ -176,6 +192,8 @@ struct ARViewContainer: UIViewRepresentable {
         }
     }
 }
+
+
 
 struct ModelNameView: View {
     var model: String

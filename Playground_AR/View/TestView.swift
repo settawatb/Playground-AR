@@ -2,7 +2,7 @@
 //  TestView.swift
 //  Playground_AR
 //
-//  Created by Kisses MJ on 30/4/2567 BE.
+//  Created by Settawat Buddhakanchana on 30/4/2567 BE.
 //
 
 import SwiftUI

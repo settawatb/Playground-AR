@@ -40,7 +40,6 @@ struct NetworkManager {
             request.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         }
 
-        // Add parameters to the request body if needed
         if let parameters = parameters {
             request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
         }

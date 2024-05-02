@@ -2,7 +2,7 @@
 //  Playground_ARTests.swift
 //  Playground_ARTests
 //
-//  Created by Kisses MJ on 18/11/2566 BE.
+//  Created by Settawat Buddhakanchana on 18/11/2566 BE.
 //
 
 import XCTest

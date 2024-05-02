@@ -14,9 +14,15 @@ struct MyProductView: View {
     var body: some View {
         ScrollView {
             if viewModel.isLoading {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: PurPle))
-                    .padding()
+                VStack(alignment:.center){
+                    ProgressView()
+                        .controlSize(.large)
+                        .progressViewStyle(CircularProgressViewStyle(tint: PurPle))
+                        .padding()
+                }
+                .padding(.top,340)
+                .frame(maxWidth: .infinity)
+//                .background(.gray)
             } else if viewModel.errorMessage != nil {
                 Group{
                     Image("astronaut_2")
@@ -67,24 +73,28 @@ struct MyProductCard: View {
                         case .success(let image):
                             image
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 100, height: 100)
                                 .cornerRadius(15)
                                 .shadow(radius: 3, x: 2, y: 2)
                         case .failure:
                             Image("image_placeholder")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 100, height: 100)
                                 .cornerRadius(15)
                                 .shadow(radius: 3, x: 2, y: 2)
                         case .empty:
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: PurPle))
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 100, height: 100)
                                 .cornerRadius(15)
                                 .shadow(radius: 3, x: 2, y: 2)
                         @unknown default:
                             Image("image_placeholder")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 100, height: 100)
                                 .cornerRadius(15)
                                 .shadow(radius: 3, x: 2, y: 2)

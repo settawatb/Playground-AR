@@ -2,7 +2,7 @@
 //  Playground_ARUITestsLaunchTests.swift
 //  Playground_ARUITests
 //
-//  Created by Kisses MJ on 18/11/2566 BE.
+//  Created by Settawat Buddhakanchana on 18/11/2566 BE.
 //
 
 import XCTest

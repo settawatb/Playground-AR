@@ -254,7 +254,7 @@ struct Home: View {
         VStack(alignment:.leading, spacing: 3){
             Text(product.title)
 //                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                .font(.custom(customFontBold, size: 20))
+                .font(.custom(customFontBold, size: 18))
                 .padding(.top)
                 .lineLimit(1)
             HStack {

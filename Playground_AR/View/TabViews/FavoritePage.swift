@@ -2,7 +2,7 @@
 //  FavoritePage.swift
 //  Playground_AR
 //
-//  Created by Kisses MJ on 29/12/2566 BE.
+//  Created by Settawat Buddhakanchana on 29/12/2566 BE.
 //
 
 import SwiftUI
