@@ -81,20 +81,20 @@ struct ProductImageCheckoutView: View {
             case .success(let image):
                 image
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: 100,height: 100)
-                    .aspectRatio(contentMode: .fit)
                     .shadow(radius: 4, x: 4, y: 4)
             case .failure, .empty:
                 Image("image_placeholder")
                     .resizable()
-                    .frame(width: 100,height: 100)
                     .aspectRatio(contentMode: .fit)
+                    .frame(width: 100,height: 100)
                     .shadow(radius: 4, x: 4, y: 4)
             @unknown default:
                 Image("image_placeholder")
                     .resizable()
-                    .frame(width: 100,height: 100)
                     .aspectRatio(contentMode: .fit)
+                    .frame(width: 100,height: 100)
                     .shadow(radius: 4, x: 4, y: 4)
             }
         }

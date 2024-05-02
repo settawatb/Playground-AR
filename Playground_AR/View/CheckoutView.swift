@@ -86,6 +86,7 @@ struct CheckoutView: View {
                                         HStack(spacing: 15) {
                                             // Product Image and information
                                             ProductImageCheckoutView(urlString: product.productImages[0])
+                                                .shadow(radius: 4, x: 4, y: 4)
                                             
                                             VStack(alignment: .leading, spacing: 8) {
                                                 Text(product.title)

@@ -227,6 +227,7 @@ struct DateOfBirthPicker: View {
                 .padding(.bottom, 20)
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                 .frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .environment(\.calendar, Calendar(identifier: .gregorian))
             Divider()
                 .background(Color.black.opacity(0.4))
         }
