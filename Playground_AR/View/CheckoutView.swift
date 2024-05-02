@@ -327,8 +327,8 @@ struct CheckoutView: View {
                 .padding()
                 .alert(isPresented: $showAlert) {
                     Alert(
-                        title: Text("Verify successful payment"),
-                        message: Text("OK"),
+                        title: Text("Verify Payment"),
+                        message: Text("Successful!"),
                         dismissButton: .default(Text("OK")) {
                             showAlert = false
                             withAnimation {
