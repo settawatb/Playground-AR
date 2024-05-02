@@ -47,8 +47,14 @@ struct ProductDetailView: View {
                         .symbolEffect(
                             .bounce.up.byLayer,value: showingPopup
                         )
-                    Text("\(product.title)\nAdded To Cart")
-                }.font(.custom(customFontBold, size: 15))
+                    VStack(alignment: .leading) {
+                        Text(product.title)
+                            .lineLimit(1)
+                        Text("Added To Cart")
+                    }
+                }
+                .padding()
+                .font(.custom(customFontBold, size: 15))
                     .foregroundStyle(.white)
                     .frame(width: 300, height: 60)
                     .background(PurPle)
@@ -68,16 +74,31 @@ struct ProductDetailView: View {
     
         VStack(alignment:.center,spacing:0){
             HStack(spacing:30){
-                Image(systemName: "heart.fill")
-                    .resizable()
-                    .frame(width: 35, height: 32)
-                    .foregroundColor(.red)
                 if toggleFav == true {
-                    Text("\(product.title)\nAdded To Favorite")
+                    Image(systemName: "heart.fill")
+                        .resizable()
+                        .frame(width: 35, height: 32)
+                        .foregroundColor(.red)
                 }else {
-                    Text("\(product.title)\nRemove From Favorite")
+                    Image(systemName: "heart.slash.fill")
+                        .resizable()
+                        .frame(width: 35, height: 32)
+                        .foregroundColor(.red)
                 }
-            }.font(.custom(customFontBold, size: 15))
+                VStack(alignment: .leading){
+                    if toggleFav == true {
+                        Text(product.title)
+                            .lineLimit(1)
+                        Text("Added To Favorite")
+                    }else {
+                        Text(product.title)
+                            .lineLimit(1)
+                        Text("Remove From Favorite")
+                    }
+                }
+            }
+            .padding()
+            .font(.custom(customFontBold, size: 15))
                 .foregroundStyle(.white)
                 .frame(width: 300, height: 60)
                 .background(PurPle)
