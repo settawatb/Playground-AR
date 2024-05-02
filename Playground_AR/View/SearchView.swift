@@ -248,7 +248,7 @@ struct SearchView: View {
                     .foregroundStyle(.gray)
                     
                 
-                Text(product.price + " บาท")
+                Text(product.price + " THB")
                     .font(.custom(customFont, size: 16))
                     .fontWeight(.bold)
                     .frame(width: getRect().width / 2 - 40, alignment: .leading)
