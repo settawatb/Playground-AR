@@ -119,6 +119,9 @@ struct SearchView: View {
                     .opacity(homeData.searchText == "" ? 0 : 1)
             }
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
         .frame(maxWidth: .infinity,maxHeight: .infinity, alignment: .top)
         .background(
             Color.white
@@ -235,7 +238,7 @@ struct SearchView: View {
                 }
                 
                 Text(product.title)
-                    .lineLimit(2)
+                    .lineLimit(1)
                     .font(.custom(customFont, size: 18))
                     .frame(width: getRect().width / 2 - 40, alignment: .leading)
                     .fontWeight(.semibold)
@@ -248,7 +251,7 @@ struct SearchView: View {
                     .foregroundStyle(.gray)
                     
                 
-                Text(product.price + " THB")
+                Text((Int(product.price) ?? 0).formattedWithSeparator + " THB")
                     .font(.custom(customFont, size: 16))
                     .fontWeight(.bold)
                     .frame(width: getRect().width / 2 - 40, alignment: .leading)
