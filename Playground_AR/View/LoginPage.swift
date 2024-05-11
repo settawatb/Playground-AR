@@ -31,9 +31,6 @@ struct LoginPage: View {
                         .padding(35)
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 5, y: 5)
                 }
-                .onTapGesture {
-                    hideKeyboard()
-                }
                 .frame(height: getReact().height / 3.5)
             }
             
@@ -121,6 +118,9 @@ struct LoginPage: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.white.clipShape(CustomCorners(corners: [.topLeft, .topRight], radius: 25)).ignoresSafeArea())
+        }
+        .onTapGesture {
+            hideKeyboard()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         
@@ -252,15 +252,12 @@ func CustomTextField(icon: String, title: String, hint: String, value: Binding<S
         }
         .foregroundColor(Color.black.opacity(0.8))
 
-        // Determine the appropriate input view based on the title
         if title.contains("Password") && !showPassword.wrappedValue {
-            // SecureField for password
             SecureField(hint, text: value)
                 .padding(.top, 2)
                 .disableAutocorrection(true)
                 .autocapitalization(.none)
         } else if title.contains("Address") {
-            // TextEditor for address input
             ZStack(alignment: .topLeading) {
                 TextEditor(text: value)
                     .frame(minWidth: 50, maxWidth: .infinity, minHeight: 100, maxHeight: 100)
@@ -269,7 +266,6 @@ func CustomTextField(icon: String, title: String, hint: String, value: Binding<S
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
                 
-                // Outlined view for the text editor
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.gray, lineWidth: 1)
                     .frame(minWidth: 50, maxWidth: .infinity, minHeight: 100, maxHeight: 100)
@@ -277,7 +273,6 @@ func CustomTextField(icon: String, title: String, hint: String, value: Binding<S
                     .padding(.bottom, 20)
             }
         } else if title.contains("Telephone Number") {
-            // TextField for telephone number with limited length
             TextField(hint, text: value)
                 .padding(.top, 2)
                 .disableAutocorrection(true)

@@ -14,6 +14,7 @@ struct ProductDetailView: View {
     var animation: Namespace.ID
     @EnvironmentObject var sharedData: SharedDataModel
     @EnvironmentObject var homeData: HomeViewModel
+    @StateObject var loginData: LoginPageModel = LoginPageModel()
     @State private var isShowingARModeView: Bool = false
     @State private var modelPlacement: Bool = false
     @State private var isLoading: Bool = false
@@ -31,11 +32,14 @@ struct ProductDetailView: View {
             
             buttonsView
         }
+        .onAppear {
+            loginData.fetchUserProfile()
+        }
         .padding(.top, 20)
 //        .background(.red)
         .ignoresSafeArea()
         .onTapGesture {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            hideKeyboard()
         }
         .popup(isPresented: $showingPopup) {
         
@@ -301,22 +305,34 @@ struct ProductDetailView: View {
                 }
 
                 
-                // Add to cart button
                 Button {
-                    addToCart()
-                    showingPopup = true
+                    if loginData.userName != product.productSeller.sellerName {
+                        addToCart()
+                        showingPopup = true
+                    }
                 } label: {
-                    Text("\(isAddedToCart() ? "Added" : "Add") to cart")
-                        .font(.custom(customFont, size: 20).bold())
-                        .foregroundColor(Color.white)
-                        .padding(.vertical, 20)
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            isAddedToCart() ? Color(PurPle).opacity(0.5) : Color(.black)
+                    Group {
+                        if loginData.userName == product.productSeller.sellerName {
+                            Text("You are the owner of this product")
+                                .font(.custom(customFont, size: 16).bold())
+                        } else {
+                            Text(isAddedToCart() ? "Added to cart" : "Add to cart")
+                                .font(.custom(customFont, size: 20).bold())
+                        }
+                    }
+                    .foregroundColor(Color.white)
+                    .padding(.vertical, 20)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        // Set background color based on the condition
+                        loginData.userName == product.productSeller.sellerName ? Color(LightGray) : (
+                            isAddedToCart() ? PurPle.opacity(0.5) : Color.black
                         )
-                        .cornerRadius(10)
-                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 5, y: 5)
+                    )
+                    .cornerRadius(10)
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 5, y: 5)
                 }
+
             }
         }
         .padding(30)

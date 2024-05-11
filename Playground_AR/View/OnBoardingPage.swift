@@ -15,6 +15,7 @@ let LightGray = Color(red: 230 / 255, green: 228 / 255, blue: 230 / 255)
 //let LightGray = Color(.white)
 let LightGray2 = Color(red: 242/255, green: 242/255, blue: 242/255)
 public let baseURL = "http://192.168.1.33:3000/"
+//public let baseURL = "https://8c73-171-97-8-66.ngrok-free.app/"
 
 struct OnBoardingPage: View {
     // Showing Login Page
@@ -30,7 +31,7 @@ struct OnBoardingPage: View {
             Image("Onboard1")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 400, height: 440)
+                .frame(width: 400, height: 545)
                 .opacity(showLoginPage ? 0 : 1)
                 
             
