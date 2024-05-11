@@ -315,6 +315,7 @@ struct ProductDetailView: View {
                         if loginData.userName == product.productSeller.sellerName {
                             Text("You are the owner of this product")
                                 .font(.custom(customFont, size: 16).bold())
+                                .foregroundColor(.black)
                         } else {
                             Text(isAddedToCart() ? "Added to cart" : "Add to cart")
                                 .font(.custom(customFont, size: 20).bold())
